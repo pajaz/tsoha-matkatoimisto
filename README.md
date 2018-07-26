@@ -22,3 +22,5 @@
    * Kohteiden ja majoitusvaihtoehtojen katselu
    * Varauksen tekeminen
    * (Oman varauksen tietojen muokkaaminen)
+   
+   more to come...
