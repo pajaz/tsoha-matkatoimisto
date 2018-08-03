@@ -1,7 +1,11 @@
 <h1> Matkatoimiston varausjärjestelmä </h1>
    
-   Linkki sovellukseen Herokussa:
-   https://tsoha-matkatoimisto.herokuapp.com/
+
+   <h2> Linkit </h2>
+   
+  [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/)
+  [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(first_draft).pdf)
+  [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md)
    
    <h2> Yleiskuvaus </h2>
 
@@ -19,6 +23,7 @@
    * Kohteiden tarkastelu, lisääminen, poistaminen ja muokkaaminen
    * Uusien varausten lisääminen.
    * Järjestelmän kautta tehtyjen varausten tarkastelu, muokkaaminen ja poistaminen.
+   * Yhteenvetokyselyt, kuten tietyssä kohteessa samaan aikaan olevien matkustajien määrä
   
    
    <h3> Asiakas </h3>

@@ -1,2 +1,0 @@
-ota käyttöön tietokanta
-suunnittele matkakohteiden käsittelyyn liittyvät polut
