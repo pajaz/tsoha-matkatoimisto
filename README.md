@@ -3,9 +3,9 @@
 
    <h2> Linkit </h2>
    
-  [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/)
-  [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(first_draft).pdf)
-  [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md)
+  [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/)  
+  [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(first_draft).pdf)  
+  [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md)  
    
    <h2> Yleiskuvaus </h2>
 
