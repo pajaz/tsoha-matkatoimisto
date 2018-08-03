@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Matkakohde</th>
+            <th>Maa</th>
+            <th>Muokkaa</th>
+            <th>Poista</th>
+        </tr>
+        {% for matkakohde in matkakohteet %}
+        <tr>
+            <td>{{ matkakohde.name }}</td>
+            <td>{{ matkakohde.country }}</td>
+            <td>
+                <a href="{{ url_for('matkakohteet_edit_form', id=matkakohde.id) }}"> Muokkaa
+                </a>
+            </td> 
+            <td>
+                <a href="{{ url_for('matkakohteet_delete', id=matkakohde.id) }}"> Poista
+                </a>
+            </td>                       
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

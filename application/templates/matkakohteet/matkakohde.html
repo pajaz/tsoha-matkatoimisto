@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <form method="POST" action="{{ url_for('matkakohteet_edit', matkakohde_id=matkakohde.id) }}">
+            <label for="destname">Matkakohde</label>
+            <input type="text" name="name" id="destname" value= "{{ matkakohde.name }}">
+            <label for="countryname">Maa</label>
+            <input type="text" name="country"  id="countryname" value= "{{matkakohde.country }}">
+            <label for="describe">Kuvaus</label>
+            <input type="text" name="intro" id="describe" value = "{{ matkakohde.intro }}">
+            <input type="submit" value="Päivitä tiedot"/>
+
+        </form>
+    
+{% endblock %}
