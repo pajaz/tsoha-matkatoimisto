@@ -7,6 +7,12 @@
     </head>
 
     <body>
+        <ul>
+            <li><a href=" {{ url_for('matkakohteet_index')}} ">Matkakohteet</a></li>
+            <li><a href=" {{ url_for('matkakohteet_form')}} ">Lisää uusi kohde</a></li>
+        </ul>
+
+
         {% block body %}
         <p>
             Sisältöä
