@@ -8,7 +8,7 @@ from ..models import Matkakohde
 class DestinationForm(FlaskForm):
     name = StringField("Nimi", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
     country = StringField("Maa", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
-    description = TextAreaField("Esittely (Vapaaehtoinen)", [validators.Length(max=500)])
+    intro = TextAreaField("Esittely (Vapaaehtoinen)", [validators.Length(max=500)])
 
     def validate_destination_name(self, field):
         if Matkakohde.query.filter_by(name=field.data).first():

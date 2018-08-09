@@ -21,7 +21,7 @@ def matkakohteet_create():
 
     dest_name = form.name.data
     dest_country = form.country.data
-    dest_intro = form.description.data
+    dest_intro = form.intro.data
     if form.validate():
         if not dest_intro:
             dest = Matkakohde(dest_name.title(), dest_country.title())
@@ -40,12 +40,12 @@ def matkakohteet_create():
 def matkakohteet_edit_form(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
-    form = DestinationForm(request.form)
+    form = DestinationForm(obj=destination)
 
     if request.method == 'POST' and form.validate():
         dest_name = form.name.data
         dest_country = form.country.data
-        dest_intro = form.description.data
+        dest_intro = form.intro.data
 
         destination.name = dest_name
         destination.country = dest_country

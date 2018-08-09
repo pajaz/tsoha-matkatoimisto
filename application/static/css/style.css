@@ -21,6 +21,7 @@ input[type=submit].formi {
 
 textarea {
     width: 50%;
+    padding: 5px 5px;
     border: 1px solid #ccc;
     box-sizing: border-box;
     resize: none;

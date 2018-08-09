@@ -6,8 +6,10 @@
 {% block body %}
 
 {% if dest_add %}
+    <h1> Lisää uusi matkakohde </h1>
     <form method="POST" action="{{ url_for('matkakohteet_create') }}">
 {% else %}
+    <h1> Muokkaa kohteen tietoja </h1> 
     <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
 {% endif %}
     <div class="addform">
@@ -44,10 +46,10 @@
         </tr>
         </table>
         <label>
-            {{ form.description.label}}
+            {{ form.intro.label}}
         </label>
         <br>
-        {{ form.description(class="textarea", rows="4") }} 
+        {{ form.intro(class="textarea", rows="4") }} 
         <br>
         {% if dest_add %}
             <input type="submit" class="formi" value="Lisää Kohde"/>
