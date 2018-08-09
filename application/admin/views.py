@@ -6,12 +6,13 @@ from application.admin.forms import DestinationForm
 
 @app.route("/matkakohteet/", methods=["GET"])
 def matkakohteet_index():
-    return render_template("admin/list.html", matkakohteet = Matkakohde.query.all())
+    return render_template("admin/list.html", matkakohteet=Matkakohde.query.all())
 
 
 @app.route("/matkakohteet/uusi")
 def matkakohteet_form():
-    return render_template("admin/new.html", form = DestinationForm())
+    return render_template("admin/matkakohde.html", form=DestinationForm(), dest_add=True)
+
 
 @app.route("/matkakohteet/", methods=["POST"])
 def matkakohteet_create():
@@ -21,47 +22,47 @@ def matkakohteet_create():
     dest_name = form.name.data
     dest_country = form.country.data
     dest_intro = form.description.data
-    if not dest_intro:
-        dest = Matkakohde(dest_name.title(), dest_country.title())
-    else:
-        dest = Matkakohde(dest_name.title(), dest_country.title(), dest_intro)
+    if form.validate():
+        if not dest_intro:
+            dest = Matkakohde(dest_name.title(), dest_country.title())
+        else:
+            dest = Matkakohde(dest_name.title(), dest_country.title(), dest_intro)
 
-    db.session().add(dest)
-    db.session().commit()
+        db.session().add(dest)
+        db.session().commit()
 
-    return redirect(url_for("matkakohteet_index"))
-
-@app.route('/matkakohteet/edit/<int:id>', methods=['GET'])
-def matkakohteet_edit_form(id):
+        return redirect(url_for("matkakohteet_index"))
     
-    destination = Matkakohde.query.get_or_404(id)  
-    return render_template("admin/matkakohde.html", form = DestinationForm(), matkakohde = destination, id = destination.id)
+    return render_template("admin/new.html", form=form, dest_add=True)
 
-@app.route("/matkakohteet/edit/<matkakohde_id>", methods=["POST"])
-def matkakohteet_edit(matkakohde_id):
-    
-    form = DestinationForm(request.form)
 
-    dest_name = form.name.data
-    dest_country = form.country.data
-    dest_intro = form.description.data
+@app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])
+def matkakohteet_edit_form(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
+    form = DestinationForm(request.form)
 
-    destination.name = dest_name
-    destination.country = dest_country
-    destination.intro = dest_intro
+    if request.method == 'POST' and form.validate():
+        dest_name = form.name.data
+        dest_country = form.country.data
+        dest_intro = form.description.data
 
-    db.session().commit()
+        destination.name = dest_name
+        destination.country = dest_country
+        destination.intro = dest_intro
 
-    return redirect(url_for("matkakohteet_index"))
+        db.session().commit()
+
+        return redirect(url_for("matkakohteet_index"))
+
+    return render_template("admin/matkakohde.html", form=form, matkakohde=destination, matkakohde_id=destination.id, dest_add=False)
+
 
 @app.route("/matkakohteet/delete/<matkakohde_id>", methods=["GET", "POST"])
 def matkakohteet_delete(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
-    print("ABOUT TO DELETE!!!!" + str(destination.id) + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    
+
     db.session.delete(destination)
     db.session.commit()
 

@@ -1,8 +1,8 @@
 input[type=text].formtext, select {
     width: 50%;
-    padding: 12px 20px;
+    height: 25px;
+    padding: 10px 5px;
     margin: 8px 0;
-    display: block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -21,7 +21,6 @@ input[type=submit].formi {
 
 textarea {
     width: 50%;
-    display: block;
     border: 1px solid #ccc;
     box-sizing: border-box;
     resize: none;
@@ -35,4 +34,8 @@ th {
 div.addform {
     width: 50%;
     border: 1px solid black;
+}
+
+table.adminform {
+    width: 100%
 }

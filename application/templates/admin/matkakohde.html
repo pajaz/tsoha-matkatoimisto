@@ -5,23 +5,41 @@
 
 {% block body %}
 
-<form method="POST" action="{{ url_for('matkakohteet_edit', matkakohde_id=matkakohde.id) }}">
+{% if dest_add %}
+    <form method="POST" action="{{ url_for('matkakohteet_create') }}">
+{% else %}
+    <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
+{% endif %}
     <div class="addform">
         <table class="adminform">
         <tr>
-            <td>
-                {{ form.name.label(class="formtext") }}
+            <td style="width: 50px">
+                {{ form.name.label }}
+            </td>
+            <td class:"formtext">
+                {{ form.name(class="formtext") }} 
             </td>
             <td>
-                {{ form.name }} 
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li> {{ error }}</li>
+                    {% endfor %}
+                </ul>
             </td>
         </tr>
         <tr>
             <td>
-                {{ form.country.label(class="formtext") }}
+                {{ form.country.label }}
+            </td>
+            <td class:"formtext">
+                {{ form.country(class="formtext") }}
             </td>
             <td>
-                {{ form.country }}
+                <ul>
+                    {% for error in form.country.errors %}
+                    <li> {{ error }}</li>
+                    {% endfor %}
+                </ul>
             </td>
         </tr>
         </table>
@@ -31,7 +49,11 @@
         <br>
         {{ form.description(class="textarea", rows="4") }} 
         <br>
-        <input type="submit" class="formi" value="Päivitä tiedot"/>
+        {% if dest_add %}
+            <input type="submit" class="formi" value="Lisää Kohde"/>
+        {% else %}
+            <input type="submit" class="formi" value="Päivitä tiedot"/>
+        {% endif %}
     </div>
 </form>
 
