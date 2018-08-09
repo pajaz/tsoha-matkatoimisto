@@ -5,22 +5,28 @@
         <tr>
             <th>Matkakohde</th>
             <th>Maa</th>
+            {% if current_user.is_authenticated %}
+            <th>Varauksia</th>
             <th>Muokkaa</th>
             <th>Poista</th>
+            {% endif %}
         </tr>
         {% for matkakohde in matkakohteet %}
         <tr>
             <td>{{ matkakohde.name }}</td>
             <td>{{ matkakohde.country }}</td>
+            {% if current_user.is_authenticated %}
+            <td>{{ matkakohde.bookings }}</td>
             <td>
                 <a href="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}"> Muokkaa
                 </a>
-            </td> 
+            </td>
             <td>
                 <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde.id) }}">
                     <input type="submit" value="Poista kohde"/>
                 </form>
-            </td>                       
+            </td>   
+            {% endif %}                    
         </tr>
         {% endfor %}
     </table>

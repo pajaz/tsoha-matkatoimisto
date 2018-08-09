@@ -1,5 +1,8 @@
-from application import app, db
+
 from flask import redirect, render_template, request, url_for
+from flask_login import login_required
+
+from application import app, db
 from application.models import Matkakohde
 from application.admin.forms import DestinationForm
 
@@ -10,11 +13,13 @@ def matkakohteet_index():
 
 
 @app.route("/matkakohteet/uusi")
+@login_required
 def matkakohteet_form():
     return render_template("admin/matkakohde.html", form=DestinationForm(), dest_add=True)
 
 
 @app.route("/matkakohteet/", methods=["POST"])
+@login_required
 def matkakohteet_create():
 
     form = DestinationForm(request.form)
@@ -33,10 +38,11 @@ def matkakohteet_create():
 
         return redirect(url_for("matkakohteet_index"))
     
-    return render_template("admin/new.html", form=form, dest_add=True)
+    return render_template("admin/matkakohde.html", form=form, dest_add=True)
 
 
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])
+@login_required
 def matkakohteet_edit_form(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
@@ -49,7 +55,8 @@ def matkakohteet_edit_form(matkakohde_id):
 
         destination.name = dest_name
         destination.country = dest_country
-        destination.intro = dest_intro
+        if dest_intro:
+            destination.intro = dest_intro
 
         db.session().commit()
 
@@ -59,6 +66,7 @@ def matkakohteet_edit_form(matkakohde_id):
 
 
 @app.route("/matkakohteet/delete/<matkakohde_id>", methods=["GET", "POST"])
+@login_required
 def matkakohteet_delete(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)

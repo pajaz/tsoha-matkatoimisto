@@ -7,6 +7,16 @@
     </head>
 
     <body>
+
+        {% if current_user.is_authenticated %}
+        <p>
+            Kirjautunut nimellä {{ current_user.username }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+        </p>
+        {% else %}
+            <a href="{{ url_for('auth_login') }}">Kirjaudu</a> / <a href="{{ url_for('auth_new') }}">Luo Käyttäjätili</a>
+        {% endif %}
+
+
         <ul>
             <li><a href=" {{ url_for('matkakohteet_index')}} ">Matkakohteet</a></li>
             <li><a href=" {{ url_for('matkakohteet_form')}} ">Lisää uusi kohde</a></li>

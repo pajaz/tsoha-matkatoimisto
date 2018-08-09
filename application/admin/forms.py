@@ -10,7 +10,7 @@ class DestinationForm(FlaskForm):
     country = StringField("Maa", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
     intro = TextAreaField("Esittely (Vapaaehtoinen)", [validators.Length(max=500)])
 
-    def validate_destination_name(self, field):
+    def validate_name(self, field):
         if Matkakohde.query.filter_by(name=field.data).first():
             raise ValidationError("Kohde on jo listattu.")
 

@@ -1,0 +1,28 @@
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, validators, ValidationError
+
+from application.auth.models import Kayttaja
+
+class LoginForm(FlaskForm):
+    username = StringField("Käyttäjänimi", [validators.required()])
+    password = PasswordField("Salasana", [validators.required()])
+
+    class Meta:
+        csrf = False
+
+class NewUserForm(FlaskForm):
+    firstname = StringField("Etunimi:", [validators.required(), validators.Length(max=24, message="max. 24 merkkiä")])
+    lastname = StringField("Sukunimi:", [validators.required(), validators.Length(max=24, message="max. 24 merkkiä")])
+    phone_number = StringField("Puhelinnumero:", [validators.required(), validators.Length(min=8, max=20, message="merkkien määrä 8-20")])
+    email = StringField("Sähköpostiosoite (Vapaaehtoinen):", [validators.Length(min=6, max=35, message="merkkien määrä 8-20")])
+    username = StringField("Käyttäjänimi:", [validators.required(), validators.Length(min=4, max=24, message="merkkien määrä 4-24")])
+    password = PasswordField("Salasana:", [validators.required(), validators.Length(min=6, max=144, message="min. 6 merkkiä"),
+                                           validators.EqualTo("confirm", message="Salasanojen tulee olla samat")])
+    confirm = PasswordField("Salasana uudestaan:", [validators.required()])
+
+    def validate_username(self, field):
+        if Kayttaja.query.filter_by(username=field.data).first():
+            raise ValidationError("Käyttäjätunnus on jo käytössä")
+
+    class Meta:
+        csrf = False
