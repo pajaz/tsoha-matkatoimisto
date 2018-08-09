@@ -2,10 +2,16 @@ from flask import Flask
 app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
-# Otetaan käyttöön matkakohteet.db tietokanta
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///matkakohteet.db"
-# SQL-kyselyiden tulostus
-app.config["SQLALCHEMY_ECHO"] = True
+
+# Kerrotaan sovellukselle missä ympäristössä toimitaan (Heroku / Paikallinen)
+import os
+if os.environ.get("HEROKU"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+else:
+    # Otetaan käyttöön matkakohteet.db tietokanta
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///matkakohteet.db"
+    # SQL-kyselyiden tulostus
+    app.config["SQLALCHEMY_ECHO"] = True
 
 # Tietokanta olion luonti
 db = SQLAlchemy(app)
@@ -35,4 +41,8 @@ login_manager.login_message = "Kirjaudu sisään käyttääksesi tätä toiminna
 def load_user(user_id):
     return Kayttaja.query.get(user_id)
 
-db.create_all()
+# Jos tarpeellista, luodaan tietokanta
+try:
+    db.create_all()
+except:
+    pass
