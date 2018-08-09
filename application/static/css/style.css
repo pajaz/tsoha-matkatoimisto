@@ -23,8 +23,8 @@ input[type=submit].formi {
 input[type=submit].delsubmit {
     width: 15%;
     min-width: 120px;
-    background-color: red;
-    color: black; 
+    background-color: #FF0000;
+    color: #000000; 
     height: 30px;
     margin-bottom: 20px;
     
@@ -41,6 +41,15 @@ textarea {
 
 th {
     text-align: left
+}
+
+.formbox {
+    border-style: solid;
+}
+
+.formbox td {
+    width: 50%;
+    height: 35px;
 }
 
 div.addform {

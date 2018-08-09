@@ -3,7 +3,7 @@
 {% block body %}
 {{ error }}
 <form method="POST" action="{{ url_for('auth_new') }}">
-        <table>
+        <table class="formbox">
             <tr>
                 <td>
                     {{ form.firstname.label }}
