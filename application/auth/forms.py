@@ -4,7 +4,7 @@ from wtforms import PasswordField, StringField, validators, ValidationError
 from application.auth.models import Kayttaja
 
 class LoginForm(FlaskForm):
-    username = StringField("Käyttäjänimi", [validators.required()])
+    username = StringField("Käyttäjätunnus", [validators.required()])
     password = PasswordField("Salasana", [validators.required()])
 
     class Meta:
@@ -15,7 +15,7 @@ class NewUserForm(FlaskForm):
     lastname = StringField("Sukunimi:", [validators.required(), validators.Length(max=24, message="max. 24 merkkiä")])
     phone_number = StringField("Puhelinnumero:", [validators.required(), validators.Length(min=8, max=20, message="merkkien määrä 8-20")])
     email = StringField("Sähköpostiosoite (Vapaaehtoinen):", [validators.Length(min=6, max=35, message="merkkien määrä 8-20")])
-    username = StringField("Käyttäjänimi:", [validators.required(), validators.Length(min=4, max=24, message="merkkien määrä 4-24")])
+    username = StringField("Käyttäjätunnus:", [validators.required(), validators.Length(min=4, max=24, message="merkkien määrä 4-20")])
     password = PasswordField("Salasana:", [validators.required(), validators.Length(min=6, max=144, message="min. 6 merkkiä"),
                                            validators.EqualTo("confirm", message="Salasanojen tulee olla samat")])
     confirm = PasswordField("Salasana uudestaan:", [validators.required()])

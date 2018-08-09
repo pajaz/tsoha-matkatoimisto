@@ -21,7 +21,7 @@ def matkakohteet_form():
 @app.route("/matkakohteet/", methods=["POST"])
 @login_required
 def matkakohteet_create():
-
+    
     form = DestinationForm(request.form)
 
     dest_name = form.name.data
@@ -48,7 +48,7 @@ def matkakohteet_edit_form(matkakohde_id):
     destination = Matkakohde.query.get_or_404(matkakohde_id)
     form = DestinationForm(obj=destination)
 
-    if request.method == 'POST' and form.validate():
+    if request.method == 'POST' and form.validate(): 
         dest_name = form.name.data
         dest_country = form.country.data
         dest_intro = form.intro.data

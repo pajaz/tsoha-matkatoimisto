@@ -10,6 +10,7 @@ input[type=text].formtext, select {
 
 input[type=submit].formi {
     width: 50%;
+    min-width: 150px;
     background-color: greenyellow;
     color: black;
     padding: 14px 20px;
@@ -17,6 +18,16 @@ input[type=submit].formi {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+input[type=submit].delsubmit {
+    width: 15%;
+    min-width: 120px;
+    background-color: red;
+    color: black; 
+    height: 30px;
+    margin-bottom: 20px;
+    
 }
 
 textarea {
@@ -34,7 +45,10 @@ th {
 
 div.addform {
     width: 50%;
-    border: 1px solid black;
+}
+
+div.headerspace {
+    width: 50%;
 }
 
 table.adminform {
