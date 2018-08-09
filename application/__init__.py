@@ -12,10 +12,10 @@ app.config["SQLALCHEMY_ECHO"] = True
 db = SQLAlchemy(app)
 
 # näkymien lukeminen
-from application import views
-
-from application.matkakohteet import models
-from application.matkakohteet import views
+from application.start_page import views
+from application.admin import views
 
 # Luodaan tietokantataulut
+
+from application import models
 db.create_all()

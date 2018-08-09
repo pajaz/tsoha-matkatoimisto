@@ -1,0 +1,38 @@
+
+
+
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form method="POST" action="{{ url_for('matkakohteet_edit', matkakohde_id=matkakohde.id) }}">
+    <div class="addform">
+        <table class="adminform">
+        <tr>
+            <td>
+                {{ form.name.label(class="formtext") }}
+            </td>
+            <td>
+                {{ form.name }} 
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.country.label(class="formtext") }}
+            </td>
+            <td>
+                {{ form.country }}
+            </td>
+        </tr>
+        </table>
+        <label>
+            {{ form.description.label}}
+        </label>
+        <br>
+        {{ form.description(class="textarea", rows="4") }} 
+        <br>
+        <input type="submit" class="formi" value="Päivitä tiedot"/>
+    </div>
+</form>
+
+{% endblock %}

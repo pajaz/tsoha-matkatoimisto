@@ -17,8 +17,9 @@
                 </a>
             </td> 
             <td>
-                <form method="POST" action="{{ url_for('matkakohteet_delete', id=matkakohde.id) }}">
+                <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde.id) }}">
                     <input type="submit" value="Poista kohde"/>
+                </form>
             </td>                       
         </tr>
         {% endfor %}
