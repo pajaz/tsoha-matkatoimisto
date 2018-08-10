@@ -6,6 +6,7 @@
   [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/)  
   * Testitunnus: testi 
   * Salasana: 123456 (Voit toki luoda myös oman)  
+    
   [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(first_draft).pdf)  
   [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md) 
    
