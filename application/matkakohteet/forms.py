@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, ValidationError, validators
 
-from ..models import Matkakohde
+from application.matkakohteet.models import Matkakohde
 
 
 #Lomake uusien matkakohteiden lisäämiseen ja muokkaamiseen

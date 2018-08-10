@@ -3,19 +3,19 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required
 
 from application import app, db
-from application.models import Matkakohde
-from application.admin.forms import DestinationForm
+from application.matkakohteet.models import Matkakohde
+from application.matkakohteet.forms import DestinationForm
 
 
 @app.route("/matkakohteet/", methods=["GET"])
 def matkakohteet_index():
-    return render_template("admin/list.html", matkakohteet=Matkakohde.query.all())
+    return render_template("matkakohteet/list.html", matkakohteet=Matkakohde.query.all())
 
 
 @app.route("/matkakohteet/uusi")
 @login_required
 def matkakohteet_form():
-    return render_template("admin/matkakohde.html", form=DestinationForm(), dest_add=True)
+    return render_template("matkakohteet/matkakohde.html", form=DestinationForm(), dest_add=True)
 
 
 @app.route("/matkakohteet/", methods=["POST"])
@@ -38,7 +38,7 @@ def matkakohteet_create():
 
         return redirect(url_for("matkakohteet_index"))
     
-    return render_template("admin/matkakohde.html", form=form, dest_add=True)
+    return render_template("matkakohteet/matkakohde.html", form=form, dest_add=True)
 
 
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])
@@ -62,7 +62,7 @@ def matkakohteet_edit_form(matkakohde_id):
 
         return redirect(url_for("matkakohteet_index"))
 
-    return render_template("admin/matkakohde.html", form=form, matkakohde=destination, matkakohde_id=destination.id, dest_add=False)
+    return render_template("matkakohteet/matkakohde.html", form=form, matkakohde=destination, matkakohde_id=destination.id, dest_add=False)
 
 
 @app.route("/matkakohteet/delete/<matkakohde_id>", methods=["GET", "POST"])

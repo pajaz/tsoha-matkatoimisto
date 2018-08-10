@@ -5,10 +5,10 @@ class Kayttaja(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
 
-    first_name = db.Column(db.String(30), nullable=False)
-    last_name = db.Column(db.String(30), nullable=False)
-    username = db.Column(db.String(30), nullable=False)
-    email = db.Column(db.String(50))
+    first_name = db.Column(db.String(24), nullable=False)
+    last_name = db.Column(db.String(24), nullable=False)
+    username = db.Column(db.String(24), nullable=False)
+    email = db.Column(db.String(48))
     phone_number = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(144), nullable=False)
 
