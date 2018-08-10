@@ -1,3 +1,4 @@
+# application/auth/views.py
 from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user
 
@@ -5,6 +6,7 @@ from application import app, db
 from application.auth.models import Kayttaja
 from application.auth.forms import LoginForm, NewUserForm
 
+# Kirjautumislomakkeen haku, sekä lähetys
 @app.route("/auth/login", methods = ["GET", "POST"])
 def auth_login():
     if request.method == "GET":
@@ -12,24 +14,27 @@ def auth_login():
 
     form = LoginForm(request.form)
 
-    #Tähän validointeja
+    if form.validate():
+        username = form.username.data
+        password = form.password.data
 
-    username = form.username.data
-    password = form.password.data
-
-    user = Kayttaja.query.filter_by(username=username, password=password).first()
-    if not user:
-        return render_template("auth/loginform.html", form = form, 
+        user = Kayttaja.query.filter_by(username=username, password=password).first()
+        if not user:
+            return render_template("auth/loginform.html", form = form, 
                                 error = "Tuntematon käyttäjänimi tai salasana")
     
-    login_user(user)
-    return redirect(url_for("matkakohteet_index"))
+        login_user(user)
+        return redirect(url_for("matkakohteet_index"))
+    return render_template("auth/loginform.html", form = form)
 
+    
+# Uloskirjaus
 @app.route("/auth/logout")
 def auth_logout():
     logout_user()
     return redirect(url_for("index"))
 
+# Uuden käyttäjän luomiseen käytettävän lomakkeen haku ja lähetys
 @app.route("/auth/new", methods = ["GET", "POST"])
 def auth_new():
     if request.method == "GET":

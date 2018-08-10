@@ -1,5 +1,7 @@
+# application/auth/models.py
 from application import db
 
+# Määritellään tietokantataulun malli
 class Kayttaja(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)

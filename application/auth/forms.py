@@ -1,8 +1,10 @@
+# application/auth/forms.py
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, validators, ValidationError
 
 from application.auth.models import Kayttaja
 
+# Lomake siäänkirjautumiseen
 class LoginForm(FlaskForm):
     username = StringField("Käyttäjätunnus", [validators.required()])
     password = PasswordField("Salasana", [validators.required()])
@@ -10,6 +12,7 @@ class LoginForm(FlaskForm):
     class Meta:
         csrf = False
 
+# Lomake jolla luodaan uusi käyttäjä
 class NewUserForm(FlaskForm):
     firstname = StringField("Etunimi:", [validators.required(), validators.Length(max=24, message="max. 24 merkkiä")])
     lastname = StringField("Sukunimi:", [validators.required(), validators.Length(max=24, message="max. 24 merkkiä")])
@@ -20,6 +23,7 @@ class NewUserForm(FlaskForm):
                                            validators.EqualTo("confirm", message="Salasanojen tulee olla samat")])
     confirm = PasswordField("Salasana uudestaan:", [validators.required()])
 
+    # Tarkistaa, ettei käyttäjänimi ole jo käytössä
     def validate_username(self, field):
         if Kayttaja.query.filter_by(username=field.data).first():
             raise ValidationError("Käyttäjätunnus on jo käytössä")

@@ -4,8 +4,10 @@
     <table>
         <tr>
             <th>Hotelli</th>
+            <!-- <th>Matkakohde</th> -->
             <th>Osoite</th>
             <!--
+            Kommentoitu osa pois, koska ei vielä varmuutta mitä tiedoista tulee lopulliseen listaan
                 <th>Puhelinnumero</th>
             <th>Email</th>
             <th>Varauksia</th>
@@ -21,6 +23,7 @@
         {% for hotelli in hotellit %}
         <tr>
             <td> {{ hotelli.name }} </td>
+           <!-- <td> {{ hotelli.destination_id }} </td>  Tämä ei oikein skulaa vielä -->
             <td> {{ hotelli.address }} </td>
             <!-- 
             <td> {{ hotelli.phone_number }} </td>
@@ -36,7 +39,7 @@
                 <a href="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}"> Muokkaa
                 </a>
             </td>
-            <td>
+            <td> <!-- Lomake hotellien poistamiseen -->
                 <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli.id) }}">
                     <input type="submit" value="Poista kohde"/>
                 </form>

@@ -4,19 +4,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
+<!-- Seuraavassa määritellään dest_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
 {% if dest_add %}
     <h1> Lisää uusi matkakohde </h1>
         <form method="POST" action="{{ url_for('matkakohteet_create') }}">
 {% else %}
     <div class="headerspace">
         <h1> Muokkaa kohteen tietoja </h1> 
+        <!-- Kohteen poistonamiska. Pitäisi olla punainen, mutta puhun huonoa css:ää -->
         <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde_id) }}">
             <input class="delsubmit" type="submit" value="Poista kohde"/>
         </form>
     </div>
     <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
 {% endif %}
+    <!-- Loppusivu on kohteiden lisäys/editointi lomaketta. Toistaiseksi sivuille voi lisätä duplikaatteja-->
     <div class="addform">
         <table class="adminform">
         <tr>

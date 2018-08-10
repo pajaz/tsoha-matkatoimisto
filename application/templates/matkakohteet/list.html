@@ -5,13 +5,13 @@
         <tr>
             <th>Matkakohde</th>
             <th>Maa</th>
-            {% if current_user.is_authenticated %}
+            {% if current_user.is_authenticated %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
             <th>Varauksia</th>
             <th>Muokkaa</th>
             <th>Poista</th>
             {% endif %}
         </tr>
-        {% for matkakohde in matkakohteet %}
+        {% for matkakohde in matkakohteet %} <!-- Listataan kaikki tietokannasta löytyvät matkakohteet -->
         <tr>
             <td>{{ matkakohde.name }}</td>
             <td>{{ matkakohde.country }}</td>

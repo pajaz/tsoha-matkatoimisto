@@ -1,16 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
+<!-- Seuraavassa määritellään hotel_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
 {% if hotel_add %}
     <h1> Lisää uusi hotelli </h1>
         <form method="POST" action="{{ url_for('hotellit_create') }}">
 {% else %}
     <div class="headerspace">
         <h1> Muokkaa kohteen tietoja </h1> 
+        <!-- Kohteen poistonamiska. Pitäisi olla punainen, mutta css taitoni ovat rajalliset :) -->
         <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli_id) }}">
             <input class="delsubmit" type="submit" value="Poista kohde"/>
         </form>
+        <!-- Seuraava osio pitää sisällään hotellien lisäys/editointi lomakkeen. (Pitää siistiä myöhemmin)-->
     </div>
     <form method="POST" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}">
 {% endif %}

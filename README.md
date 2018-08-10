@@ -3,9 +3,10 @@
 
    <h2> Linkit </h2>
    
-  [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/)  
+  [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/) 
+    * Testitunnus: testi Salasana: 123456 (Voit toki luoda myös oman)
   [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(first_draft).pdf)  
-  [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md)  
+  [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md) 
    
    <h2> Yleiskuvaus </h2>
 
@@ -30,6 +31,7 @@
    
    * Kohteiden ja majoitusvaihtoehtojen katselu
    * Varauksen tekeminen
+   * Omien tietojen muokkaaminen
    * (Oman varauksen tietojen muokkaaminen)
    
    more to come...
