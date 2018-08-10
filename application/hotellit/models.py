@@ -17,8 +17,8 @@ class Hotelli(db.Model):
     star_rating = db.Column(db.Integer, nullable=False) # 1-5 tähteä
     introduction = db.Column(db.String(500))
 
-    # Liitetään jokaiseen luotuun hotelliin yksi Matkakohde
-    destination_id = db.Column(db.Integer, db.ForeignKey("matkakohde.id"), nullable=False)
+    # Liitetään jokaiseen luotuun hotelliin yksi Matkakohde. Toistaiseksi poistettu!
+    # destination_id = db.Column(db.Integer, db.ForeignKey("matkakohde.id"), nullable=False)
 
     def __init__(self, name, address, phone_number, star_rating, small_rooms, 
              large_rooms, price_small, price_large, email,

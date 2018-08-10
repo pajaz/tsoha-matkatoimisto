@@ -9,8 +9,8 @@ class Matkakohde(db.Model):
     intro = db.Column(db.String(500))
     bookings = db.Column(db.Integer)
 
-    # Määritellään riippuvuussuhde hotellien kanssa
-    hotels = db.relationship("Hotelli", backref="matkakohde", lazy=True)
+    # Määritellään riippuvuussuhde hotellien kanssa. Toistaiseksi poistettu!
+    #hotels = db.relationship("Hotelli", backref="matkakohde", lazy=True)
 
     def __init__(self, name, country, intro = "Kohde-esittelyä ei ole vielä kirjoitettu", bookings = 0):
         self.name = name
