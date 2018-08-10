@@ -1,5 +1,5 @@
 
-from flask import redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
 from application import app, db
@@ -27,7 +27,7 @@ def matkakohteet_create():
     dest_name = form.name.data
     dest_country = form.country.data
     dest_intro = form.intro.data
-    if form.validate():
+    if form.validate_on_submit():
         if not dest_intro:
             dest = Matkakohde(dest_name.title(), dest_country.title())
         else:
@@ -48,7 +48,7 @@ def matkakohteet_edit_form(matkakohde_id):
     destination = Matkakohde.query.get_or_404(matkakohde_id)
     form = DestinationForm(obj=destination)
 
-    if request.method == 'POST' and form.validate(): 
+    if request.method == 'POST' and form.validate():
         dest_name = form.name.data
         dest_country = form.country.data
         dest_intro = form.intro.data
@@ -62,7 +62,8 @@ def matkakohteet_edit_form(matkakohde_id):
 
         return redirect(url_for("matkakohteet_index"))
 
-    return render_template("matkakohteet/matkakohde.html", form=form, matkakohde=destination, matkakohde_id=destination.id, dest_add=False)
+    return render_template("matkakohteet/matkakohde.html", form=form, matkakohde=destination, 
+                            matkakohde_id=destination.id, dest_add=False)
 
 
 @app.route("/matkakohteet/delete/<matkakohde_id>", methods=["GET", "POST"])

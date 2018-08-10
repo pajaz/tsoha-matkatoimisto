@@ -19,10 +19,12 @@ db = SQLAlchemy(app)
 # näkymien lukeminen
 from application.start_page import views
 from application.matkakohteet import views
+from application.hotellit import views
 from application.auth import views
 
 # Tietokantamallit
 from application.matkakohteet import models
+from application.hotellit import models
 from application.auth import models
 
 # Kirjautuminen

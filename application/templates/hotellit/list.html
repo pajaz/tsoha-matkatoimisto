@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <table>
+        <tr>
+            <th>Hotelli</th>
+            <th>Osoite</th>
+            <!--
+                <th>Puhelinnumero</th>
+            <th>Email</th>
+            <th>Varauksia</th>
+            <th>Pieniä Huoneita</th>
+            <th>Suuria Huoneita</th>
+            <th>€/viikko (pieni)</th>
+            <th>€/viikko (suuri)</th>
+            -->
+            <th>Tähtiluokitus</th>
+            <th>Muokkaa</th>
+            <th>Poista</th>
+        </tr>
+        {% for hotelli in hotellit %}
+        <tr>
+            <td> {{ hotelli.name }} </td>
+            <td> {{ hotelli.address }} </td>
+            <!-- 
+            <td> {{ hotelli.phone_number }} </td>
+            <td> {{ hotelli.email }} </td>
+            <td> {{ hotelli.bookings }} </td>
+            <td> {{ hotelli.small_rooms }} </td>
+            <td> {{ hotelli.large_rooms }} </td>
+            <td> {{ hotelli.price_small }} </td>
+            <td> {{ hotelli.price_large }} </td>
+            -->
+            <td> {{ hotelli.star_rating }} </td>
+            <td>
+                <a href="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}"> Muokkaa
+                </a>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli.id) }}">
+                    <input type="submit" value="Poista kohde"/>
+                </form>
+            </td>                     
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
