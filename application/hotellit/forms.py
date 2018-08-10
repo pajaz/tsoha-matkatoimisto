@@ -25,12 +25,12 @@ class HotelForm(FlaskForm):
     introduction = TextAreaField("Esittely (0-500 merkkiä)", [validators.optional(), validators.Length(max=500, message="max. 500 merkkiä")])
 
     # Metodi tarkastaa hotellin lisäyksen yhteydessä, että Hotelliin liitettävä
-    # Matkakohde on olemassa.
-    def validate_destination(form, field):
-        dest = db.session.query(Matkakohde).filter(Matkakohde.name==form.destination.data).first()
-        if not dest:
-            raise ValidationError("Kohdetta ei tietokannassa")
-
+    # Matkakohde on olemassa. Toistaiseksi pois käytöstä.
+    
+    # def validate_destination(form, field):
+    #   dest = db.session.query(Matkakohde).filter(Matkakohde.name==form.destination.data).first()
+    #    if not dest:
+    #        raise ValidationError("Kohdetta ei tietokannassa")
 
     class Meta:
         csrf = False
