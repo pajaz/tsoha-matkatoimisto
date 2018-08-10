@@ -12,8 +12,8 @@ class HotelForm(FlaskForm):
     # Sallii toistaiseksi duplikaattien lisäämisen.
 
     name = StringField("Nimi *", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
-    destination = StringField("Matkakohde *", [validators.required(), validators.Length(max=30, 
-                                               message=('max. 30 merkkiä'))])
+    #destination = StringField("Matkakohde *", [validators.required(), validators.Length(max=30, 
+    #                                           message=('max. 30 merkkiä'))])
     address = StringField("Osoite *", [validators.required(),validators.Length(min=10, max=50, message=('10-50 merkkiä'))])
     phone_number = StringField("Puhelinnumero *", [validators.required(),validators.Length(min=8, max=20, message=('10-20 merkkiä'))])
     email = StringField("Sähköposti", [validators.optional(), validators.email(message="Ei kunnollinen sähköpostiosoite")])
@@ -26,7 +26,7 @@ class HotelForm(FlaskForm):
 
     # Metodi tarkastaa hotellin lisäyksen yhteydessä, että Hotelliin liitettävä
     # Matkakohde on olemassa. Toistaiseksi pois käytöstä.
-    
+
     # def validate_destination(form, field):
     #   dest = db.session.query(Matkakohde).filter(Matkakohde.name==form.destination.data).first()
     #    if not dest:
