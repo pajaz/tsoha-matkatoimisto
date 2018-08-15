@@ -65,14 +65,14 @@ table.adminform {
 }
 
 .navbar {
-    background: yellow;
+    background: #FFFF00;
     margin: 0 0 1cm 0;
 }
 
 .navbar-light {
-    color: white;
+    color: #FFFFFF;
 }
 
 .btn-default {
-    background: yellow
+    background: #FFFF00
 }
