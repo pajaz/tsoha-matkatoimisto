@@ -59,30 +59,28 @@ def hotellit_create():
 @login_required
 def hotellit_edit_form(hotelli_id):
 
-    Hotel = Hotelli.query.get_or_404(hotelli_id)
-    form = HotelForm(obj=Hotel) # Täytetään lomake tietokannasta löytyvillä hotellin tiedoilla
+    hotel = Hotelli.query.get_or_404(hotelli_id)
+    form = HotelForm(obj=hotel) # Täytetään lomake tietokannasta löytyvillä hotellin tiedoilla
 
     if request.method == 'POST' and form.validate(): 
-        hotel_name = form.name.data
-        hotel_address = form.address.data
-        hotel_phone_number = form.phone_number.data
-        hotel_small_rooms = form.small_rooms.data
-        hotel_large_rooms = form.large_rooms.data
-        hotel_price_small = form.price_small.data
-        hotel_price_large = form.price_large.data
-        hotel_star_rating = form.star_rating.data
-        hotel_email = form.email.data
-        hotel_introduction = form.introduction.data
+        hotel.name = form.name.data
+        hotel.address = form.address.data
+        hotel.phone_number = form.phone_number.data
+        hotel.small_rooms = form.small_rooms.data
+        hotel.large_rooms = form.large_rooms.data
+        hotel.price_small = form.price_small.data
+        hotel.price_large = form.price_large.data
+        hotel.star_rating = form.star_rating.data
+        hotel.email = form.email.data
 
-        if hotel_introduction: # Jos esittelyn yrittää pyyhkiä kokonaan pois, sitä ei tallenneta
-            Hotel.introduction = hotel_introduction
+        if hotel.introduction: # Jos esittelyn yrittää pyyhkiä kokonaan pois, sitä ei tallenneta
+            hotel.introduction = form.introduction.data
 
         db.session().commit()
 
         return redirect(url_for("hotellit_index"))
 
-    return render_template("hotellit/hotelli.html", form=form, hotelli=Hotel, hotelli_id=Hotel.id, hotel_add=False)
-
+    return render_template("hotellit/hotelli.html", form=form, hotelli=hotel, hotelli_id=hotel.id, hotel_add=False)
 # Hotellien poisto. Ei muuta.
 @app.route("/hotellit/delete/<hotelli_id>", methods=["GET", "POST"])
 @login_required

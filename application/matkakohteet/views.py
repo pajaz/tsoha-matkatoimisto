@@ -52,7 +52,8 @@ def matkakohteet_edit_form(matkakohde_id):
 
         destination.name = form.name.data
         destination.country = form.country.data
-        if dest_intro: # Jos kohteen esittelyn yrittää pyyhkiä kokonaan pois, sitä ei tallenneta
+        
+        if destination.intro: # Jos kohteen esittelyn yrittää pyyhkiä kokonaan pois, sitä ei tallenneta
             destination.intro = form.intro.data
 
         db.session().commit()
