@@ -4,9 +4,8 @@
 
 {% block body %}
 
-    {% block content %}
 <!-- Seuraavassa määritellään dest_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
-    <div class="container"></div>
+    <div class="container middle-column">
     {% if dest_add %}
     <h1> Lisää uusi matkakohde </h1>
         <form method="POST" action="{{ url_for('matkakohteet_create') }}">
@@ -20,15 +19,15 @@
         <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}" class="form" role="form">
     {% endif %}
        
-        <div class="h-50 inline-block">
+        <div class="middle-column">
             {{ wtf.form_field(form.name, class="form-control", placeholder="Kohteen nimi") }}
             {{ wtf.form_field(form.country, class="form-control", placeholder="Maa") }}
             {{ wtf.form_field(form.intro, class="form-control", placeholder="Kirjoita tähän enintään 500 merkin esittely") }}
+        
             <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
         </div>
-     
         </form>
     </div>
-    {% endblock %}
+ 
 
 {% endblock %}

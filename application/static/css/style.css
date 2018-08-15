@@ -1,55 +1,18 @@
-input[type=text].formtext, select {
-    width: 50%;
-    height: 25px;
-    padding: 10px 5px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-input[type=submit].formi {
-    width: 50%;
-    min-width: 150px;
-    background-color: greenyellow;
-    color: black;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-input[type=submit].delsubmit {
-    width: 15%;
-    min-width: 120px;
-    background-color: #FF0000;
-    color: #000000; 
-    height: 30px;
-    margin-bottom: 20px;
-    
-}
-
-textarea {
-    width: 50%;
-    padding: 5px 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    resize: none;
-    overflow-y: scroll;
-}
-
 th {
     text-align: left
 }
 
-.formbox {
-    border-style: solid;
+body {
+    background: gainsboro;
 }
 
-.formbox td {
-    width: 50%;
-    height: 35px;
+.middle-column {
+    background: white;
+    padding-bottom: 10px
+}
+
+.card {
+    margin-bottom: 10px;
 }
 
 div.addform {
@@ -79,4 +42,8 @@ table.adminform {
 
 .loginform {
     width: 50%;
+}
+
+.word-wrap {
+    word-wrap: break-word;
 }

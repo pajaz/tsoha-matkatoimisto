@@ -1,9 +1,38 @@
-{% extends layout.html %}
+{% extends "layout.html" %}
 
 {% block body %}
 
-    <div class="container">
-        <h2> {{ matkakohde.name }} </h2>
-        <h3> {{ matkakohde.country }} </h3> 
-
+    <div class="container-fluid word-wrap">
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-4 middle-column">
+                <h3> {{ matkakohde.name }} </h3>
+                <p class="text-black-50"> {{ matkakohde.country }} </p>
+                <div class="card middle-column">
+                    <h5>Kohde-esittely</h5>
+                    <p> {{ matkakohde.intro }} </p>
+                </div>
+                <div class="card middle-column">
+                    <h6>Valitse haluamasi lähtöpäivä</h6>
+                </div>
+                {% if current_user.is_authenticated %}
+                <div class="card middle-column">
+                    <p>Kohteesen tehty {{ matkakohde.bookings }} varausta. <br>
+                       Joista aktiivisia:  <br>
+                       Tulevia: <br>
+                       Päättyneitä: <br>
+                       Käsittelemättömiä:  <br>
+                       Käsiteltyjä: 
+                    </p> 
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-sm-2 middle-column">
+                <h5>Hotellit:</h5>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
     </div>
+
+
+{% endblock %}
