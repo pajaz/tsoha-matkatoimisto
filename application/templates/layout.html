@@ -1,29 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html lang="fin">
     <head>
         <meta charset="utf-8">
+        <meta content="width=device.width, initial-scale=1.0">
         <title>Matkatoimisto X</title>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     </head>
 
     <body>
-        <!-- Kirjautumisenhallinta -->
-        {% if current_user.is_authenticated %}
-        <p>
-            Kirjautunut nimellä {{ current_user.username }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
-        </p>
-        {% else %}
-            <a href="{{ url_for('auth_login') }}">Kirjaudu</a> / <a href="{{ url_for('auth_new') }}">Luo Käyttäjätili</a>
-        {% endif %}
-
-        <!-- Navigointilinkit-->
-        <ul>
-            <li><a href=" {{ url_for('matkakohteet_index') }} ">Matkakohteet</a></li>
-            <li><a href=" {{ url_for('matkakohteet_form') }} ">Lisää uusi kohde</a></li>
-            <li><a href=" {{ url_for('hotellit_index') }} ">Hotellit</a></li>
-            <li><a href=" {{ url_for('hotellit_form') }} ">Lisää uusi hotelli</a></li>
-        </ul>
-
+        <nav class="navbar navbar-expand-sm navbar-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href=" {{ url_for('matkakohteet_index') }} ">
+                    <img height="75%" width="75%" border="0" src="{{ url_for('static', filename='images/logosmall.png') }}" alt="logo">
+                </a>
+                <!-- Navigointilinkit-->
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            Matkakohteet
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href=" {{ url_for('matkakohteet_index') }} ">Näytä kaikki</a>
+                            <a class="dropdown-item" href=" {{ url_for('matkakohteet_form') }} ">Lisää uusi</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            Hotellit    
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href=" {{ url_for('hotellit_index') }} ">Näytä kaikki</a>
+                            <a class="dropdown-item" href=" {{ url_for('hotellit_form') }} ">Lisää uusi</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <!-- Kirjautumisenhallinta -->
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="#"><span class="glyphicon glyphicon-user"></span> {{ current_user.username }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('auth_login') }}">Kirjaudu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('auth_new') }}">Luo Käyttäjätili</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
 
         {% block body %}
         <p>

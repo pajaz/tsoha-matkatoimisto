@@ -63,3 +63,16 @@ div.headerspace {
 table.adminform {
     width: 100%
 }
+
+.navbar {
+    background: yellow;
+    margin: 0 0 1cm 0;
+}
+
+.navbar-light {
+    color: white;
+}
+
+.btn-default {
+    background: yellow
+}

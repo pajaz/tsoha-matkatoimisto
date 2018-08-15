@@ -1,33 +1,48 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <table>
-        <tr>
-            <th>Matkakohde</th>
-            <th>Maa</th>
-            {% if current_user.is_authenticated %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
-            <th>Varauksia</th>
-            <th>Muokkaa</th>
-            <th>Poista</th>
-            {% endif %}
-        </tr>
-        {% for matkakohde in matkakohteet %} <!-- Listataan kaikki tietokannasta löytyvät matkakohteet -->
-        <tr>
-            <td>{{ matkakohde.name }}</td>
-            <td>{{ matkakohde.country }}</td>
-            {% if current_user.is_authenticated %}
-            <td>{{ matkakohde.bookings }}</td>
-            <td>
-                <a href="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}"> Muokkaa
-                </a>
-            </td>
-            <td>
-                <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde.id) }}">
-                    <input type="submit" value="Poista kohde"/>
-                </form>
-            </td>   
-            {% endif %}                    
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>Matkakohteet</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Matkakohde</th>
+                    <th>Maa</th>
+                    {% if current_user.is_authenticated %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
+                    <th>Varauksia</th>
+                    <th>Muokkaa</th>
+                    <th>Poista</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            {% for matkakohde in matkakohteet %} <!-- Listataan kaikki tietokannasta löytyvät matkakohteet -->
+            <tr>
+                <td>{{ matkakohde.name }}</td>
+                <td>{{ matkakohde.country }}</td>
+                {% if current_user.is_authenticated %}
+                <td>{{ matkakohde.bookings }}</td>
+                <td>
+                    <form method="GET" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
+                        <input type="submit" class="btn btn-secondary" value="Muokkaa"/>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde.id) }}">
+                        <input type="submit" class="btn btn-secondary" value="Poista kohde"/>
+                    </form>
+                </td>   
+                {% endif %}                    
+            </tr>
+            {% endfor %}
+        </table>
+        {% if current_user.is_authenticated %}
+        <div class="container">
+            
+            <form method="GET" action="{{ url_for('matkakohteet_form') }}">
+                <input type="submit" class="btn btn-default" value="Lisää uusi kohde"/>
+            </form>
+           
+        </div>
+        {% endif %}
+    </div> 
 {% endblock %}

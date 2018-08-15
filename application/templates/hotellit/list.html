@@ -1,50 +1,64 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <table>
-        <tr>
-            <th>Hotelli</th>
-            <!-- <th>Matkakohde</th> -->
-            <th>Osoite</th>
-            <!--
-            Kommentoitu osa pois, koska ei vielä varmuutta mitä tiedoista tulee lopulliseen listaan
-                <th>Puhelinnumero</th>
-            <th>Email</th>
-            <th>Varauksia</th>
-            <th>Pieniä Huoneita</th>
-            <th>Suuria Huoneita</th>
-            <th>€/viikko (pieni)</th>
-            <th>€/viikko (suuri)</th>
-            -->
-            <th>Tähtiluokitus</th>
-            <th>Muokkaa</th>
-            <th>Poista</th>
-        </tr>
-        {% for hotelli in hotellit %}
-        <tr>
-            <td> {{ hotelli.name }} </td>
-           
-            <td> {{ hotelli.address }} </td>
-            <!-- 
-            <td> {{ hotelli.phone_number }} </td>
-            <td> {{ hotelli.email }} </td>
-            <td> {{ hotelli.bookings }} </td>
-            <td> {{ hotelli.small_rooms }} </td>
-            <td> {{ hotelli.large_rooms }} </td>
-            <td> {{ hotelli.price_small }} </td>
-            <td> {{ hotelli.price_large }} </td>
-            -->
-            <td> {{ hotelli.star_rating }} </td>
-            <td>
-                <a href="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}"> Muokkaa
-                </a>
-            </td>
-            <td> <!-- Lomake hotellien poistamiseen -->
-                <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli.id) }}">
-                    <input type="submit" value="Poista kohde"/>
-                </form>
-            </td>                     
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="container">
+        <h2>Hotellit</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Hotelli</th>
+                    <!-- <th>Matkakohde</th> -->
+                    <th>Osoite</th>
+                    <!--
+                    Kommentoitu osa pois, koska ei vielä varmuutta mitä tiedoista tulee lopulliseen listaan
+                    <th>Puhelinnumero</th>
+                    <th>Email</th>
+                    <th>Varauksia</th>
+                    <th>Pieniä Huoneita</th>
+                    <th>Suuria Huoneita</th>
+                    <th>€/viikko (pieni)</th>
+                    <th>€/viikko (suuri)</th>
+                    -->
+                    <th>Tähtiluokitus</th>
+                    <th>Muokkaa</th>
+                    <th>Poista</th>
+                </tr>
+            </thead>    
+            {% for hotelli in hotellit %}
+            <tr>
+                <td> {{ hotelli.name }} </td>
+                
+                <td> {{ hotelli.address }} </td>
+                <!-- 
+                <td> {{ hotelli.phone_number }} </td>
+                <td> {{ hotelli.email }} </td>
+                <td> {{ hotelli.bookings }} </td>
+                <td> {{ hotelli.small_rooms }} </td>
+                <td> {{ hotelli.large_rooms }} </td>
+                <td> {{ hotelli.price_small }} </td>
+                <td> {{ hotelli.price_large }} </td>
+                -->
+                <td> {{ hotelli.star_rating }} </td>
+                <td>
+                    <form method="GET" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}">
+                        <input type="submit" class="btn btn-secondary" value="Muokkaa"/>
+                    </form>
+                </td>
+                <td> <!-- Lomake hotellien poistamiseen -->
+                    <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli.id) }}">
+                        <input type="submit" class="btn btn-secondary" value="Poista kohde"/>
+                    </form>
+                </td>                     
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% if current_user.is_authenticated %}
+            <div class="container">
+                <form method="GET" action="{{ url_for('hotellit_form') }}">
+                    <input type="submit" class="btn btn-default" value="Lisää uusi hotelli"/>
+                </form>   
+            </div>
+        {% endif %}
+    </div>  
 {% endblock %}

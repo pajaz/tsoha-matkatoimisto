@@ -2,6 +2,7 @@ from flask import Flask
 app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 
 # Kerrotaan sovellukselle missä ympäristössä toimitaan (Heroku / Paikallinen)
 import os
@@ -17,6 +18,8 @@ else:
 db = SQLAlchemy(app)
 
 # näkymien lukeminen
+Bootstrap(app)
+
 from application.start_page import views
 from application.matkakohteet import views
 from application.hotellit import views

@@ -1,69 +1,32 @@
 
-
-
 {% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+
+    {% block content %}
 <!-- Seuraavassa määritellään dest_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
-{% if dest_add %}
+    <div class="container"></div>
+    {% if dest_add %}
     <h1> Lisää uusi matkakohde </h1>
         <form method="POST" action="{{ url_for('matkakohteet_create') }}">
-{% else %}
-    <div class="headerspace">
+    {% else %}
+    
         <h1> Muokkaa kohteen tietoja </h1> 
         <!-- Kohteen poistonamiska. Pitäisi olla punainen, mutta puhun huonoa css:ää -->
-        <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde_id) }}">
+        <form method="POST" action="{{ url_for('matkakohteet_delete', matkakohde_id=matkakohde_id) }}" class="form" role="form">
             <input class="delsubmit" type="submit" value="Poista kohde"/>
         </form>
+        <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}" class="form" role="form">
+    {% endif %}
+       
+        <d1>
+            {{ wtf.form_field(form.name, class="form-control", placeholder="Kohteen nimi") }}
+            {{ wtf.form_field(form.country, class="form-control", placeholder="Maa") }}
+        </d1>
+        <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
+        </form>
     </div>
-    <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
-{% endif %}
-    <!-- Loppusivu on kohteiden lisäys/editointi lomaketta. Toistaiseksi sivuille voi lisätä duplikaatteja-->
-    <div class="addform">
-        <table class="adminform">
-        <tr>
-            <td style="width: 50px">
-                {{ form.name.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.name(class="formtext") }} 
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.name.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.country.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.country(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.country.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        </table>
-        <label>
-            {{ form.intro.label}}
-        </label>
-        <br>
-        {{ form.intro(class="textarea", rows="4") }} 
-        <br>
-        {% if dest_add %}
-            <input type="submit" class="formi" value="Lisää Kohde"/>
-        {% else %}
-            <input type="submit" class="formi" value="Päivitä tiedot"/>
-        {% endif %}
-    </div>
-</form>
+    {% endblock %}
 
 {% endblock %}
