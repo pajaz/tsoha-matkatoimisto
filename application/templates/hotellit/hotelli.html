@@ -1,171 +1,44 @@
 {% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
 <!-- Seuraavassa määritellään hotel_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
 {% if hotel_add %}
     <h1> Lisää uusi hotelli </h1>
-        <form method="POST" action="{{ url_for('hotellit_create') }}">
 {% else %}
-    <div class="headerspace">
-        <h1> Muokkaa kohteen tietoja </h1> 
-        <!-- Kohteen poistonamiska. Pitäisi olla punainen, mutta css taitoni ovat rajalliset :) -->
-        <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli_id) }}">
-            <input class="delsubmit" type="submit" value="Poista kohde"/>
-        </form>
-        <!-- Seuraava osio pitää sisällään hotellien lisäys/editointi lomakkeen. (Pitää siistiä myöhemmin)-->
-    </div>
-    <form method="POST" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}">
+    <h1> Muokkaa hotellin tietoja </h1> 
+    <!-- Kohteen poistonamiska. -->
+    <form method="POST" action="{{ url_for('hotellit_delete', hotelli_id=hotelli_id) }}">
+    <input class="delsubmit" type="submit" value="Poista kohde"/>
+    </form>
 {% endif %}
-    <div class="addform">
-        <table class="adminform">
-        <tr>
-            <td style="width: 50px">
-                {{ form.name.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.name(class="formtext") }} 
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.name.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.address.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.address(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.address.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.phone_number.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.phone_number(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.phone_number.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.email.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.email(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.email.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.small_rooms.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.small_rooms(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.small_rooms.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.large_rooms.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.large_rooms(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.large_rooms.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.price_small.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.price_small(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.price_small.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.price_large.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.price_large(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.price_large.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.star_rating.label }}
-            </td>
-            <td class:"formtext">
-                {{ form.star_rating(class="formtext") }}
-            </td>
-            <td>
-                <ul>
-                    {% for error in form.star_rating.errors %}
-                    <li> {{ error }}</li>
-                    {% endfor %}
-                </ul>
-            </td>
-        </tr>
-        </table>
-        <label>
-            {{ form.introduction.label}}
-        </label>
-        <br>
-        {{ form.introduction(class="textarea", rows="4") }} 
-        <br>
+<div class="form-inline">
+   
+    <!-- Seuraava osio pitää sisällään hotellien lisäys/editointi lomakkeen. -->
+    {% if hotel_add %}
+    <form method="POST" action="{{ url_for('hotellit_create') }}">
+    {% else %}
+    <form method="POST" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}"> 
+    {% endif %}
+
+        {{ wtf.form_field(form.name, class="form-control", placeholder="Nimi") }} 
+        {{ wtf.form_field(form.address, class="form-control", placeholder="Osoite") }}
+        {{ wtf.form_field(form.phone_number, class="form-control", placeholder="Puhelinnumero") }}
+        {{ wtf.form_field(form.email, class="form-control", placeholder="Sähköpostiosoite") }}
+        {{ wtf.form_field(form.small_rooms, class="form-control", placeholder="Pienien huoneiden lkm") }}
+        {{ wtf.form_field(form.large_rooms, class="form-control", placeholder="Suurien huoneiden lkm") }}
+        {{ wtf.form_field(form.price_small, class="form-control", placeholder="1-2 hengen huoneiden hinta per yö") }}
+        {{ wtf.form_field(form.price_large, class="form-control", placeholder="3-4 hengen huoneiden hinta per yö") }}
+        {{ wtf.form_field(form.star_rating, class="form-control", placeholder="Hotellin tähtiluokitus") }}
+        {{ wtf.form_field(form.introduction, class="form-control", placeholder="Kirjoita tähän enintään 500 sanan esittely") }}
+            
         {% if hotel_add %}
-            <input type="submit" class="formi" value="Lisää Hotelli"/>
+            <input type="submit" class="btn btn-default btn-block" value="Lisää Hotelli"/>
         {% else %}
-            <input type="submit" class="formi" value="Päivitä tiedot"/>
+            <input type="submit" class="btn btn-default btn-block" value="Päivitä tiedot"/>
         {% endif %}
-    </div>
-</form>
+
+    </form>
+</div>
 
 {% endblock %}
