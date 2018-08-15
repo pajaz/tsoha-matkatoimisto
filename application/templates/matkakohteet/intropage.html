@@ -13,8 +13,10 @@
                     <p> {{ matkakohde.intro }} </p>
                 </div>
                 <div class="card middle-column">
-                    <h6>Valitse haluamasi lähtöpäivä</h6>
-                    <p> {{ matkakohde.depart }} {{ travelday }} </p>
+                    <h6>Seuraavat lähdöt:</h6>
+                    {% for date in traveldays %}
+                        <p> {{ matkakohde.depart}}  {{ date }}</p>
+                    {% endfor %}
                 </div>
                 {% if current_user.is_authenticated %}
                 <div class="card middle-column">

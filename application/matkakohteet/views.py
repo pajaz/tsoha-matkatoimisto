@@ -5,6 +5,7 @@ from flask_login import login_required
 from application import app, db
 from application.matkakohteet.models import Matkakohde
 from application.matkakohteet.forms import DestinationForm
+from application.utils.tools import next_weekdays
 
 import datetime
 
@@ -33,16 +34,8 @@ def matkakohteet_create():
     dest_price = form.price.data
     dest_intro = form.intro.data
 
-    print(form.name.data)
-    print(form.country.data)
-    print(form.depart.data)
-    print(form.day_out.data)
-    print(form.price.data)
-
-
     if form.validate_on_submit():
         if not dest_intro: # Jos ei esittelyä määritelty käytetään valmiiksi määriteltyä.
-            print(dest_depart)
             dest = Matkakohde(dest_name, dest_country, dest_depart, dest_day_out, dest_price)
         else:
             dest = Matkakohde(dest_name, dest_country, dest_depart, dest_day_out, dest_price, dest_intro)
@@ -58,20 +51,11 @@ def matkakohteet_create():
 def matkakohde_intro(matkakohde_id):
     
     destination = Matkakohde.query.get_or_404(matkakohde_id)
-    d = datetime.datetime.now()
-    next_travelday = next_weekday(d, 0)
+    day = datetime.datetime.now()
+    travel_days = next_weekdays(day, destination.depart, 4)
 
 
-    return render_template("matkakohteet/intropage.html", travelday = next_travelday.strftime("%d/%m/%Y"), matkakohde = destination)
-
-
-def next_weekday(d, weekday):
-    days_ahead = weekday - d.weekday()
-    if days_ahead <= 0: # Target day already happened this week
-        days_ahead += 7
-    return d + datetime.timedelta(days_ahead)
-
-
+    return render_template("matkakohteet/intropage.html", traveldays = travel_days, matkakohde = destination)
 
 # Editointilomakkeen haku ja lomakkeen lähetys. dest_add lopussa kertoo että kyseessä muokkaus
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])
