@@ -76,3 +76,7 @@ table.adminform {
 .btn-default {
     background: #FFFF00
 }
+
+.loginform {
+    width: 50%;
+}

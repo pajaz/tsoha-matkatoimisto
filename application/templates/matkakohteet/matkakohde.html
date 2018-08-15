@@ -20,12 +20,13 @@
         <form method="POST" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}" class="form" role="form">
     {% endif %}
        
-        <d1>
+        <div class="h-50 inline-block">
             {{ wtf.form_field(form.name, class="form-control", placeholder="Kohteen nimi") }}
             {{ wtf.form_field(form.country, class="form-control", placeholder="Maa") }}
             {{ wtf.form_field(form.intro, class="form-control", placeholder="Kirjoita tähän enintään 500 merkin esittely") }}
-        </d1>
-        <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
+            <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
+        </div>
+     
         </form>
     </div>
     {% endblock %}

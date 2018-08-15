@@ -12,13 +12,13 @@
     <input class="delsubmit" type="submit" value="Poista kohde"/>
     </form>
 {% endif %}
-<div class="form-inline">
+<div class="form-group">
    
     <!-- Seuraava osio pitää sisällään hotellien lisäys/editointi lomakkeen. -->
     {% if hotel_add %}
-    <form method="POST" action="{{ url_for('hotellit_create') }}">
+    <form method="POST" action="{{ url_for('hotellit_create') }}" class="form" role="form">
     {% else %}
-    <form method="POST" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}"> 
+    <form method="POST" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}" class="form" role="form"> 
     {% endif %}
 
         {{ wtf.form_field(form.name, class="form-control", placeholder="Nimi") }} 

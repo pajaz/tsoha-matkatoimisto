@@ -40,6 +40,14 @@ def matkakohteet_create():
     
     return render_template("matkakohteet/matkakohde.html", form=form, dest_add=True)
 
+@app.route('/matkakohteet/<matkakohde_id>', methods=['GET'])
+def matkakohde_intro(matkakohde_id):
+
+    destination = Matkakohde.query.get_or_404(matkakohde_id)
+
+    return render_template("matkakohteet/intropage.html", matkakohde = destination)
+
+
 # Editointilomakkeen haku ja lomakkeen lähetys. dest_add lopussa kertoo että kyseessä muokkaus
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])
 @login_required
