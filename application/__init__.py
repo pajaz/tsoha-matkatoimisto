@@ -6,6 +6,7 @@ from flask_bootstrap import Bootstrap
 
 # Kerrotaan sovellukselle missä ympäristössä toimitaan (Heroku / Paikallinen)
 import os
+
 if os.environ.get("HEROKU"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 else:

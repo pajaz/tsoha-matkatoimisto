@@ -22,8 +22,10 @@
         <div class="middle-column">
             {{ wtf.form_field(form.name, class="form-control", placeholder="Kohteen nimi") }}
             {{ wtf.form_field(form.country, class="form-control", placeholder="Maa") }}
+            {{ wtf.form_field(form.depart, class="form-control", placeholder="Maanantai, tiistai, keskiviikko jne.") }}
+            {{ wtf.form_field(form.day_out, class="form-control", placeholder="Maanantai, tiistai, keskiviikko jne.") }}
+            {{ wtf.form_field(form.price, class="form-control", placeholder="Matkat ja matkatoimistopalvelut") }}
             {{ wtf.form_field(form.intro, class="form-control", placeholder="Kirjoita tähän enintään 500 merkin esittely") }}
-        
             <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
         </div>
         </form>

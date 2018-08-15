@@ -14,6 +14,7 @@
                 </div>
                 <div class="card middle-column">
                     <h6>Valitse haluamasi lähtöpäivä</h6>
+                    <p> {{ matkakohde.depart }} {{ travelday }} </p>
                 </div>
                 {% if current_user.is_authenticated %}
                 <div class="card middle-column">
@@ -24,6 +25,9 @@
                        Käsittelemättömiä:  <br>
                        Käsiteltyjä: 
                     </p> 
+                </div>
+                <div class="card middle-column">
+
                 </div>
                 {% endif %}
             </div>

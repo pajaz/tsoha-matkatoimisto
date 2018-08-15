@@ -6,6 +6,8 @@ from application import app, db
 from application.matkakohteet.models import Matkakohde
 from application.matkakohteet.forms import DestinationForm
 
+import datetime
+
 # Hakee kohteiden listaussivun esille
 @app.route("/matkakohteet/", methods=["GET"])
 def matkakohteet_index():
@@ -24,14 +26,26 @@ def matkakohteet_create():
     
     form = DestinationForm(request.form)
 
-    dest_name = form.name.data
-    dest_country = form.country.data
+    dest_name = form.name.data.title()
+    dest_country = form.country.data.title()
+    dest_depart = form.depart.data.title()
+    dest_day_out = form.day_out.data.title()
+    dest_price = form.price.data
     dest_intro = form.intro.data
+
+    print(form.name.data)
+    print(form.country.data)
+    print(form.depart.data)
+    print(form.day_out.data)
+    print(form.price.data)
+
+
     if form.validate_on_submit():
         if not dest_intro: # Jos ei esittelyä määritelty käytetään valmiiksi määriteltyä.
-            dest = Matkakohde(dest_name.title(), dest_country.title())
+            print(dest_depart)
+            dest = Matkakohde(dest_name, dest_country, dest_depart, dest_day_out, dest_price)
         else:
-            dest = Matkakohde(dest_name.title(), dest_country.title(), dest_intro)
+            dest = Matkakohde(dest_name, dest_country, dest_depart, dest_day_out, dest_price, dest_intro)
 
         db.session().add(dest)
         db.session().commit()
@@ -42,10 +56,21 @@ def matkakohteet_create():
 
 @app.route('/matkakohteet/<matkakohde_id>', methods=['GET'])
 def matkakohde_intro(matkakohde_id):
-
+    
     destination = Matkakohde.query.get_or_404(matkakohde_id)
+    d = datetime.datetime.now()
+    next_travelday = next_weekday(d, 0)
 
-    return render_template("matkakohteet/intropage.html", matkakohde = destination)
+
+    return render_template("matkakohteet/intropage.html", travelday = next_travelday.strftime("%d/%m/%Y"), matkakohde = destination)
+
+
+def next_weekday(d, weekday):
+    days_ahead = weekday - d.weekday()
+    if days_ahead <= 0: # Target day already happened this week
+        days_ahead += 7
+    return d + datetime.timedelta(days_ahead)
+
 
 
 # Editointilomakkeen haku ja lomakkeen lähetys. dest_add lopussa kertoo että kyseessä muokkaus
@@ -58,9 +83,12 @@ def matkakohteet_edit_form(matkakohde_id):
 
     if request.method == 'POST' and form.validate():
 
-        destination.name = form.name.data
-        destination.country = form.country.data
-        
+        destination.name = form.name.data.title()
+        destination.country = form.country.data.title()
+        destination.depart = form.depart.data.title()
+        destination.day_out = form.day_out.data.title()
+        destination.price = form.price.data
+
         if destination.intro: # Jos kohteen esittelyn yrittää pyyhkiä kokonaan pois, sitä ei tallenneta
             destination.intro = form.intro.data
 
