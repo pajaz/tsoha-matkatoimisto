@@ -20,7 +20,7 @@ class DestinationForm(FlaskForm):
 
     def validate_day_out(self, field):
         weekdays = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"]
-        if field.data not in weekdays:
+        if field.data.title() not in weekdays:
             raise ValidationError("Ei kunnollinen päivämäärä")
 
     class Meta:
