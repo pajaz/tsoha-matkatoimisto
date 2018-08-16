@@ -8,11 +8,11 @@ def next_weekdays(d, weekday, repeat):
     if days_ahead <= 0: # Kyseinen päivä on jo menny tällä viikolla
         days_ahead += 7
     departure = d + datetime.timedelta(days_ahead)
-    dates = [departure.strftime("%d/%m/%Y")]
+    dates = [departure.strftime("%d.%m.%Y")]
     count = repeat
     while count > 0:
         departure = departure + datetime.timedelta(days=7)
-        dates.append(departure.strftime("%d/%m/%Y"))
+        dates.append(departure.strftime("%d.%m.%Y"))
         count = count - 1
     return dates
 

@@ -1,6 +1,7 @@
 # application/hotellit/models.py
 from application import db
 
+from application.matkakohteet.models import Matkakohde
 
 # Määritetään mallit tietokantataululle.
 class Hotelli(db.Model):
@@ -9,7 +10,6 @@ class Hotelli(db.Model):
     address = db.Column(db.String(60), nullable=False)      # Ei näytetä asiakkaalle
     phone_number = db.Column(db.String(20), nullable=False) # Ei näytetä asiakkaalle
     email = db.Column(db.String(30))                        # Ei näytetä asiakkaalle
-    bookings = db.Column(db.Integer)                        # Ei näytetä asiakkaalle
     small_rooms = db.Column(db.Integer) # max 2 hengen huoneet
     large_rooms = db.Column(db.Integer) # max 4 hengen huoneet
     price_small = db.Column(db.Integer) # hinta / 
@@ -18,7 +18,11 @@ class Hotelli(db.Model):
     introduction = db.Column(db.String(500))
 
     # Liitetään jokaiseen luotuun hotelliin yksi Matkakohde.
-    destination_id = db.Column(db.Integer, db.ForeignKey("matkakohde.id"), nullable=False)
+    destination_id = db.Column(db.Integer, db.ForeignKey(Matkakohde.id), nullable=False)
+
+    # Riippuvuussuhde varausten kanssa
+    bookings = db.relationship("Varaus", backref="Hotel", cascade="all, delete-orphan", lazy=True)
+
 
     def __init__(self, name, address, phone_number, star_rating, small_rooms, 
              large_rooms, price_small, price_large, email, destination_id,
@@ -27,7 +31,6 @@ class Hotelli(db.Model):
         self.address = address
         self.phone_number = phone_number
         self.email = email
-        self.bookings = 0
         self.small_rooms = small_rooms
         self.large_rooms = large_rooms
         self.price_small = price_small

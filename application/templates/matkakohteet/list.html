@@ -9,7 +9,7 @@
                     <th>Matkakohde</th>
                     <th>Maa</th>
                     {% if current_user.is_authenticated %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
-                    <th>Varauksia</th>
+                    
                     <th>Muokkaa</th>
                     <th>Poista</th>
                     {% endif %}
@@ -22,7 +22,7 @@
                 </td>
                 <td>{{ matkakohde.country }}</td>
                 {% if current_user.is_authenticated %}
-                <td>{{ matkakohde.bookings }}</td>
+             
                 <td>
                     <form method="GET" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
                         <input type="submit" class="btn btn-light" value="Muokkaa"/>

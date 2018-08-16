@@ -12,15 +12,9 @@
                     <h5>Kohde-esittely</h5>
                     <p> {{ matkakohde.intro }} </p>
                 </div>
-                <div class="card middle-column">
-                    <h6>Seuraavat lähdöt:</h6>
-                    {% for date in traveldays %}
-                        <p> {{ matkakohde.depart}}  {{ date }}</p>
-                    {% endfor %}
-                </div>
                 {% if current_user.is_authenticated %}
                 <div class="card middle-column">
-                    <p>Kohteesen tehty {{ matkakohde.bookings }} varausta. <br>
+                    <p>Kohteesen tehty  varausta. <br>
                        Joista aktiivisia:  <br>
                        Tulevia: <br>
                        Päättyneitä: <br>
@@ -34,17 +28,36 @@
                 {% endif %}
             </div>
             <div class="col-md-2 col-xs-3 middle-column">
-                <h5>Hotellit:</h5>
-                <ul class="list-group">
-                    {% for hotel in hotellit %}
-                    <li class="list-group-item"> 
-                        {{ hotel.name }} <br/>
-                        {% for stars in range(hotel.star_rating)  %}
-                        <img border="0" src="{{ url_for('static', filename='images/star.png') }}" alt="star">
+                <div class="card middle-column">
+                    <ul class="list-group">
+                       
+                        {% for hotel in hotellit %}
+                        <li class="list-group-item"> 
+                            {{ hotel.name }} <br/>
+                            {% for stars in range(hotel.star_rating)  %}
+                            <img border="0" src="{{ url_for('static', filename='images/star.png') }}" alt="star">
+                            {% endfor %}
+                        </li>
                         {% endfor %}
-                    </li>
+                    </ul>
+                </div>
+                <div class="card middle-column container-fluid">
+                    <h5>Varaa matka</h5>
+                    <h6>Seuraavat lähdöt:</h6>
+                    {% for dates in traveldays %}
+                    <p>{{ matkakohde.depart }} <a href="{{ url_for('varaus_create', dest=matkakohde.id, date=dates) }}">{{ dates }} </a></p>
                     {% endfor %}
-                </ul>
+                    <a href=#>Katso kaikki</a>
+                    <div class="form-group">
+                        <label for="sel1">Kuukausittain:</label>
+                        <select class="form-control" id="sel1">
+                          <option>This</option>
+                          <option>is</option>
+                          <option>under</option>
+                          <option>development</option>
+                        </select>  
+                    </div> 
+                </div>
             </div>
             <div class="col-md-3 col-xs-1"></div>
         </div>

@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div class="container middle-column">
+        <h2>Varaukset</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Varausnumero</th>
+                    <th>Asiakas vahvistanut</th>
+                    <th>Lasku lähetetty</th>
+                    <th>Maksettu</th>
+                
+                </tr>
+            </thead>
+            {% for varaus in varaukset %} <!-- Listataan kaikki tietokannasta löytyvät varaukset -->
+            <tr>
+                <td>
+                    <a href="{{ url_for('varausinfo', varaus_id=varaus.id) }}"> {{ varaus.id }} </a>
+                </td>
+                <td>
+                    <p>{{ varaus.confirmed }}</p>
+                </td>
+                <td>
+                    <p>{{ varaus.bill_sent }}</p>
+                </td>
+                <td>
+                    <p>{{ varaus.paid }}</p>
+                </td>                   
+            </tr>
+            {% endfor %}
+        </table>
+    </div> 
+{% endblock %}

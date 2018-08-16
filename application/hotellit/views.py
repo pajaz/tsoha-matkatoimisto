@@ -25,8 +25,6 @@ def hotellit_create():
     if request.method == "POST":
         hotel_name = form.name.data
         hotel_destination = form.destination.data
-        print(hotel_destination)
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         hotel_address = form.address.data
         hotel_phone_number = form.phone_number.data
         hotel_small_rooms = form.small_rooms.data
@@ -50,9 +48,7 @@ def hotellit_create():
             db.session().add(hotel)
             db.session().commit()
 
-            return redirect(url_for("hotellit_index"))
-        else:
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")   
+            return redirect(url_for("hotellit_index"))  
 
     return render_template("hotellit/hotelli.html", form=form, hotel_add=True)
 

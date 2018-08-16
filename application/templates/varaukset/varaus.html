@@ -1,0 +1,36 @@
+
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block body %}
+
+<!-- Seuraavassa määritellään dest_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
+    <div class="container middle-column">
+    {% if book_add %}
+    <h1> Uusi varaus </h1>
+        <form method="POST" action="{{ url_for('varaus_create', dest=dest, date=date) }}">
+            <h3> Matkakohde {{ matkakohde.name }}, {{ matkakohde.country }}</h3>
+            <h3> Lähtöpäivä {{ date }} </h3>
+    {% else %}
+    
+        <h1> Muokkaa tietoja </h1> 
+        <!-- Kohteen poistonamiska. -->
+        <form method="POST" action="{{ url_for('varaus_delete', varaus_id=varaus.id) }}" class="form" role="form">
+            <input type="submit" value="Poista varaus"/>
+        </form>
+        <form method="POST" action="{{ url_for('varaukset_edit_form', varaus_id=varaus.id) }}" class="form" role="form">
+    {% endif %}
+       
+        <div class="middle-column">
+            
+            {{ wtf.form_field(form.passengers, class="form-control", placeholder="max. 12") }}
+            {{ wtf.form_field(form.hotel, class="form-control") }}
+            {{ wtf.form_field(form.small_rooms, class="form-control") }}
+            {{ wtf.form_field(form.large_rooms, class="form-control") }}
+            <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
+        </div>
+        </form>
+    </div>
+ 
+
+{% endblock %}

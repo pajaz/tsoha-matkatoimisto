@@ -25,11 +25,13 @@ from application.start_page import views
 from application.matkakohteet import views
 from application.hotellit import views
 from application.auth import views
+from application.varaukset import views
 
 # Tietokantamallit
 from application.matkakohteet import models
 from application.hotellit import models
 from application.auth import models
+from application.varaukset import models
 
 # Kirjautuminen
 from application.auth.models import Kayttaja
