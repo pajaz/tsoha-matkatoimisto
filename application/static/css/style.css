@@ -47,5 +47,5 @@ table.adminform {
 }
 
 .word-wrap {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 }

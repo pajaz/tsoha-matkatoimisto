@@ -4,8 +4,8 @@
 
     <div class="container-fluid word-wrap">
         <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-4 middle-column">
+            <div class="col-md-3 col-xs-1"></div>
+            <div class="col-md-4 col-xs-7 middle-column">
                 <h3> {{ matkakohde.name }} </h3>
                 <p class="text-black-50"> {{ matkakohde.country }} </p>
                 <div class="card middle-column">
@@ -33,7 +33,7 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="col-sm-2 middle-column">
+            <div class="col-md-2 col-xs-3 middle-column">
                 <h5>Hotellit:</h5>
                 <ul class="list-group">
                     {% for hotel in hotellit %}
@@ -46,7 +46,7 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-sm-3"></div>
+            <div class="col-md-3 col-xs-1"></div>
         </div>
     </div>
 
