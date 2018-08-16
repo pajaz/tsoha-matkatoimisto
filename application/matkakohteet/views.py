@@ -4,6 +4,7 @@ from flask_login import login_required
 
 from application import app, db
 from application.matkakohteet.models import Matkakohde
+from application.hotellit.models import Hotelli
 from application.matkakohteet.forms import DestinationForm
 from application.utils.tools import next_weekdays
 
@@ -53,9 +54,12 @@ def matkakohde_intro(matkakohde_id):
     destination = Matkakohde.query.get_or_404(matkakohde_id)
     day = datetime.datetime.now()
     travel_days = next_weekdays(day, destination.depart, 4)
+    hotels = Hotelli.query.filter_by(destination_id=matkakohde_id)
+    for h in hotels:
+        print(h.name)
 
-
-    return render_template("matkakohteet/intropage.html", traveldays = travel_days, matkakohde = destination)
+    return render_template("matkakohteet/intropage.html", traveldays = travel_days, matkakohde = destination,
+                            hotellit=hotels)
 
 # Editointilomakkeen haku ja lomakkeen lähetys. dest_add lopussa kertoo että kyseessä muokkaus
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])

@@ -12,8 +12,8 @@ class Matkakohde(db.Model):
     price = db.Column(db.Integer) # Hinta joka sisältää matkat kohteeseen, sekä matkatoimiston palvelut
     intro = db.Column(db.String(500))                             
                                     
-    # Määritellään riippuvuussuhde hotellien kanssa. Toistaiseksi poistettu!
-    #hotels = db.relationship("Hotelli", backref="matkakohde", lazy=True)
+    # Määritellään riippuvuussuhde hotellien kanssa.
+    hotels = db.relationship("Hotelli", backref="matkakohde", cascade="all, delete-orphan", lazy=True)
 
     def __init__(self, name, country, depart = "Tyhjä", day_out = "Tyhjä", price = 0, intro = "Kohde-esittelyä ei ole vielä kirjoitettu", bookings = 0):
         self.name = name

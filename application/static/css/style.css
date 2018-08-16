@@ -8,8 +8,10 @@ body {
 
 .middle-column {
     background: white;
-    padding-bottom: 10px
+    padding-bottom: 10px;
+    min-width: ;
 }
+
 
 .card {
     margin-bottom: 10px;

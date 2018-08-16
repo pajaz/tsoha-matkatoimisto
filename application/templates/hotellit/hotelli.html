@@ -3,6 +3,7 @@
 
 {% block body %}
 <!-- Seuraavassa määritellään hotel_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
+<div class="container middle-column">
 {% if hotel_add %}
     <h1> Lisää uusi hotelli </h1>
 {% else %}
@@ -12,7 +13,7 @@
     <input class="delsubmit" type="submit" value="Poista kohde"/>
     </form>
 {% endif %}
-<div class="form-group">
+    <div class="middle-column">
    
     <!-- Seuraava osio pitää sisällään hotellien lisäys/editointi lomakkeen. -->
     {% if hotel_add %}
@@ -21,7 +22,8 @@
     <form method="POST" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}" class="form" role="form"> 
     {% endif %}
 
-        {{ wtf.form_field(form.name, class="form-control", placeholder="Nimi") }} 
+        {{ wtf.form_field(form.name, class="form-control", placeholder="Nimi") }}
+        {{ wtf.form_field(form.destination, class="form-control") }}
         {{ wtf.form_field(form.address, class="form-control", placeholder="Osoite") }}
         {{ wtf.form_field(form.phone_number, class="form-control", placeholder="Puhelinnumero") }}
         {{ wtf.form_field(form.email, class="form-control", placeholder="Sähköpostiosoite") }}
@@ -39,6 +41,7 @@
         {% endif %}
 
     </form>
-</div>
 
+    </div>
+</div>
 {% endblock %}

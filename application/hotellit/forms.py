@@ -1,6 +1,6 @@
 # application/hotellit/forms.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, ValidationError, validators, IntegerField
+from wtforms import StringField, TextAreaField, ValidationError, validators, IntegerField, SelectField
 
 from application import db
 from application.hotellit.models import Hotelli
@@ -12,8 +12,7 @@ class HotelForm(FlaskForm):
     # Sallii toistaiseksi duplikaattien lisäämisen.
 
     name = StringField("Nimi *", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
-    #destination = StringField("Matkakohde *", [validators.required(), validators.Length(max=30, 
-    #                                           message=('max. 30 merkkiä'))])
+    destination = SelectField("Matkakohde *", [validators.required()], coerce=int)
     address = StringField("Osoite *", [validators.required(),validators.Length(min=10, max=50, message=('10-50 merkkiä'))])
     phone_number = StringField("Puhelinnumero *", [validators.required(),validators.Length(min=8, max=20, message=('10-20 merkkiä'))])
     email = StringField("Sähköposti", [validators.optional(), validators.email(message="Ei kunnollinen sähköpostiosoite")])
@@ -25,12 +24,11 @@ class HotelForm(FlaskForm):
     introduction = TextAreaField("Esittely (0-500 merkkiä)", [validators.optional(), validators.Length(max=500, message="max. 500 merkkiä")])
 
     # Metodi tarkastaa hotellin lisäyksen yhteydessä, että Hotelliin liitettävä
-    # Matkakohde on olemassa. Toistaiseksi pois käytöstä.
-
-    # def validate_destination(form, field):
-    #   dest = db.session.query(Matkakohde).filter(Matkakohde.name==form.destination.data).first()
-    #    if not dest:
-    #        raise ValidationError("Kohdetta ei tietokannassa")
+    # Matkakohde on olemassa.
+    def validate_destination(form, field):
+        dest = db.session.query(Matkakohde).filter(Matkakohde.id==form.destination.data).first()
+        if not dest:
+            raise ValidationError("Kohdetta ei tietokannassa")
 
     class Meta:
         csrf = False

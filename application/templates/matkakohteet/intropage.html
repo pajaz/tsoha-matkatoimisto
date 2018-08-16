@@ -35,6 +35,16 @@
             </div>
             <div class="col-sm-2 middle-column">
                 <h5>Hotellit:</h5>
+                <ul class="list-group">
+                    {% for hotel in hotellit %}
+                    <li class="list-group-item"> 
+                        {{ hotel.name }} <br/>
+                        {% for stars in range(hotel.star_rating)  %}
+                        <img border="0" src="{{ url_for('static', filename='images/star.png') }}" alt="star">
+                        {% endfor %}
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col-sm-3"></div>
         </div>
