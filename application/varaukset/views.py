@@ -42,7 +42,7 @@ def varaus_create():
             date_save = datetime.datetime.strptime(date, '%d.%m.%Y')
             booking = Varaus(date_save, price, current_user.id, dest, passengers, hotel_id,
                                  small_rooms, large_rooms)
-            print("NOT VALID !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+          
             db.session().add(booking)
             db.session().commit()
 
@@ -58,8 +58,7 @@ def varaus_hotelli():
     date = request.args.get("date")
     form = ChooseHotelForm()
     hotel_count = db.session.query(Hotelli).filter(Hotelli.destination_id==dest).count()
-    
-    booked = Hotelli.vacant_rooms(1, "small_rooms", datetime.datetime.strptime(date, '%d.%m.%Y'))
+
     form.hotel.choices = [(hotel.id, hotel.name) for hotel in Hotelli.query.filter_by(destination_id=dest)]
     hotels = Hotelli.query.filter_by(destination_id=dest)
     zipped = zip(form.hotel.choices, hotels)
