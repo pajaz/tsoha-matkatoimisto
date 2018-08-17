@@ -57,12 +57,10 @@ def varaus_hotelli():
     dest = request.args.get("dest")
     date = request.args.get("date")
     form = ChooseHotelForm()
-    hotel_count = db.session.query(Hotelli).filter(Hotelli.destination_id==dest).count()
 
     form.hotel.choices = [(hotel.id, hotel.name) for hotel in Hotelli.query.filter_by(destination_id=dest)]
     hotels = Hotelli.query.filter_by(destination_id=dest)
     zipped = zip(form.hotel.choices, hotels)
-    Hotelli.hotels_with_bookings()
 
     form.dest.data = dest
     form.date.data = date
