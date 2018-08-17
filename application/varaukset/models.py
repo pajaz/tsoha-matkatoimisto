@@ -1,10 +1,11 @@
 # application/varaukset/models.py
+from sqlalchemy.sql import text
+
 from application import db
 
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
 from application.auth.models import Kayttaja
-
 # Määritellään mallit tietokantataululle
 class Varaus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,7 +25,7 @@ class Varaus(db.Model):
     hotel_id = db.Column(db.Integer, db.ForeignKey(Hotelli.id), nullable=True)
 
     def __init__(self, start, price, user, dest, passengers, hotel = None, 
-                 small_rooms = None, large_rooms = None):
+                 small_rooms = 0, large_rooms = 0):
         self.start_date = start
         self.price = price
         self.handled = False

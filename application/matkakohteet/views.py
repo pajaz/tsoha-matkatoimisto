@@ -47,6 +47,7 @@ def matkakohteet_create():
 
         return redirect(url_for("matkakohteet_index"))
     
+    
     return render_template("matkakohteet/matkakohde.html", form=form, dest_add=True)
 
 @app.route('/matkakohteet/<matkakohde_id>', methods=['GET'])
@@ -57,8 +58,7 @@ def matkakohde_intro(matkakohde_id):
     travel_days = next_weekdays(day, destination.depart, 4)
     hotels = Hotelli.query.filter_by(destination_id=matkakohde_id)
 
-    return render_template("matkakohteet/intropage.html", traveldays = travel_days, matkakohde = destination,
-                            hotellit=hotels)
+    return render_template("matkakohteet/intropage.html", traveldays = travel_days, matkakohde = destination)
 
 # Editointilomakkeen haku ja lomakkeen lähetys. dest_add lopussa kertoo että kyseessä muokkaus
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])

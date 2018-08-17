@@ -39,11 +39,11 @@ def hotellit_create():
             if not hotel_introduction: # Jos ei hotellille lisätty esittelyä, käytetään modelsissa määriteltyä vakio viestiä 
                 hotel = Hotelli(hotel_name.title(), hotel_address.title(), hotel_phone_number, 
                                 hotel_star_rating, hotel_small_rooms, hotel_large_rooms, 
-                                hotel_price_small, hotel_price_large, hotel_email, hotel_destination)
+                                hotel_destination, hotel_price_small, hotel_price_large, hotel_email)
             else:
                 hotel = Hotelli(hotel_name.title(), hotel_address.title(), hotel_phone_number, 
                                 hotel_star_rating, hotel_small_rooms, hotel_large_rooms, 
-                                hotel_price_small, hotel_price_large, hotel_email, hotel_destination, hotel_introduction)
+                                hotel_destination, hotel_price_small, hotel_price_large, hotel_email, hotel_introduction)
 
             db.session().add(hotel)
             db.session().commit()

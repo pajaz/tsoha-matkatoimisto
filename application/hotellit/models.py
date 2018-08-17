@@ -1,7 +1,10 @@
 # application/hotellit/models.py
 from application import db
-
 from application.matkakohteet.models import Matkakohde
+
+from sqlalchemy.sql import text
+
+import datetime
 
 # Määritetään mallit tietokantataululle.
 class Hotelli(db.Model):
@@ -25,7 +28,7 @@ class Hotelli(db.Model):
 
 
     def __init__(self, name, address, phone_number, star_rating, small_rooms, 
-             large_rooms, price_small, price_large, email, destination_id,
+             large_rooms, destination_id, price_small = 0, price_large = 0, email = None,
              introduction = "Esittelyä ei ole vielä kirjoitettu"):
         self.name = name
         self.address = address
@@ -38,5 +41,21 @@ class Hotelli(db.Model):
         self.star_rating = star_rating
         self.destination_id = destination_id
         self.introduction = introduction
+    
+    # Palauttaa hotellit joihin on tehty varauksia
+    @staticmethod
+    def hotels_with_bookings():
+       
 
+        stmt = text("SELECT Hotelli.id, Hotelli.name, Hotelli.destination_id FROM Hotelli"
+                    " LEFT JOIN Varaus ON Varaus.hotel_id = Hotelli.id"
+                    " WHERE (Varaus.hotel_id = Hotelli.id)"
+                    " GROUP BY Hotelli.destination_id")
+            
+        res = db.engine.execute(stmt)
 
+        response = []
+        for row in res:
+            response.append({"id":row[0], "name":row[1], "destination":row[2]})
+        
+        print(response)

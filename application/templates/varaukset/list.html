@@ -16,7 +16,7 @@
             {% for varaus in varaukset %} <!-- Listataan kaikki tietokannasta löytyvät varaukset -->
             <tr>
                 <td>
-                    <a href="{{ url_for('varausinfo', varaus_id=varaus.id) }}"> {{ varaus.id }} </a>
+                    <p> {{ varaus.id }} </p>
                 </td>
                 <td>
                     <p>{{ varaus.confirmed }}</p>
@@ -25,7 +25,7 @@
                     <p>{{ varaus.bill_sent }}</p>
                 </td>
                 <td>
-                    <p>{{ varaus.paid }}</p>
+                    <p>{{ varaus.handled }}</p>
                 </td>                   
             </tr>
             {% endfor %}

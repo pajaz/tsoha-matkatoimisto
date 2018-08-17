@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-xs-1"></div>
+        <div class="col-md-6 col-xs-10 middle-column">
+            <form method="GET" class="form" role="form" action="{{ url_for('varaus_create') }}">
+                <h3>Valitse Hotelli</h3>
+
+        
+                
+                {% for i,j in hotels  %}
+                <div class="form-check card">
+                    <input class="form-check-input" type="radio" name="hotel_id" id="hotel{{ i[0] }}" value="{{ i[0] }}">
+                    <label class="form-check-label" for="hotel{{ i[0] }}">
+                      <div class="container-fluid">
+                          <h5>{{ j.name }} 
+                            {% for stars in range(j.star_rating)  %}
+                            <img border="0" src="{{ url_for('static', filename='images/star.png') }}" alt="star">
+                            {% endfor %}
+                            
+                        </h5>
+                        <p>
+                            {{ j.introduction }}
+                        </p>
+                    </div>
+                    </label>
+                </div>
+                {% endfor %}
+
+                {{ wtf.form_field(form.dest, class="form-control") }}
+                {{ wtf.form_field(form.date, class="form-control") }}
+                <input type="submit" class="btn btn-default" value="Valitse"/>
+
+            </form>
+        <div class="col-md3 col-xs-1"></div>    
+    </div>
+</div>
+
+
+
+
+{% endblock %}

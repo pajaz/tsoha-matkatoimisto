@@ -7,7 +7,7 @@ from application import app, db
 from application.varaukset.models import Varaus
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
-from application.varaukset.forms import BookingForm
+from application.varaukset.forms import BookingForm, ChooseHotelForm
 
 # Hakee varausten listaussivun esille
 @app.route("/varaukset/", methods=["GET"])
@@ -22,35 +22,56 @@ def varaukset_index():
 def varaus_create():
     dest = request.args.get("dest")
     date = request.args.get("date")
+    hotel_id = request.args.get("hotel_id")
     destination = Matkakohde.query.get_or_404(dest)
+    hotel = Hotelli.query.get_or_404(hotel_id)
     form = BookingForm(request.form)
-    form.hotel.choices = [(hotel.id, hotel.name) for hotel in Hotelli.query.filter_by(destination_id=dest)]
 
     if request.method == "POST":
-        start_date = form.start.data
-        #end_date = form.end.data
         passengers = form.passengers.data
-        hotel = form.hotel.data
         small_rooms = form.small_rooms.data
         large_rooms = form.large_rooms.data
 
-        if form.validate_on_submit():
-            h = Hotelli.query.get_or_404(hotel)
-            price = destination.price * passengers + small_rooms * h.price_small + large_rooms * h.price_large
-            print(price)
+        if form.validate():
+            if not small_rooms:
+                small_rooms = 0
+            if not large_rooms:
+                large_rooms = 0
+            price = destination.price * passengers + small_rooms * hotel.price_small + large_rooms * hotel.price_large
+            
             date_save = datetime.datetime.strptime(date, '%d.%m.%Y')
-            print(date_save)
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            booking = Varaus(date_save, price, current_user.id, dest, hotel,
+            booking = Varaus(date_save, price, current_user.id, dest, passengers, hotel_id,
                                  small_rooms, large_rooms)
-
+            print("NOT VALID !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             db.session().add(booking)
             db.session().commit()
 
             return redirect(url_for("matkakohteet_index")) 
-
+    print(form.errors)    
     return render_template("/varaukset/varaus.html", form=form, book_add=True, dest=dest, date=date,
-                           matkakohde=destination)
+                           matkakohde=destination, hotel=hotel, hotel_id=hotel_id)
+
+@app.route("/varaukset/uusi/valitsehotelli", methods=["GET"])
+@login_required
+def varaus_hotelli():  
+    dest = request.args.get("dest")
+    date = request.args.get("date")
+    form = ChooseHotelForm()
+    hotel_count = db.session.query(Hotelli).filter(Hotelli.destination_id==dest).count()
+    
+    booked = Hotelli.vacant_rooms(1, "small_rooms", datetime.datetime.strptime(date, '%d.%m.%Y'))
+    form.hotel.choices = [(hotel.id, hotel.name) for hotel in Hotelli.query.filter_by(destination_id=dest)]
+    hotels = Hotelli.query.filter_by(destination_id=dest)
+    zipped = zip(form.hotel.choices, hotels)
+    Hotelli.hotels_with_bookings()
+
+    form.dest.data = dest
+    form.date.data = date
+
+    return render_template("/varaukset/destinationhotels.html", dest=dest, date=date, form=form, hotels=zipped)
+
+
+
 
 @app.route("/varaukset/edit/<varaus_id>", methods=["GET","POST"])
 @login_required

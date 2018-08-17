@@ -45,7 +45,7 @@
                     <h5>Varaa matka</h5>
                     <h6>Seuraavat lähdöt:</h6>
                     {% for dates in traveldays %}
-                    <p>{{ matkakohde.depart }} <a href="{{ url_for('varaus_create', dest=matkakohde.id, date=dates) }}">{{ dates }} </a></p>
+                    <p>{{ matkakohde.depart }} <a href="{{ url_for('varaus_hotelli', dest=matkakohde.id, date=dates, hotels = hotellit) }}">{{ dates }} </a></p>
                     {% endfor %}
                     <a href=#>Katso kaikki</a>
                     <div class="form-group">
