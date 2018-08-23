@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 import datetime
 
-from application import app, db
+from application import app, db, login_required
 from application.varaukset.models import Varaus
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
@@ -11,14 +11,14 @@ from application.varaukset.forms import BookingForm, ChooseHotelForm
 
 # Hakee varausten listaussivun esille
 @app.route("/varaukset/", methods=["GET"])
-@login_required
+@login_required(role="Admin")
 def varaukset_index():
     bookings = Varaus.query.order_by(Varaus.dest_id).all()
     return render_template("/varaukset/list.html", varaukset=Varaus.query.all())
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.
 @app.route("/varaukset/uusi", methods=["GET","POST"])
-@login_required
+@login_required(role="User")
 def varaus_create():
     dest = request.args.get("dest")
     date = request.args.get("date")
@@ -52,7 +52,7 @@ def varaus_create():
                            matkakohde=destination, hotel=hotel, hotel_id=hotel_id)
 
 @app.route("/varaukset/uusi/valitsehotelli", methods=["GET"])
-@login_required
+@login_required(role="User")
 def varaus_hotelli():  
     dest = request.args.get("dest")
     date = request.args.get("date")
@@ -71,7 +71,7 @@ def varaus_hotelli():
 
 
 @app.route("/varaukset/edit/<varaus_id>", methods=["GET","POST"])
-@login_required
+@login_required(role="Admin")
 def varaukset_edit_form(varaus_id):
     
     varaus = Varaus.query.get_or_404(varaus_id)
@@ -92,7 +92,7 @@ def varaukset_edit_form(varaus_id):
     return render_template("/varaukset/varaus.html", form=form, varaus=varaus, varaus_id=varaus.id, book_add=False)
 
 @app.route("/varaukset/delete/<varaus_id>", methods=["GET", "POST"])
-@login_required
+@login_required(role="Admin")
 def varaukset_delete(varaus_id):
 
     varaus = Varaus.query.get_or_404(varaus_id)
@@ -101,3 +101,22 @@ def varaukset_delete(varaus_id):
     db.session.commit()
 
     return redirect(url_for("matkakohteet_index"))
+
+# Varauksen tietojen katselu, sekä tehdyn varauksen tietojen vahvistus käyttäjälle
+@app.route("/varaukset/<varaus_id>", methods=["GET", "POST"])
+@login_required(role=("User"))
+def varaus_info(varaus_id):
+    
+    varaus = Varaus.query.get_or_404(varaus_id)
+    dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
+    hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
+
+    if request.method == "POST":
+        varaus.confirmed = True
+        db.session().commit()
+
+        return redirect(url_for("varaus_info", varaus_id = varaus.id))
+
+    
+    return render_template("varaukset/varausinfo.html", varaus=varaus, matkakohde=dest, hotel=hotel, date = varaus.start_date,
+                           lasku="Ei", maksettu="Ei maksettu")

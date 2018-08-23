@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="col-md-6 col-xs-10 middle-column">
+    <h2> Varauksen tiedot </h2>
+    <h3> Matkakohde: {{ matkakohde.name }}, {{ matkakohde.country }}</h3>
+    <h3> Lähtöpäivä: {{ date }} </h3>
+    <!-- Tähän väliin paluu pvm -->
+   
+    
+    <div class="card">
+        <h4> Hotelli: {{ hotel.name }} </h4>
+        <h5>Matkustajia: {{ varaus.passengers }}</h5>
+        <h5> Huoneet:</h5>
+        <p>1-2 henkilöä: {{ varaus.small_rooms }}</p>
+        <p>3-4 henkilöä: {{ varaus.large_rooms }}</p>
+    </div>
+    
+    <h4>Hinta: {{ varaus.price }}€</h4>
+    {% if varaus.confirmed %}
+    <div class="card">
+        <p>Olet vahvistanut varauksen tiedot</p>
+        <p>Lasku lähetetty: {{ lasku }}</p> 
+        <p>Maksun tila: {{ maksettu }}</p>
+    </div>
+    {% else %}
+    <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, confirm = True) }}">
+            <input type="submit" class="btn btn-default" value="Vahvista tiedot"/>
+    </form>
+    {% endif %}
+</div>
+
+
+{% endblock %}

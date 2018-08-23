@@ -16,7 +16,7 @@
             {% for varaus in varaukset %} <!-- Listataan kaikki tietokannasta löytyvät varaukset -->
             <tr>
                 <td>
-                    <p> {{ varaus.id }} </p>
+                    <a href="{{ url_for('varaus_info', varaus_id=varaus.id) }}">{{ varaus.id }}</a>
                 </td>
                 <td>
                     <p>{{ varaus.confirmed }}</p>

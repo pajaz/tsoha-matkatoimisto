@@ -2,7 +2,7 @@
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
-from application import app, db
+from application import app, db, login_required
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
 from application.varaukset.models import Varaus
@@ -18,13 +18,13 @@ def matkakohteet_index():
 
 # Hakee uuden kohteen lisäyssivun näkyville. Parametri dest_add kertoo html-templatelle, että kyseessä kohteen lisäys
 @app.route("/matkakohteet/uusi")
-@login_required
+@login_required(role="Admin")
 def matkakohteet_form():
     return render_template("matkakohteet/matkakohde.html", form=DestinationForm(), dest_add=True)
 
 # Lisäyslomakkeen postaus.
 @app.route("/matkakohteet/", methods=["POST"])
-@login_required
+@login_required(role="Admin")
 def matkakohteet_create():
     
     form = DestinationForm(request.form)
@@ -65,7 +65,7 @@ def matkakohde_intro(matkakohde_id):
 
 # Editointilomakkeen haku ja lomakkeen lähetys. dest_add lopussa kertoo että kyseessä muokkaus
 @app.route('/matkakohteet/edit/<matkakohde_id>', methods=['GET', 'POST'])
-@login_required
+@login_required(role="Admin")
 def matkakohteet_edit_form(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
@@ -91,7 +91,7 @@ def matkakohteet_edit_form(matkakohde_id):
 
 # Kohteiden poisto
 @app.route("/matkakohteet/delete/<matkakohde_id>", methods=["GET", "POST"])
-@login_required
+@login_required(role="Admin")
 def matkakohteet_delete(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)

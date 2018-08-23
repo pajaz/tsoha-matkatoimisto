@@ -37,3 +37,30 @@ class Varaus(db.Model):
         self.small_rooms = small_rooms
         self.large_rooms = large_rooms
         self.confirmed = False
+
+    def booking_hotel(self):
+        stmt = text("SELECT id FROM Hotelli"
+                    " WHERE Hotelli.id = :id").params(id=self.hotel_id)
+        res = db.engine.execute(stmt)
+        hotel = []
+        for row in res:
+            hotel.append(row[0])
+        return hotel
+
+    def booking_dest(self):
+        stmt = text("SELECT id FROM Matkakohde"
+                    " WHERE Matkakohde.id = :id").params(id=self.dest_id)
+        res = db.engine.execute(stmt)
+        dest = []
+        for row in res:
+            dest.append(row[0])
+        return dest
+    
+    def booking_user(self):
+        stmt = text("SELECT id FROM Kayttaja"
+                    " WHERE Kayttaja.id = :id").params(id=self.dest_id)
+        res = db.engine.execute(stmt)
+        dest = []
+        for row in res:
+            dest.append(row[0])
+        return dest

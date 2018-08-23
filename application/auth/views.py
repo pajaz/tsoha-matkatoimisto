@@ -62,8 +62,6 @@ def auth_new():
 
         db.session().add(user)
         db.session.flush()
-        print("!!!!!!!!!!!!!!!1")
-        print(user.id)
         if admin == 1:
            adminrole = roles.insert().values(role_id = 1, kayttaja_id = user.id)
            db.session.execute(adminrole)
