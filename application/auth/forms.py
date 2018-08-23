@@ -1,6 +1,6 @@
 # application/auth/forms.py
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, validators, ValidationError
+from wtforms import PasswordField, SelectField, StringField, validators, ValidationError
 
 from application.auth.models import Kayttaja
 
@@ -22,6 +22,7 @@ class NewUserForm(FlaskForm):
     password = PasswordField("Salasana:", [validators.required(), validators.Length(min=6, max=144, message="min. 6 merkkiä"),
                                            validators.EqualTo("confirm", message="Salasanojen tulee olla samat")])
     confirm = PasswordField("Salasana uudestaan:", [validators.required()])
+    admin = SelectField("Rooli: ", choices=[(True, "Admin"), (False, "Käyttäjä")], default=False, coerce=bool)
 
     # Tarkistaa, ettei käyttäjänimi ole jo käytössä
     def validate_username(self, field):

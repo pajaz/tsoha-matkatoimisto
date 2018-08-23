@@ -59,11 +59,18 @@
             </div>
         </nav>
 
-        {% block body %}
-        <p>
-            Sisältöä
-        </p>
-        {% endblock %}
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 col-xs-1"></div>
+                    {% block body %}
+                    
+        
+                    {% endblock %}
+                <div class="col-md-3 col-xs-1"></div>
+            </div>
+        </div>   
+               
+
        
     </body>
 </html>

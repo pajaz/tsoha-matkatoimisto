@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block body %}
+            <div class="col-md-6 col-xs-10 middle-column">
+                <h3> 
+                    {{ hotel.name }}             
+                    {% for stars in range(hotel.star_rating)  %}
+                    <img border="0" src="{{ url_for('static', filename='images/star.png') }}" alt="star">
+                    {% endfor %}    
+                </h3>
+                <p class="text-black-50"> {{ destination }} </p>
+                <div class="card middle-column">
+                    <h5>Hotellin tiedot: </h5>
+                    {% if current_user.admin %}
+                    <p>{{ hotel.address }}</p>
+                    <p>{{ hotel.phone_number }}</p>
+                    <p>{{ hotel.email }}</p>
+                    {% endif %}
+                    <p>Pieniä huoneita (1-2 henkilöä): {{ hotel.small_rooms }} kpl</p>
+                    <p> Hinta {{ hotel.price_small }}€ / matka </p>
+                    <p>Suuria huoneita (3-4 henkilöä): {{ hotel.large_rooms }} kpl</p>
+                    <p> Hinta {{ hotel.price_large }}€ / matka </p>
+                    <h5>Kohde-esittely</h5>
+                    <p> {{ hotel.introduction }} </p>
+                    
+                </div>
+                {% if current_user.admin %}
+                <div class="card middle-column">
+                    <p>Hotelliin tehty  varausta. <br>
+                       Joista aktiivisia:  <br>
+                       Tulevia: <br>
+                       Päättyneitä: <br>
+                       Käsittelemättömiä:  <br>
+                       Käsiteltyjä: 
+                    </p> 
+                </div>
+                <div class="card middle-column">
+
+                </div>
+                {% endif %}
+            </div>
+   
+
+{% endblock %}

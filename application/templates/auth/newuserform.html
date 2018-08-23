@@ -2,6 +2,9 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
+
+{% if (current_user.is_authenticated) and (current_user.admin) %}
+
 <div class="form-group">
     <form method="POST" action="{{ url_for('auth_new') }}">
 
@@ -12,7 +15,18 @@
         {{ wtf.form_field(form.username, class="form-control", placeholder="4-20 merkkiä") }}
         {{ wtf.form_field(form.password, class="form-control", placeholder="Salasana") }}
         {{ wtf.form_field(form.confirm, class="form-control", placeholder="Salasana uudestaan") }}
+        {% if current_user.admin %}
+        {{ wtf.form_field(form.admin, class="form-control") }}
+        {% endif %}
         <input type="submit" class="btn btn-default btn-block" value="Lähetä"/>
     </form>
 </div>
+
+{% else %}
+<div>
+    <p>Olet jo kirjautunut sisään</p>
+</div>
+{% endif %}
+
+
 {% endblock %}

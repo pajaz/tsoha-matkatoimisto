@@ -81,6 +81,7 @@ def hotellit_edit_form(hotelli_id):
         return redirect(url_for("hotellit_index"))
 
     return render_template("hotellit/hotelli.html", form=form, hotelli=hotel, hotelli_id=hotel.id, hotel_add=False)
+
 # Hotellien poisto. Ei muuta.
 @app.route("/hotellit/delete/<hotelli_id>", methods=["GET", "POST"])
 @login_required
@@ -92,3 +93,10 @@ def hotellit_delete(hotelli_id):
     db.session.commit()
 
     return redirect(url_for("hotellit_index"))
+
+# Hotellien esittelysivut.
+@app.route("/hotellit/<hotel_id>", methods=["GET"])
+def hotelli_intro(hotel_id):
+    hotelli = Hotelli.query.get_or_404(hotel_id)
+
+    return render_template("hotellit/hotelintro.html", hotel = hotelli)

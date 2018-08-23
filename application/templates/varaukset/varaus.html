@@ -5,7 +5,7 @@
 {% block body %}
 
 <!-- Seuraavassa määritellään dest_add muuttujan avulla ollaanko poistamassa vai lisäämässä tietoa -->
-    <div class="container middle-column">
+    <div class="container col-md-6 col-xs-10 middle-column">
     {% if book_add %}
     <h1> Uusi varaus </h1>
         <form method="POST" action="{{ url_for('varaus_create', dest=dest, date=date, hotel_id=hotel_id) }}">

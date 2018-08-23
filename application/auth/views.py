@@ -50,11 +50,15 @@ def auth_new():
         email = form.email.data
         username = form.username.data
         pword = form.password.data
+        admin = form.admin.data
+        
+        print(admin)
 
         if not email:
-            user = Kayttaja(first_name.title(), last_name.title(), username, phone, pword)
+            user = Kayttaja(first_name.title(), last_name.title(), username, phone, pword, admin)
         else:
-            user = Kayttaja(first_name.title(), last_name.title(), username, phone, pword, email)
+            user = Kayttaja(first_name.title(), last_name.title(), username, phone, pword, admin, email)
+
 
         db.session().add(user)
         db.session().commit()

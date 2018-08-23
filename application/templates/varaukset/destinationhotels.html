@@ -3,9 +3,6 @@
 
 {% block body %}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3 col-xs-1"></div>
         <div class="col-md-6 col-xs-10 middle-column">
             <form method="GET" class="form" role="form" action="{{ url_for('varaus_create') }}">
                 <h3>Valitse Hotelli</h3>
@@ -36,11 +33,7 @@
                 <input type="submit" class="btn btn-default" value="Valitse"/>
 
             </form>
-        <div class="col-md3 col-xs-1"></div>    
     </div>
-</div>
-
-
 
 
 {% endblock %}
