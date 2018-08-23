@@ -11,7 +11,7 @@
                 <p class="text-black-50"> {{ destination }} </p>
                 <div class="card middle-column">
                     <h5>Hotellin tiedot: </h5>
-                    {% if current_user.admin %}
+                    {% if current_user.admin == 1 %}
                     <p>{{ hotel.address }}</p>
                     <p>{{ hotel.phone_number }}</p>
                     <p>{{ hotel.email }}</p>
@@ -24,14 +24,12 @@
                     <p> {{ hotel.introduction }} </p>
                     
                 </div>
-                {% if current_user.admin %}
+                {% if current_user.admin == 1 %}
                 <div class="card middle-column">
                     <p>Hotelliin tehty  varausta. <br>
                        Joista aktiivisia:  <br>
                        Tulevia: <br>
                        Päättyneitä: <br>
-                       Käsittelemättömiä:  <br>
-                       Käsiteltyjä: 
                     </p> 
                 </div>
                 <div class="card middle-column">

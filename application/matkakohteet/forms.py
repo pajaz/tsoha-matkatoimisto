@@ -16,12 +16,12 @@ class DestinationForm(FlaskForm):
     def validate_depart(self, field):
         weekdays = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"]
         if field.data.title() not in weekdays:
-            raise ValidationError("Ei kunnollinen päivämäärä")
+            raise ValidationError("Ei kunnollinen viikonpäivä")
 
     def validate_day_out(self, field):
         weekdays = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"]
         if field.data.title() not in weekdays:
-            raise ValidationError("Ei kunnollinen päivämäärä")
+            raise ValidationError("Ei kunnollinen viikonpäivä")
 
     class Meta:
         csrf = False

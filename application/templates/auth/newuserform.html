@@ -3,7 +3,7 @@
 
 {% block body %}
 
-{% if (current_user.is_authenticated) and (current_user.admin) %}
+{% if (not current_user.is_authenticated) or (current_user.admin == 1) %}
 
 <div class="form-group">
     <form method="POST" action="{{ url_for('auth_new') }}">

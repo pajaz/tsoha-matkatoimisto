@@ -22,7 +22,7 @@ class NewUserForm(FlaskForm):
     password = PasswordField("Salasana:", [validators.required(), validators.Length(min=6, max=144, message="min. 6 merkkiä"),
                                            validators.EqualTo("confirm", message="Salasanojen tulee olla samat")])
     confirm = PasswordField("Salasana uudestaan:", [validators.required()])
-    admin = SelectField("Rooli: ", choices=[(True, "Admin"), (False, "Käyttäjä")], default=False, coerce=bool)
+    admin = SelectField("Rooli: ", choices=[(1, "Admin"), (2, "Käyttäjä")], default=2, coerce=int)
 
     # Tarkistaa, ettei käyttäjänimi ole jo käytössä
     def validate_username(self, field):

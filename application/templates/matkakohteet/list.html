@@ -8,7 +8,7 @@
                 <tr>
                     <th>Matkakohde</th>
                     <th>Maa</th>
-                    {% if current_user.is_authenticated %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
+                    {% if current_user.admin == 1 %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
                     
                     <th>Muokkaa</th>
                     <th>Poista</th>
@@ -21,7 +21,7 @@
                     <a href="{{ url_for('matkakohde_intro', matkakohde_id=matkakohde.id) }}"> {{ matkakohde.name }} </a>
                 </td>
                 <td>{{ matkakohde.country }}</td>
-                {% if current_user.is_authenticated %}
+                {% if current_user.admin == 1 %}
              
                 <td>
                     <form method="GET" action="{{ url_for('matkakohteet_edit_form', matkakohde_id=matkakohde.id) }}">
@@ -37,7 +37,7 @@
             </tr>
             {% endfor %}
         </table>
-        {% if current_user.is_authenticated %}
+        {% if current_user.admin == 1 %}
         <div class="container">
             
             <form method="GET" action="{{ url_for('matkakohteet_form') }}">

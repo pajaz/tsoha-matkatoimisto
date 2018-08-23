@@ -2,13 +2,21 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
-<h1> Kirjaudu sisään </h1>
+
+<div class="col-md-6 col-xs-10 middle-column">
+
+{% if current_user.is_authenticated %}
+    <p>Virhe!</p>
+    <a href="{{ url_for('matkakohteet_index') }}">Takaisin etusivulle</a>
+{% else %}
+    <h1> Kirjaudu sisään </h1>
     <form method="POST" action="{{ url_for('auth_login') }}" class="form" role="form">
         <div class="w-50 inline-block">
             {{ wtf.form_field(form.username, class="form-control", placeholder="käyttäjänimi") }}
             {{ wtf.form_field(form.password, class="form-control", placeholder="password") }}
             <p><input type="submit" class="btn btn-default btn-block" value="Kirjaudu sisään"></p>
-        </div>
-        
+        </div>    
     </form>
+{% endif %}
+</div>
 {% endblock %}

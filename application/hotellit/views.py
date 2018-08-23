@@ -2,21 +2,21 @@
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required
 
-from application import app, db
+from application import app, db, login_required
 from application.hotellit.models import Hotelli
 from application.hotellit.forms import HotelForm
 from application.matkakohteet.models import Matkakohde
 
 # Hotellien listaussivu
 @app.route("/hotellit/", methods=["GET"])
-@login_required
+@login_required(role="Admin")
 def hotellit_index():
     hotellit=Hotelli.query.all()
     return render_template("hotellit/list.html", hotellit=hotellit)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.
 @app.route("/hotellit/uusi", methods=["GET","POST"])
-@login_required
+@login_required(role="Admin")
 def hotellit_create():
     
     form = HotelForm(request.form)
@@ -54,7 +54,7 @@ def hotellit_create():
 
 # Editointi lomakkeen haku, sekä lähetys toiminnaliisuus
 @app.route('/hotellit/edit/<hotelli_id>', methods=['GET', 'POST'])
-@login_required
+@login_required(role="Admin")
 def hotellit_edit_form(hotelli_id):
 
     hotel = Hotelli.query.get_or_404(hotelli_id)
@@ -84,7 +84,7 @@ def hotellit_edit_form(hotelli_id):
 
 # Hotellien poisto. Ei muuta.
 @app.route("/hotellit/delete/<hotelli_id>", methods=["GET", "POST"])
-@login_required
+@login_required(role="Admin")
 def hotellit_delete(hotelli_id):
 
     Hotel = Hotelli.query.get_or_404(hotelli_id)

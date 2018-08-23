@@ -30,8 +30,8 @@
                     <ul class="list-group">
                        
                         {% for hotel in hotellit %}
-                        <li class="list-group-item"> 
-                            {{ hotel.name }} <br/>
+                        <li class="list-group-item">
+                            <a href="{{ url_for('hotelli_intro', hotel_id=hotel.id) }}">{{ hotel.name }}</a> <br/>
                             {% for stars in range(hotel.star_rating)  %}
                             <img border="0" src="{{ url_for('static', filename='images/star.png') }}" alt="star">
                             {% endfor %}

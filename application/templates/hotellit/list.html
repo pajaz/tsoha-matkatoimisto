@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+
     <div class="container middle-column">
         <h2>Hotellit</h2>
         <table class="table table-hover">
@@ -41,6 +42,7 @@
                 <td> {{ hotelli.price_large }} </td>
                 -->
                 <td> {{ hotelli.star_rating }} </td>
+
                 <td>
                     <form method="GET" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}">
                         <input type="submit" class="btn btn-secondary" value="Muokkaa"/>
@@ -54,13 +56,11 @@
             </tr>
             {% endfor %}
         </table>
-
-        {% if current_user.is_authenticated %}
             <div class="container">
                 <form method="GET" action="{{ url_for('hotellit_create') }}">
                     <input type="submit" class="btn btn-default" value="Lisää uusi hotelli"/>
                 </form>   
             </div>
-        {% endif %}
     </div>  
+
 {% endblock %}

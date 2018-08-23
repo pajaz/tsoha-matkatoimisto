@@ -3,7 +3,7 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user
 
 from application import app, db
-from application.auth.models import Kayttaja
+from application.auth.models import Kayttaja, Role, roles
 from application.auth.forms import LoginForm, NewUserForm
 
 # Kirjautumislomakkeen haku, sekä lähetys
@@ -61,6 +61,15 @@ def auth_new():
 
 
         db.session().add(user)
+        db.session.flush()
+        print("!!!!!!!!!!!!!!!1")
+        print(user.id)
+        if admin == 1:
+           adminrole = roles.insert().values(role_id = 1, kayttaja_id = user.id)
+           db.session.execute(adminrole)
+        
+        user_role = roles.insert().values(role_id = 2, kayttaja_id = user.id)
+        db.session.execute(user_role)
         db.session().commit()
 
         return redirect(url_for("index"))

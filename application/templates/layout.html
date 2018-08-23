@@ -25,9 +25,12 @@
                         </a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href=" {{ url_for('matkakohteet_index') }} ">Näytä kaikki</a>
+                            {% if current_user.admin == 1 %}
                             <a class="dropdown-item" href=" {{ url_for('matkakohteet_form') }} ">Lisää uusi</a>
+                            {% endif %}
                         </div>
                     </li>
+                    {% if current_user.admin == 1 %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                             Hotellit    
@@ -45,6 +48,7 @@
                             <a class="dropdown-item" href=" {{ url_for('varaukset_index') }} ">Näytä kaikki</a>
                         </div>
                     </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <!-- Kirjautumisenhallinta -->
