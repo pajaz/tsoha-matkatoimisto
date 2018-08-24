@@ -1,13 +1,16 @@
 # application/varaukset/views.py
 from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
+from wtforms import StringField
 import datetime
 
 from application import app, db, login_required
-from application.varaukset.models import Varaus
+from application.varaukset.models import Varaus, matkustaja_varaus
 from application.matkakohteet.models import Matkakohde
+from application.matkustajat.models import Matkustaja
 from application.hotellit.models import Hotelli
 from application.varaukset.forms import BookingForm, ChooseHotelForm
+from application.matkustajat.forms import PassengerForm
 
 # Hakee varausten listaussivun esille
 @app.route("/varaukset/", methods=["GET"])
@@ -46,7 +49,7 @@ def varaus_create():
             db.session().add(booking)
             db.session().commit()
 
-            return redirect(url_for("matkakohteet_index")) 
+            return redirect(url_for("varaus_info", varaus_id=booking.id)) 
     print(form.errors)    
     return render_template("/varaukset/varaus.html", form=form, book_add=True, dest=dest, date=date,
                            matkakohde=destination, hotel=hotel, hotel_id=hotel_id)
@@ -110,13 +113,45 @@ def varaus_info(varaus_id):
     varaus = Varaus.query.get_or_404(varaus_id)
     dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
     hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
+    passengers = varaus.booking_passengers()
+    form = PassengerForm(request.form)
 
-    if request.method == "POST":
+    if request.method == "POST" and form.validate_on_submit() and len(passengers) < varaus.passengers:
+        fname = form.fname.data
+        lname = form.lname.data
+        socsec = form.socialsec.data
+
+        pas = Matkustaja.query.filter_by(socialsec=socsec).first()
+        if pas is None:
+            passenger = Matkustaja(fname, lname, socsec)
+            db.session.add(passenger)
+            db.session.flush()
+            pas_book = matkustaja_varaus.insert().values(matkustaja_id=passenger.id, varaus_id=varaus.id)
+            print("!!!!!!!!!!!!!!!")
+        else:
+            pas_book = matkustaja_varaus.insert().values(matkustaja_id=pas.id, varaus_id=varaus.id)
+            print(pas.id)
+            print("!!!!!!!!!!!!!!!1")
+
+       
+        db.session.execute(pas_book)
+
+        db.session.commit()
+
+        return redirect(url_for("varaus_info", varaus_id=varaus.id))
+
+
+    if request.method == "POST" and len(passengers) == varaus.passengers:
         varaus.confirmed = True
         db.session().commit()
 
         return redirect(url_for("varaus_info", varaus_id = varaus.id))
 
     
-    return render_template("varaukset/varausinfo.html", varaus=varaus, matkakohde=dest, hotel=hotel, date = varaus.start_date,
-                           lasku="Ei", maksettu="Ei maksettu")
+    return render_template("varaukset/varausinfo.html", form=form, varaus=varaus, matkakohde=dest, hotel=hotel, date = varaus.start_date,
+                            matkustajat = passengers, lasku=varaus.bill_sent, maksettu=varaus.handled)
+
+
+
+
+    

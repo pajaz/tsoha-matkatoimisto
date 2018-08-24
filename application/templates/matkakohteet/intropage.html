@@ -7,7 +7,7 @@
                 <div class="card middle-column">
                     <h5>Kohde-esittely</h5>
                     <p> {{ matkakohde.intro }} </p>
-                    <p> Matkoja joka viikko välillä {{ matkakohde.depart }} - {{ matkakohde.day_out }} </p>
+                    <p> Lähdöt joka {{ matkakohde.depart }}, paluu {{ matkakohde.day_out }}na </p>
                     <p> Hinta {{ matkakohde.price }}€ (Ei sisällä hotellia)</p>
                 </div>
                 {% if current_user.is_authenticated %}

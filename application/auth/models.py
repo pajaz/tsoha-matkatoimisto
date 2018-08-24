@@ -20,7 +20,7 @@ class Kayttaja(db.Model):
     phone_number = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(144), nullable=False)
     admin = db.Column(db.Integer, nullable=False) # admin = 1 user = 2
-    roles = db.relationship('Role', secondary=roles, lazy='subquery',
+    roles = db.relationship('Role', secondary=roles, lazy='dynamic',
                                      backref=db.backref('users', lazy=True))
 
     # Riippuvuussuhde varausten kanssa
