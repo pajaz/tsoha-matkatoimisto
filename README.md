@@ -7,7 +7,7 @@
   * Testitunnus: testi 
   * Salasana: 123456 (Voit toki luoda myös oman)  
     
-  [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(first_draft).pdf)  
+  [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(2nd_draft).pdf)  
   [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md) 
    
    <h2> Yleiskuvaus </h2>
