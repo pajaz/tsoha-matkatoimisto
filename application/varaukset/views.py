@@ -27,11 +27,14 @@ def varaus_create():
     date = request.args.get("date")
     hotel_id = request.args.get("hotel_id")
     destination = Matkakohde.query.get_or_404(dest)
-    hotel = Hotelli.query.get_or_404(hotel_id)
+    
+    if hotel_id:   
+        hotel = Hotelli.query.get_or_404(hotel_id)
     form = BookingForm(request.form)
 
     if request.method == "POST":
         passengers = form.passengers.data
+        
         small_rooms = form.small_rooms.data
         large_rooms = form.large_rooms.data
 
@@ -40,10 +43,17 @@ def varaus_create():
                 small_rooms = 0
             if not large_rooms:
                 large_rooms = 0
-            price = destination.price * passengers + small_rooms * hotel.price_small + large_rooms * hotel.price_large
+            if hotel_id:
+                price = destination.price * passengers + small_rooms * hotel.price_small + large_rooms * hotel.price_large
+            else:
+                price = destination.price * passengers
             
             date_save = datetime.datetime.strptime(date, '%d.%m.%Y')
-            booking = Varaus(date_save, price, current_user.id, dest, passengers, hotel_id,
+            if hotel_id:
+                booking = Varaus(date_save, price, current_user.id, dest, passengers, hotel_id,
+                                 small_rooms, large_rooms)
+            else:
+                booking = Varaus(date_save, price, current_user.id, dest, passengers,
                                  small_rooms, large_rooms)
           
             db.session().add(booking)
@@ -52,7 +62,7 @@ def varaus_create():
             return redirect(url_for("varaus_info", varaus_id=booking.id)) 
     print(form.errors)    
     return render_template("/varaukset/varaus.html", form=form, book_add=True, dest=dest, date=date,
-                           matkakohde=destination, hotel=hotel, hotel_id=hotel_id)
+                           matkakohde=destination, hotel_id=hotel_id)
 
 @app.route("/varaukset/uusi/valitsehotelli", methods=["GET"])
 @login_required(role="User")
@@ -61,12 +71,15 @@ def varaus_hotelli():
     date = request.args.get("date")
     form = ChooseHotelForm()
 
-    form.hotel.choices = [(hotel.id, hotel.name) for hotel in Hotelli.query.filter_by(destination_id=dest)]
+    
     hotels = Hotelli.query.filter_by(destination_id=dest)
+    form.hotel.choices = [(hotel.id, hotel.name) for hotel in hotels]
     zipped = zip(form.hotel.choices, hotels)
 
-    form.dest.data = dest
-    form.date.data = date
+    
+    if form.validate_on_submit:
+        form.dest.data = dest
+        form.date.data = date
 
     return render_template("/varaukset/destinationhotels.html", dest=dest, date=date, form=form, hotels=zipped)
 
@@ -112,7 +125,12 @@ def varaus_info(varaus_id):
     
     varaus = Varaus.query.get_or_404(varaus_id)
     dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
-    hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
+    if varaus.hotel_id:
+        hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
+    else:
+        hotel = None
+    print(hotel)
+    print("!!!!!!!!!!!!!!!!!!!!")
     passengers = varaus.booking_passengers()
     form = PassengerForm(request.form)
 
@@ -127,11 +145,9 @@ def varaus_info(varaus_id):
             db.session.add(passenger)
             db.session.flush()
             pas_book = matkustaja_varaus.insert().values(matkustaja_id=passenger.id, varaus_id=varaus.id)
-            print("!!!!!!!!!!!!!!!")
+
         else:
             pas_book = matkustaja_varaus.insert().values(matkustaja_id=pas.id, varaus_id=varaus.id)
-            print(pas.id)
-            print("!!!!!!!!!!!!!!!1")
 
        
         db.session.execute(pas_book)

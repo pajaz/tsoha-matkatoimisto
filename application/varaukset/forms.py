@@ -18,7 +18,7 @@ class BookingForm(FlaskForm):
 class ChooseHotelForm(FlaskForm):
     dest = HiddenField("", [validators.required()])
     date = HiddenField("", [validators.required()])
-    hotel = RadioField("Hotellit", [validators.optional()], coerce=int)
+    hotel = RadioField("Hotellit", [validators.required()], coerce=int)
 
     class Meta:
         csrf = False

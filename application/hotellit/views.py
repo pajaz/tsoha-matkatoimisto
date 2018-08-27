@@ -64,7 +64,7 @@ def hotellit_edit_form(hotelli_id):
     if request.method == 'POST' and form.validate(): 
         hotel.name = form.name.data
         hotel.address = form.address.data
-        hotel.destination = form.destination.data
+        hotel.destination_id = form.destination.data
         hotel.phone_number = form.phone_number.data
         hotel.small_rooms = form.small_rooms.data
         hotel.large_rooms = form.large_rooms.data
@@ -77,6 +77,7 @@ def hotellit_edit_form(hotelli_id):
             hotel.introduction = form.introduction.data
 
         db.session().commit()
+
 
         return redirect(url_for("hotellit_index"))
 

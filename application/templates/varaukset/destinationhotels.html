@@ -26,6 +26,17 @@
                     </label>
                 </div>
                 {% endfor %}
+                <div class="form-check card">
+                    <input class="form-check-input" type="radio" name="none" id="none" value="">
+                    <label class="form-check-label" for="none">
+                        <div class="container-fluid">
+                            <h5>
+                                Ei hotellia
+                            </h5>
+                        </div>
+
+                    </label>
+                </div>
 
                 {{ wtf.form_field(form.dest, class="form-control") }}
                 {{ wtf.form_field(form.date, class="form-control") }}

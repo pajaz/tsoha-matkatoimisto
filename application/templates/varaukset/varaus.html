@@ -11,7 +11,9 @@
         <form method="POST" action="{{ url_for('varaus_create', dest=dest, date=date, hotel_id=hotel_id) }}">
             <h3> Matkakohde {{ matkakohde.name }}, {{ matkakohde.country }}</h3>
             <h3> Lähtöpäivä {{ date }} </h3>
+            {% if hotel %}
             <h3> Hotelli {{ hotel.name }} </h3>
+            {% endif %}
     {% else %}
     
         <h1> Muokkaa tietoja </h1> 
@@ -25,6 +27,7 @@
         <div class="middle-column">
             
             {{ wtf.form_field(form.passengers, class="form-control", placeholder="max. 12") }}
+            {% if hotel %}
             <div class="row">
                     <div class="col-md-10 col-xs-10">
                         {{ wtf.form_field(form.small_rooms, class="form-control") }}
@@ -41,7 +44,7 @@
                        <span>{{ hotel.price_large }}€/kpl</span>
                     </div>
             </div>
-            
+            {% endif %}
             <p><input type="submit" class="btn btn-default btn-block" value="Lähetä"></p>
         </div>
         </form>

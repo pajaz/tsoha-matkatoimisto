@@ -29,6 +29,7 @@
         {% endif %}
         </div>
     </div>
+    {% if hotel %}
     <div class="card">
         <div class="card-body">
             <h4 class="card-title"> Hotelli: {{ hotel.name }} </h4>
@@ -37,7 +38,7 @@
             <p>3-4 henkilöä: {{ varaus.large_rooms }}</p>
         </div>  
     </div>
-    
+    {% endif %}
     <h4>Hinta: {{ varaus.price }}€</h4>
     {% if varaus.confirmed %}
     <div class="card">
