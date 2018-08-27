@@ -30,6 +30,8 @@ def varaus_create():
     
     if hotel_id:   
         hotel = Hotelli.query.get_or_404(hotel_id)
+    else:
+        hotel = None
     form = BookingForm(request.form)
 
     if request.method == "POST":
@@ -62,7 +64,7 @@ def varaus_create():
             return redirect(url_for("varaus_info", varaus_id=booking.id)) 
     print(form.errors)    
     return render_template("/varaukset/varaus.html", form=form, book_add=True, dest=dest, date=date,
-                           matkakohde=destination, hotel_id=hotel_id)
+                           matkakohde=destination, hotel_id=hotel_id, hotel=hotel)
 
 @app.route("/varaukset/uusi/valitsehotelli", methods=["GET"])
 @login_required(role="User")
@@ -75,11 +77,9 @@ def varaus_hotelli():
     hotels = Hotelli.query.filter_by(destination_id=dest)
     form.hotel.choices = [(hotel.id, hotel.name) for hotel in hotels]
     zipped = zip(form.hotel.choices, hotels)
-
-    
-    if form.validate_on_submit:
-        form.dest.data = dest
-        form.date.data = date
+    form.dest.data = dest
+    form.date.data = date
+        
 
     return render_template("/varaukset/destinationhotels.html", dest=dest, date=date, form=form, hotels=zipped)
 
@@ -129,8 +129,6 @@ def varaus_info(varaus_id):
         hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
     else:
         hotel = None
-    print(hotel)
-    print("!!!!!!!!!!!!!!!!!!!!")
     passengers = varaus.booking_passengers()
     form = PassengerForm(request.form)
 

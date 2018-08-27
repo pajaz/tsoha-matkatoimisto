@@ -10,23 +10,29 @@
     <!-- Tähän väliin paluu pvm -->
    
     <div class="card">
-        <div class="card-body">
-        <h4 class="card-title"> Matkustajia: {{ varaus.passengers }}</h4>
-        {% for i,j,k in matkustajat %}
-        <div class="card-text">
-            <p>{{ i }} {{ j }} <br/>
-             Henkilötunnus: {{ k }}</p>
-        </div>    
-        {% endfor %}
-        {% if varaus.passengers > matkustajat|length %}
-        <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id) }}" class="form" role="form">
-           {{ errors }}
-           {{ wtf.form_field(form.fname, class="form-control", placeholder="...") }}
-           {{ wtf.form_field(form.lname, class="form-control", placeholder="...") }}
-           {{ wtf.form_field(form.socialsec, class="form-control", placeholder="...") }}
-           <input type="submit" class="btn btn-default" value="Lisää"/>
-        </form>
-        {% endif %}
+        <div class="card-body row">
+            <h4 class="card-title col-12"> Matkustajia: {{ varaus.passengers }}</h4>
+            {% for i,j,k,l in matkustajat %}
+            <div class="col-6 card-text">
+                <p>{{ i }} {{ j }}  <br/>
+                Henkilötunnus: {{ k }}  </p>
+            </div> 
+            <div class="col-3">
+                <form method="POST" action="{{ url_for('delete_matkustaja', matkustaja_id = l , varaus_id = varaus.id, previous_page = 'varaus_info') }}">
+                <input class="btn btn-warning" type="submit" value="Poista Matkustaja"/></form>
+            </div> 
+            {% endfor %}
+            {% if varaus.passengers > matkustajat|length %}
+            <div class="col-12">
+                <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id) }}" class="form" role="form">
+                    {{ errors }}
+                    {{ wtf.form_field(form.fname, class="form-control", placeholder="...") }}
+                    {{ wtf.form_field(form.lname, class="form-control", placeholder="...") }}
+                    {{ wtf.form_field(form.socialsec, class="form-control", placeholder="...") }}
+                    <input type="submit" class="btn btn-default" value="Lisää"/>
+                </form>
+            </div>
+            {% endif %}
         </div>
     </div>
     {% if hotel %}

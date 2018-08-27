@@ -70,7 +70,7 @@ from application.matkakohteet import views
 from application.hotellit import views
 from application.auth import views
 from application.varaukset import views
-
+from application.matkustajat import views
 
 # Tietokantamallit
 from application.matkakohteet import models

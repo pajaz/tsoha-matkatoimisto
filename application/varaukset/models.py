@@ -34,7 +34,7 @@ class Varaus(db.Model):
     matkustajat = db.relationship("Matkustaja", secondary=matkustaja_varaus, lazy="dynamic",
                                   backref=db.backref("varaukset", lazy=True))
 
-    def __init__(self, start, price, user, dest, passengers, hotel = None, 
+    def __init__(self, start, price, user, dest, passengers, hotel, 
                  small_rooms = 0, large_rooms = 0):
         self.start_date = start
         self.price = price
@@ -76,14 +76,18 @@ class Varaus(db.Model):
         return dest
 
     def booking_passengers(self):
-        stmt = text("SELECT Matkustaja.first_name, Matkustaja.last_name, Matkustaja.socialsec FROM Matkustaja"
+        stmt = text("SELECT Matkustaja.first_name, Matkustaja.last_name, Matkustaja.socialsec, Matkustaja.id FROM Matkustaja"
                     " LEFT JOIN matkustaja_varaus mv ON mv.matkustaja_id = matkustaja.id" 
                     " WHERE mv.varaus_id = :id").params(id=self.id)
         res = db.engine.execute(stmt)
         response = []
         for row in res:
-            response.append((row[0], row[1], row[2]))
-        print(response)
-        print(len(response))
-        print("!!!!!!!!!!!!!!!!!")
+            response.append((row[0], row[1], row[2], row[3]))
         return response
+
+    def delete_passenger_from_booking(self, pas_id):
+        stmt = text("DELETE FROM matkustaja_varaus WHERE matkustaja_id=:m_id AND varaus_id=:v_id").params(m_id=pas_id, v_id=self.id)
+
+        db.engine.execute(stmt)
+
+        return "Done"
