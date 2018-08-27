@@ -4,8 +4,8 @@
    <h2> Linkit </h2>
    
   [Sovellus Herokussa](https://tsoha-matkatoimisto.herokuapp.com/)  
-  * Testitunnus: testi 
-  * Salasana: 123456 (Voit toki luoda myös oman)  
+  * Testitunnus (admin-oikeuksilla): testi 
+  * Salasana: 123456  
     
   [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(2nd_draft).pdf)  
   [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md)   
