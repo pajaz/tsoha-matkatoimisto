@@ -118,7 +118,8 @@ def varaukset_delete(varaus_id):
 
     return redirect(url_for("matkakohteet_index"))
 
-# Varauksen tietojen katselu, sekä tehdyn varauksen tietojen vahvistus käyttäjälle
+# Käyttäjä voi tarkastella varauksen tietoja, vahvistaa varauksen ja lisätä/poistaa matkustajia varauksesta tämän sivun kautta
+# Admin voi tämän lisäksi merkitä varauksen laskun lähetetyksi ja maksetuksi
 @app.route("/varaukset/<varaus_id>", methods=["GET", "POST"])
 @login_required(role=("User"))
 def varaus_info(varaus_id):
@@ -131,13 +132,14 @@ def varaus_info(varaus_id):
         hotel = None
     passengers = varaus.booking_passengers()
     form = PassengerForm(request.form)
-
-    if request.method == "POST" and form.validate_on_submit() and len(passengers) < varaus.passengers:
+                                                                # Jos kaikki matkustajia ei vielä ole syötetty
+    if request.method == "POST" and form.validate_on_submit() and len(passengers) < varaus.passengers: 
         fname = form.fname.data
         lname = form.lname.data
         socsec = form.socialsec.data
 
         pas = Matkustaja.query.filter_by(socialsec=socsec).first()
+        # Jos matkustajaa ei ole vielä luotu tietokantaan, luodaan se tässä
         if pas is None:
             passenger = Matkustaja(fname, lname, socsec)
             db.session.add(passenger)
@@ -156,7 +158,13 @@ def varaus_info(varaus_id):
 
 
     if request.method == "POST" and len(passengers) == varaus.passengers:
-        varaus.confirmed = True
+
+        if not varaus.confirmed:
+            varaus.confirmed = True
+        elif varaus.confirmed and not varaus.bill_sent:
+            varaus.bill_sent = True
+        elif varaus.bill_sent and not varaus.handled:
+            varaus.handled = True
         db.session().commit()
 
         return redirect(url_for("varaus_info", varaus_id = varaus.id))

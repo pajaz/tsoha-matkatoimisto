@@ -1,6 +1,8 @@
 # application/matkakohteet/models.py
 from application import db
 
+from sqlalchemy.sql import text
+
 # Määritetään mallit tietokantataululle.
 class Matkakohde(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,3 +26,17 @@ class Matkakohde(db.Model):
         self.price = price
         self.intro = intro
 
+    @staticmethod
+    def find_destinations_by_name(name="", country=""):
+        stmt = text("SELECT * FROM Matkakohde"
+                    " WHERE country=:country AND lower(name) LIKE lower(:name)").params(name=name,country=country)
+
+
+
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"id":row[0], "name":row[1], "country":row[2]})
+
+        return response

@@ -2,7 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block body %}
-
+{% if current_user.id == varaus.user_id or current_user.admin == 1 %}
 <div class="col-md-6 col-xs-10 middle-column">
     <h2> Varauksen tiedot </h2>
     <h3> Matkakohde: {{ matkakohde.name }}, {{ matkakohde.country }}</h3>
@@ -17,10 +17,12 @@
                 <p>{{ i }} {{ j }}  <br/>
                 Henkilötunnus: {{ k }}  </p>
             </div> 
+                {% if not varaus.confirmed %}
             <div class="col-3">
                 <form method="POST" action="{{ url_for('delete_matkustaja', matkustaja_id = l , varaus_id = varaus.id, previous_page = 'varaus_info') }}">
                 <input class="btn btn-warning" type="submit" value="Poista Matkustaja"/></form>
             </div> 
+                {% endif %}
             {% endfor %}
             {% if varaus.passengers > matkustajat|length %}
             <div class="col-12">
@@ -49,18 +51,32 @@
     {% if varaus.confirmed %}
     <div class="card">
         <p>Olet vahvistanut varauksen tiedot</p>
-        <p>Lasku lähetetty: {{ lasku }}</p> 
+        <p>Lasku lähetetty: {{ lasku }}</p>
         <p>Maksun tila: {{ maksettu }}</p>
+        
     </div>
-    {% elif varaus.passengers == matkustajat|length %}
+    {% endif %}
+    {% if (varaus.passengers == matkustajat|length) and (not varaus.confirmed) %}
     <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, confirm = True) }}">
             <input type="submit" class="btn btn-default" value="Vahvista tiedot"/>
     </form>
-    {% else %}
-        <p>Varausta voi muokata niin kauan, kun et ole vahvistanut sen tietoja.</p>
-        <p>Tietojen vahvistaminen on mahdollista, kun kaikkien matkustajien tiedot on syötetty</p>
-    {% endif %}
+    {% elif (varaus.confirmed) and (not lasku) %}
+    <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, lasku = True) }}">
+            <input type="submit" class="btn btn-default" value="Lasku lähetetty"/>
+    </form> 
+    {% elif (lasku) and (not maksettu) %}
+    <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, maksettu = True) }}">
+            <input type="submit" class="btn btn-default" value="Lasku maksettu"/>
+    </form> 
+    {% endif %}    
+    <p>Varausta voi muokata niin kauan, kun et ole vahvistanut sen tietoja.</p>
+    <p>Tietojen vahvistaminen on mahdollista, kun kaikkien matkustajien tiedot on syötetty</p>
+    
 </div>
-
-
+{% else %}
+<div class="container-fluid">
+    <p>Valitettavasti sinulla ei ole oikeuksia tarkastella tätä sivua </p>
+    <a href="{{ url_for('matkakohteet_index') }}">Takaisin etusivulle</a>
+</div>
+{% endif %}
 {% endblock %}

@@ -8,9 +8,8 @@ from application.varaukset.models import matkustaja_varaus
 from application.varaukset.models import Varaus
 
 @app.route("/matkustajat/delete_from_booking/<matkustaja_id>", methods=["GET", "POST"])
+@login_required("User")
 def delete_matkustaja(matkustaja_id):
-    print(matkustaja_id)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     previous_page = request.args.get("previous_page")
     varaus_id = request.args.get("varaus_id")
 

@@ -6,15 +6,28 @@ from application import app, db, login_required
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
 from application.varaukset.models import Varaus
-from application.matkakohteet.forms import DestinationForm
+from application.matkakohteet.forms import DestinationForm, DestinationSearchForm
 from application.utils.tools import next_weekdays
 
 import datetime
 
 # Hakee kohteiden listaussivun esille
-@app.route("/matkakohteet/", methods=["GET"])
+@app.route("/matkakohteet/", methods=["GET","POST"])
 def matkakohteet_index():
-    return render_template("matkakohteet/list.html", matkakohteet=Matkakohde.query.all())
+
+
+    form = DestinationSearchForm(request.form)
+    
+    choices = [(dest[0], dest[0]) for dest in db.session.query(Matkakohde.country).distinct()]
+    empty = [("","")]
+    form.country.choices = empty + choices
+    print(form.country.choices)
+    if request.method == "POST" and form.validate():
+        kohteet = Matkakohde.find_destinations_by_name(form.name.data + "%", form.country.data)
+        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form)
+
+
+    return render_template("matkakohteet/list.html", matkakohteet=Matkakohde.query.all(), form=form)
 
 # Hakee uuden kohteen lisäyssivun näkyville. Parametri dest_add kertoo html-templatelle, että kyseessä kohteen lisäys
 @app.route("/matkakohteet/uusi")
@@ -23,7 +36,7 @@ def matkakohteet_form():
     return render_template("matkakohteet/matkakohde.html", form=DestinationForm(), dest_add=True)
 
 # Lisäyslomakkeen postaus.
-@app.route("/matkakohteet/", methods=["POST"])
+@app.route("/matkakohteet/uusi", methods=["POST"])
 @login_required(role="Admin")
 def matkakohteet_create():
     
@@ -100,3 +113,4 @@ def matkakohteet_delete(matkakohde_id):
     db.session.commit()
 
     return redirect(url_for("matkakohteet_index"))
+
