@@ -13,7 +13,7 @@ from application.matkakohteet.models import Matkakohde
 def hotellit_index():
     hotellit=Hotelli.query.all()
     destinations = [dest.get_destination() for dest in hotellit]
-    hotels_destinations = zip(hotellit, destinations[0])
+    hotels_destinations = zip(hotellit, destinations)
     
     return render_template("hotellit/list.html", hotellit=hotels_destinations)
 

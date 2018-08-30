@@ -69,7 +69,10 @@ class Kayttaja(db.Model):
 
         bookings = []
         for row in res:
-            dt = datetime.datetime.strptime(row[1], "%Y-%m-%d")
+            if type(row[1]) == str:
+                dt = datetime.datetime.strptime(row[1], "%Y-%m-%d")
+            else:
+                dt = row[1]
             date = dt.strftime("%d.%m.%Y")
             bookings.append({"id":row[0], "start_date":date, "name":row[2]})
 
