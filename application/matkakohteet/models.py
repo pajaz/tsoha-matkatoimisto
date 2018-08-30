@@ -94,8 +94,6 @@ class Matkakohde(db.Model):
 
         response = []
         for row in res:
-            print(row[0])
-            print(row[1])
             response.append({"id":row[0], "name":row[1]})
         
         return response

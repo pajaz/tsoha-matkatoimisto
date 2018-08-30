@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+
+
+
+
+    <div class="col-md-6 col-xs-10 middle-column"> 
+        <h1 class="pb-3">Käyttäjät</h1>
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                                <a href="{{ url_for('kayttajat_index', page=page) }}">ID</a>
+                        </th>
+                        <th>
+                            <a href="{{ url_for('kayttajat_index', page=page, order='username') }}">Käyttäjänimi</a>
+                        </th>
+                        <th>Varauksia</th>
+                        <th>Muokkaa</th>
+                        <th>Poista</th>
+                        
+                    </tr>
+                </thead>
+                {% for kayttaja, varaus in kayttajat %} <!-- Listataan kaikki tietokannasta löytyvät käyttäjät -->
+                <tr>
+                    <td>
+                        <a href="{{ url_for('user_info', user_id=kayttaja.id) }}"> {{ kayttaja.id }} </a>
+                    </td>
+                    <td>{{ kayttaja.username }}</td>
+                    <td>{{ varaus }}</td>
+                    
+                 
+                    <td>
+                        <form method="GET" action="{{ url_for('edit_user', user_id=kayttaja.id) }}">
+                            <input type="submit" class="btn btn-light" value="Muokkaa"/>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="{{ url_for('kayttaja_delete', user_id=kayttaja.id) }}">
+                            <input type="submit" class="btn btn-light" value="Poista kohde"/>
+                        </form>
+                    </td>   
+                                       
+                </tr>
+                {% endfor %}
+            </table>
+            <!-- Seuraavaksi sivutus -->
+            <ul class="pagination">
+                {% for n in range(pages) %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('kayttajat_index', page=n+1, order=order) }}">{{n+1}}</a>
+                </li>
+                {% endfor %}
+            
+            
+            <div class="container">
+                
+                <form method="GET" action="{{ url_for('auth_new') }}">
+                    <input type="submit" class="btn btn-default" value="Tee uusi käyttäjä"/>
+                </form>
+               
+            </div>
+          
+        </div> 
+
+{% endblock %}

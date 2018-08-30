@@ -13,19 +13,19 @@
         <div class="card-body row">
             <h4 class="card-title col-12"> Matkustajia: {{ varaus.passengers }}</h4>
             {% for i,j,k,l in matkustajat %}
-            <div class="col-6 card-text">
+            <div class="col-md-6 card-text">
                 <p>{{ i }} {{ j }}  <br/>
                 Henkilötunnus: {{ k }}  </p>
             </div> 
                 {% if not varaus.confirmed %}
-            <div class="col-3">
+            <div class="col-md-3">
                 <form method="POST" action="{{ url_for('delete_matkustaja', matkustaja_id = l , varaus_id = varaus.id, previous_page = 'varaus_info') }}">
                 <input class="btn btn-warning" type="submit" value="Poista Matkustaja"/></form>
             </div> 
                 {% endif %}
             {% endfor %}
             {% if varaus.passengers > matkustajat|length %}
-            <div class="col-12">
+            <div class="col-md-12">
                 <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id) }}" class="form" role="form">
                     {{ errors }}
                     {{ wtf.form_field(form.fname, class="form-control", placeholder="...") }}

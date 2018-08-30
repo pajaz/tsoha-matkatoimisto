@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+{% if current_user.id == kayttaja.id or current_user.admin == 1 %}
+<div class="col-md-6 col-xs-10 middle-column">
+    <div class="row">
+        <div class="col-md-8 col-xs-8">
+            <div class="card">
+                <div class="card-header card-yellow-head">
+                    <h4> {{ kayttaja.first_name}} {{ kayttaja.last_name }} <h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>Käyttäjänimi</td>
+                            <td>{{ kayttaja.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>Osoite</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Puhelinnumero</td>
+                            <td>{{ kayttaja.phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            {% if kayttaja.email != "tyhjä" %}
+                            <td>{{ kayttaja.email }}</td>
+                            {% else %}
+                            <td>Ei sähköpostiosoitetta</td>
+                            {% endif %}
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <form method="GET" action="{{ url_for('edit_user', user_id=kayttaja.id) }}">
+                        <input type="submit" class="btn btn-primary" value="Muokkaa tietoja">
+                    </form> 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 cold-xs-4">
+            <div class="card">
+                <div class="card-header card-yellow-head">
+                    <h5>Varaukset</h5>
+                </div>
+                <div class="card-body">
+                    {% for v in varaukset %}
+                    <li class="list-group-item">
+                        <p> {{ v.start_date }} - 
+                        <a href="{{ url_for('varaus_info', varaus_id=v.id) }}"> {{ v.name }}</a>
+                        </p>
+                    </li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+</div>
+
+{% endblock %}

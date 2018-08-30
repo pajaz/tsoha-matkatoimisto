@@ -15,7 +15,7 @@ class Kayttaja(db.Model):
 
     first_name = db.Column(db.String(24), nullable=False)
     last_name = db.Column(db.String(24), nullable=False)
-    username = db.Column(db.String(24), nullable=False)
+    username = db.Column(db.String(24), nullable=False, unique=True)
     email = db.Column(db.String(48))
     phone_number = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(144), nullable=False)
@@ -26,10 +26,10 @@ class Kayttaja(db.Model):
     # Riippuvuussuhde varausten kanssa
     bookings = db.relationship("Varaus", backref="Kayttaja", cascade="all, delete-orphan", lazy=True)
 
-    def __init__(self, fname, lname, uname, phone_number, password, role, email = "tyhjä"):
+    def __init__(self, fname, lname, username, phone_number, password, role, email = "tyhjä"):
         self.first_name = fname
         self.last_name = lname
-        self.username = uname
+        self.username = username
         self.email = email
         self.phone_number = phone_number
         self.password = password
@@ -47,6 +47,7 @@ class Kayttaja(db.Model):
     def is_authenticated(self):
         return True
 
+    # Haetaan käyttäjälle asetetut roolit
     def roles(self):
         stmt = text("SELECT Role.name FROM Role"
                     " LEFT JOIN roles ON roles.role_id = role.id" 
@@ -58,6 +59,20 @@ class Kayttaja(db.Model):
             roolit.append(row[0])
        
         return roolit
+
+    # Haetaan käyttäjän tekemien varausten tiedot
+    def get_booking_infos(self):
+        stmt = text("SELECT Varaus.id, Varaus.start_date, Matkakohde.name" 
+                    " FROM Varaus INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id" 
+                    " WHERE Varaus.user_id = :id").params(id=self.id)
+        res = db.engine.execute(stmt)
+
+        bookings = []
+        for row in res:
+            bookings.append({"id":row[0], "start_date":row[1], "name":row[2]})
+
+        return bookings
+
 
 class Role(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

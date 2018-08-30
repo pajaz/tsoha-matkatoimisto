@@ -1,12 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SelectField, TextAreaField, ValidationError, validators
+from wtforms import HiddenField, IntegerField, StringField, SelectField, TextAreaField, ValidationError, validators
+from application import db
 
 from application.matkakohteet.models import Matkakohde
-
+from application.utils.myvalidators import Unique
 
 #Lomake uusien matkakohteiden lisäämiseen ja muokkaamiseen
 class DestinationForm(FlaskForm):
-    name = StringField("Nimi *", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
+    id = HiddenField()
+    name = StringField("Nimi *", [validators.required(), Unique(Matkakohde, Matkakohde.name, "Matkakohde löytyy jo tietokannasta"),
+                                validators.Length(max=30, message=('max. 30 merkkiä'))])
     country = StringField("Maa *", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
     depart = StringField("Lähtöpäivä", [validators.optional()])
     day_out = StringField("Paluupäivä", [validators.optional()])
@@ -28,7 +31,7 @@ class DestinationForm(FlaskForm):
 
 class DestinationSearchForm(FlaskForm):
     country = SelectField("Maa: ", [validators.optional()], coerce=str)
-    name = StringField("Matkakohde*: ", [validators.optional(), validators.Length(max=30, message=('max. 30 merkkiä'))])
+    name = StringField("Matkakohde: ", [validators.optional(), validators.Length(max=30, message=('max. 30 merkkiä'))])
 
     class Meta:
         csrf = False

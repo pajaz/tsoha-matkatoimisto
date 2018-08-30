@@ -70,7 +70,7 @@ def matkakohteet_create():
         return redirect(url_for("matkakohteet_index"))
     
     
-    return render_template("matkakohteet/matkakohde.html", form=form, dest_add=True)
+    return render_template("matkakohteet/matkakohde.html", form=form, add_user=True)
 
 # Matkakohteen info ja varaussivu
 @app.route('/matkakohteet/<matkakohde_id>', methods=['GET'])
@@ -97,7 +97,7 @@ def matkakohteet_edit_form(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
     form = DestinationForm(obj=destination) # Lomakkeen esitäyttö tietokannasta löytyvillä tiedoilla
- 
+
     if request.method == 'POST' and form.validate():
 
         destination.name = form.name.data.title()
