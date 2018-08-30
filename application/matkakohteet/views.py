@@ -18,8 +18,8 @@ import datetime
 def matkakohteet_index():
     orderby = request.args.get("order", "name", type=str)
     page = request.args.get("page", 1, type=int)
-    show = 5
-    pages = ceil(Matkakohde.query.count()/show)
+    show = 6
+    
     form = DestinationSearchForm(request.form)
     
     choices = [(dest[0], dest[0]) for dest in db.session.query(Matkakohde.country).order_by("country").distinct()]
@@ -27,11 +27,12 @@ def matkakohteet_index():
     form.country.choices = empty + choices
    
     if request.method == "POST" and form.validate():
-        kohteet = Matkakohde.find_destinations_by_name(form.name.data + "%", form.country.data, page, show)
- 
-        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form, page=page, pages=pages, order=orderby)
+        show = 10000
+        kohteet = Matkakohde.find_destinations_by_name(form.name.data + "%", form.country.data)
+        
+        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form, page=page, pages=1, order=orderby)
     kohteet = Matkakohde.query.order_by(orderby, "name").paginate(page, show, False).items
-    
+    pages = ceil(Matkakohde.query.count()/show)
     return render_template("matkakohteet/list.html", matkakohteet=kohteet, form=form, page=page, pages=pages, order=orderby)
 
 # Hakee uuden kohteen lisäyssivun näkyville. Parametri dest_add kertoo html-templatelle, että kyseessä kohteen lisäys

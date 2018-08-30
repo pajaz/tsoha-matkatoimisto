@@ -32,12 +32,10 @@ class Matkakohde(db.Model):
     def find_destinations_by_name(name="", country="", page=1, count=3):
         if country == "":
             stmt = text("SELECT * FROM Matkakohde"
-                    " WHERE lower(name) LIKE lower(:name)"
-                    " LIMIT :count OFFSET :page").params(name=name, page=page-1, count=count, order=order)
+                    " WHERE lower(name) LIKE lower(:name)").params(name=name)
         else:            
             stmt = text("SELECT * FROM Matkakohde"
-                    " WHERE country=:country AND lower(name) LIKE lower(:name)"
-                    " LIMIT :count OFFSET :page").params(name=name,country=country, page=page-1, count=count)
+                    " WHERE country=:country AND lower(name) LIKE lower(:name)").params(name=name,country=country)
 
                    
         res = db.engine.execute(stmt)
@@ -47,3 +45,21 @@ class Matkakohde(db.Model):
             response.append({"id":row[0], "name":row[1], "country":row[2]})
 
         return response
+
+    # Palauttaa edellisen metodin kohteiden määrän
+    @staticmethod
+    def count_destinations_by_name(name="", country=""):
+        if country == "":
+            stmt = text("SELECT Count(*) FROM Matkakohde"
+                    " WHERE lower(name) LIKE lower(:name)").params(name=name)
+        else:            
+            stmt = text("SELECT Count(*) FROM Matkakohde"
+                    " WHERE country=:country AND lower(name) LIKE lower(:name)").params(name=name,country=country)
+
+                   
+        res = db.engine.execute(stmt)
+        count = 0
+        for row in res:
+            count = row[0]
+
+        return count 
