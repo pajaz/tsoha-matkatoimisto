@@ -1,33 +1,38 @@
 # application/matkakohteet/views.py
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import login_required
+from math import ceil
 
 from application import app, db, login_required
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
 from application.varaukset.models import Varaus
 from application.matkakohteet.forms import DestinationForm, DestinationSearchForm
-from application.utils.tools import next_weekdays
+from application.utils.tools import next_weekdays, round_to_next
 
 import datetime
+
 
 # Hakee kohteiden listaussivun esille
 @app.route("/matkakohteet/", methods=["GET","POST"])
 def matkakohteet_index():
-
-
+    orderby = request.args.get("order", "name", type=str)
+    page = request.args.get("page", 1, type=int)
+    show = 5
+    pages = ceil(Matkakohde.query.count()/show)
     form = DestinationSearchForm(request.form)
     
-    choices = [(dest[0], dest[0]) for dest in db.session.query(Matkakohde.country).distinct()]
-    empty = [("","")]
+    choices = [(dest[0], dest[0]) for dest in db.session.query(Matkakohde.country).order_by("country").distinct()]
+    empty = [("","Kaikki")]
     form.country.choices = empty + choices
-    print(form.country.choices)
+   
     if request.method == "POST" and form.validate():
-        kohteet = Matkakohde.find_destinations_by_name(form.name.data + "%", form.country.data)
-        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form)
-
-
-    return render_template("matkakohteet/list.html", matkakohteet=Matkakohde.query.all(), form=form)
+        kohteet = Matkakohde.find_destinations_by_name(form.name.data + "%", form.country.data, page, show)
+ 
+        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form, page=page, pages=pages, order=orderby)
+    kohteet = Matkakohde.query.order_by(orderby, "name").paginate(page, show, False).items
+    
+    return render_template("matkakohteet/list.html", matkakohteet=kohteet, form=form, page=page, pages=pages, order=orderby)
 
 # Hakee uuden kohteen lisäyssivun näkyville. Parametri dest_add kertoo html-templatelle, että kyseessä kohteen lisäys
 @app.route("/matkakohteet/uusi")

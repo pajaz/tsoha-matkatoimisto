@@ -21,4 +21,8 @@ def get_weekday_number(d):
                 "Perjantai":4, "Lauantai":5, "Sunnuntai":6}
     dd = weekdays[d]
     return dd
-    
+
+# Ottaa luvun ja kohteen. Pyöristää luvun seuraavaan kohteen kertoimeen. (round_to_next(16, 5) -> 20)
+def round_to_next(n, target):
+    j =  n + (target - n) % 5
+    return int(j)

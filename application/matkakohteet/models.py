@@ -29,14 +29,19 @@ class Matkakohde(db.Model):
 
     # Metodi matkakohteiden hakemiseen maan, nimen tai molempien perusteella
     @staticmethod
-    def find_destinations_by_name(name="", country=""):
+    def find_destinations_by_name(name="", country="", page=1, count=3, order="name"):
         if country == "":
             stmt = text("SELECT * FROM Matkakohde"
-                    " WHERE lower(name) LIKE lower(:name)").params(name=name)
+                    " WHERE lower(name) LIKE lower(:name)"
+                    " ORDER BY :order"
+                    " LIMIT :page, :count").params(name=name, page=page-1, count=count, order=order)
         else:            
             stmt = text("SELECT * FROM Matkakohde"
-                    " WHERE country=:country AND lower(name) LIKE lower(:name)").params(name=name,country=country)
+                    " WHERE country=:country AND lower(name) LIKE lower(:name)"
+                    " ORDER BY :order"
+                    " LIMIT :page, :count").params(name=name,country=country, page=page-1, count=count, order=order)
 
+                   
         res = db.engine.execute(stmt)
 
         response = []
