@@ -55,7 +55,7 @@ def varaus_create():
                 booking = Varaus(date_save, price, current_user.id, dest, passengers, hotel_id,
                                  small_rooms, large_rooms)
             else:
-                booking = Varaus(date_save, price, current_user.id, dest, passengers,
+                booking = Varaus(date_save, price, current_user.id, dest, passengers, None,
                                  small_rooms, large_rooms)
           
             db.session().add(booking)
@@ -75,11 +75,11 @@ def varaus_hotelli():
 
     
     hotels = Hotelli.query.filter_by(destination_id=dest)
-    form.hotel.choices = [(hotel.id, hotel.name) for hotel in hotels]
+
+    form.hotel.choices = [(hotel.id, hotel.name) for hotel in hotels] + [(None, "Ei hotellia")]
     zipped = zip(form.hotel.choices, hotels)
     form.dest.data = dest
-    form.date.data = date
-        
+    form.date.data = date   
 
     return render_template("/varaukset/destinationhotels.html", dest=dest, date=date, form=form, hotels=zipped)
 
