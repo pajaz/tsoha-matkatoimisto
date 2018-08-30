@@ -3,7 +3,25 @@
 
 {% block body %}
     <div class="col-md-6 col-xs-10 middle-column">
-        <h2>Matkakohteet</h2>
+        <h1 class="pb-3">Matkakohteet</h1>
+        <div class="container">
+            <h2>Suosituimmat kohteet</h2>
+            <div class="row pb-3">
+            
+                {% for p in popular %}
+                <div class="col-6 card">
+                    <h5>
+                    <a href="{{ url_for('matkakohde_intro', matkakohde_id = p.id) }}"><p class="font-weight-bold font-italic">{{ p.name }}</p></a> 
+                    </h5>
+                    <p>
+                        {{ p.introduction|truncate(50) }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        
         <h4>Haku</h4>
             <form method="POST" action="{{ url_for('matkakohteet_index', page=1, order=order) }}" class="form-inline" role="form">
             

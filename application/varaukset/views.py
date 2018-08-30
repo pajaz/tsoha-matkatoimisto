@@ -16,14 +16,12 @@ from application.matkustajat.forms import PassengerForm
 @app.route("/varaukset/", methods=["GET"])
 @login_required(role="User")
 def varaukset_index():
-    print(current_user.admin)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
     if current_user.admin == 1:
         bookings = Varaus.query.order_by(Varaus.dest_id).all()
     else:
         bookings = Varaus.query.filter_by(user_id = current_user.id)
-    print(current_user.id)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
     return render_template("/varaukset/list.html", varaukset=bookings)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.

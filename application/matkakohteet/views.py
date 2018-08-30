@@ -19,6 +19,7 @@ def matkakohteet_index():
     orderby = request.args.get("order", "name", type=str)
     page = request.args.get("page", 1, type=int)
     show = 6
+    most_popular = Matkakohde.most_popular_destinations(4)
     
     form = DestinationSearchForm(request.form)
     
@@ -27,13 +28,15 @@ def matkakohteet_index():
     form.country.choices = empty + choices
    
     if request.method == "POST" and form.validate():
-        show = 10000
+        
         kohteet = Matkakohde.find_destinations_by_name(form.name.data + "%", form.country.data)
         
-        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form, page=page, pages=1, order=orderby)
+        return render_template("matkakohteet/list.html", matkakohteet=kohteet,form=form, page=page, pages=1, order=orderby, popular=most_popular)
+
     kohteet = Matkakohde.query.order_by(orderby, "name").paginate(page, show, False).items
     pages = ceil(Matkakohde.query.count()/show)
-    return render_template("matkakohteet/list.html", matkakohteet=kohteet, form=form, page=page, pages=pages, order=orderby)
+
+    return render_template("matkakohteet/list.html", matkakohteet=kohteet, form=form, page=page, pages=pages, order=orderby, popular=most_popular)
 
 # Hakee uuden kohteen lisäyssivun näkyville. Parametri dest_add kertoo html-templatelle, että kyseessä kohteen lisäys
 @app.route("/matkakohteet/uusi")

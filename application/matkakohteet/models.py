@@ -29,7 +29,7 @@ class Matkakohde(db.Model):
 
     # Metodi matkakohteiden hakemiseen maan, nimen tai molempien perusteella
     @staticmethod
-    def find_destinations_by_name(name="", country="", page=1, count=3):
+    def find_destinations_by_name(name="", country=""):
         if country == "":
             stmt = text("SELECT * FROM Matkakohde"
                     " WHERE lower(name) LIKE lower(:name)").params(name=name)
@@ -63,3 +63,19 @@ class Matkakohde(db.Model):
             count = row[0]
 
         return count 
+
+    # Palauttaa n suosituinta matkakohdetta
+    @staticmethod
+    def most_popular_destinations(n=4):
+        stmt = text("SELECT Matkakohde.id, Matkakohde.name, Matkakohde.country, Matkakohde.intro"
+                    " FROM Matkakohde INNER JOIN (SELECT dest_id, count(*) as cnt"
+                    " FROM Varaus GROUP BY dest_id ORDER BY cnt DESC LIMIT :n) AS Varaus"
+                    " ON Matkakohde.id = Varaus.dest_id").params(n=n)
+        
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"id":row[0], "name":row[1], "country":row[2], "introduction":row[3]})
+
+        return response

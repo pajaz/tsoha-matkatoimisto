@@ -37,40 +37,49 @@
             {% endif %}
         </div>
     </div>
-    {% if hotel %}
+   
     <div class="card">
         <div class="card-body">
+            {% if hotel %}
             <h4 class="card-title"> Hotelli: {{ hotel.name }} </h4>
             <h5> Huoneet:</h5>
             <p>1-2 henkilöä: {{ varaus.small_rooms }}</p>
             <p>3-4 henkilöä: {{ varaus.large_rooms }}</p>
+            {% else %}
+            <h4 class="card-title">Varaukseen ei sisälly majoitusta</h4>
+            {% endif %}
         </div>  
     </div>
-    {% endif %}
+    
     <h4>Hinta: {{ varaus.price }}€</h4>
     {% if varaus.confirmed %}
     <div class="card">
         <p>Olet vahvistanut varauksen tiedot</p>
-        <p>Lasku lähetetty: {{ lasku }}</p>
-        <p>Maksun tila: {{ maksettu }}</p>
+        <p>Lasku lähetetty: {% if lasku %} Kyllä {% else %} Ei {% endif %}</p>
+        <p>Maksun tila: {% if maksettu %} Maksettu {% else %} Ei maksettu {% endif %}</p>
         
     </div>
     {% endif %}
+   
     {% if (varaus.passengers == matkustajat|length) and (not varaus.confirmed) %}
     <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, confirm = True) }}">
             <input type="submit" class="btn btn-default" value="Vahvista tiedot"/>
     </form>
-    {% elif (varaus.confirmed) and (not lasku) %}
+    {% endif %}
+    {% if current_user.admin == 1 %}
+        {% if (varaus.confirmed) and (not lasku) %}
     <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, lasku = True) }}">
             <input type="submit" class="btn btn-default" value="Lasku lähetetty"/>
     </form> 
-    {% elif (lasku) and (not maksettu) %}
+        {% elif (lasku) and (not maksettu) %}
     <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id, maksettu = True) }}">
             <input type="submit" class="btn btn-default" value="Lasku maksettu"/>
     </form> 
+        {% endif %}
     {% endif %}    
     <p>Varausta voi muokata niin kauan, kun et ole vahvistanut sen tietoja.</p>
     <p>Tietojen vahvistaminen on mahdollista, kun kaikkien matkustajien tiedot on syötetty</p>
+    <p class="text-black-70">Varausnumero: {{ varaus.id }}</p>
     
 </div>
 {% else %}
