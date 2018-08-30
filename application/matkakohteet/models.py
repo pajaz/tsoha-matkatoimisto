@@ -26,12 +26,16 @@ class Matkakohde(db.Model):
         self.price = price
         self.intro = intro
 
+
+    # Metodi matkakohteiden hakemiseen maan, nimen tai molempien perusteella
     @staticmethod
     def find_destinations_by_name(name="", country=""):
-        stmt = text("SELECT * FROM Matkakohde"
+        if country == "":
+            stmt = text("SELECT * FROM Matkakohde"
+                    " WHERE lower(name) LIKE lower(:name)").params(name=name)
+        else:            
+            stmt = text("SELECT * FROM Matkakohde"
                     " WHERE country=:country AND lower(name) LIKE lower(:name)").params(name=name,country=country)
-
-
 
         res = db.engine.execute(stmt)
 

@@ -4,7 +4,7 @@
 {% block body %}
     <div class="col-md-6 col-xs-10 middle-column">
         <h2>Matkakohteet</h2>
-        
+        <h4>Haku</h4>
             <form method="POST" action="{{ url_for('matkakohteet_index') }}" class="form-inline" role="form">
             
                     {{ wtf.form_field(form.country, class="form-control") }}
@@ -13,6 +13,7 @@
             
                 <input type="submit" class="btn btn-default" value="Hae"/>   
             </form>
+        <p class="text-black-50 mx-2">Hae kohteita joko maan, nimen tai molempien perusteella</p>
       
 
         <table class="table table-hover">

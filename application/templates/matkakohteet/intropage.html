@@ -7,8 +7,16 @@
                 <div class="card middle-column">
                     <h5>Kohde-esittely</h5>
                     <p> {{ matkakohde.intro }} </p>
+                    {% if matkakohde.depart %}
                     <p> Lähdöt joka {{ matkakohde.depart }}, paluu {{ matkakohde.day_out }}na </p>
-                    <p> Hinta {{ matkakohde.price }}€ (Ei sisällä hotellia)</p>
+                    {% else %}
+                    <p> Ei lähtöjä toistaiseksi</p>
+                    {% endif %}
+                    {% if matkakohde.hinta %}
+                        <p> Hinta {{ matkakohde.price }}€ (Ei sisällä hotellia)</p>
+                    {% else %}
+                        <p> Hintaa ei ole määritelty </p>
+                    {% endif %}
                 </div>
                 {% if current_user.is_authenticated %}
                 <div class="card middle-column">
@@ -43,7 +51,11 @@
                     <h5>Varaa matka</h5>
                     <h6>Seuraavat lähdöt:</h6>
                     {% for dates in traveldays %}
-                    <p>{{ matkakohde.depart }} <a href="{{ url_for('varaus_hotelli', dest=matkakohde.id, date=dates, hotels = hotellit) }}">{{ dates }} </a></p>
+                        {% if dates == "Ei lähtöjä" %}
+                        <p> {{ dates }} </p>
+                        {% else %}
+                        <p>{{ matkakohde.depart }} <a href="{{ url_for('varaus_hotelli', dest=matkakohde.id, date=dates, hotels = hotellit) }}">{{ dates }} </a></p>
+                        {% endif %}
                     {% endfor %}
                     <a href=#>Katso kaikki</a>
                     <div class="form-group">

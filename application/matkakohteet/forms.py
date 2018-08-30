@@ -10,7 +10,7 @@ class DestinationForm(FlaskForm):
     country = StringField("Maa *", [validators.required(), validators.Length(max=30, message=('max. 30 merkkiä'))])
     depart = StringField("Lähtöpäivä", [validators.optional()])
     day_out = StringField("Paluupäivä", [validators.optional()])
-    price = IntegerField("Hinta", [validators.NumberRange(min=0, max=100000, message="0-100000")])
+    price = IntegerField("Hinta", [validators.optional(), validators.NumberRange(min=0, max=100000, message="0-100000")])
     intro = TextAreaField("Esittely (Vapaaehtoinen)", [validators.Length(max=500)])
 
     def validate_depart(self, field):

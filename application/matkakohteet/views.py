@@ -69,7 +69,10 @@ def matkakohde_intro(matkakohde_id):
     
     destination = Matkakohde.query.get_or_404(matkakohde_id)
     day = datetime.datetime.now()
-    travel_days = next_weekdays(day, destination.depart, 4)
+    if destination.depart:
+        travel_days = next_weekdays(day, destination.depart, 4)
+    else:
+        travel_days = ["Ei lähtöjä"]
     hotels = Hotelli.query.filter_by(destination_id=matkakohde_id)
     bookings = Varaus.query.filter_by(dest_id=matkakohde_id).count()
 
