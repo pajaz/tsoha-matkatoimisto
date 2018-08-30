@@ -50,7 +50,7 @@ def matkakohteet_form():
 def matkakohteet_create():
     
     form = DestinationForm(request.form)
-
+    
     dest_name = form.name.data.title()
     dest_country = form.country.data.title()
     dest_depart = form.depart.data.title()
@@ -70,7 +70,7 @@ def matkakohteet_create():
         return redirect(url_for("matkakohteet_index"))
     
     
-    return render_template("matkakohteet/matkakohde.html", form=form, add_user=True)
+    return render_template("matkakohteet/matkakohde.html", form=form, dest_add=True)
 
 # Matkakohteen info ja varaussivu
 @app.route('/matkakohteet/<matkakohde_id>', methods=['GET'])

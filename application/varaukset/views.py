@@ -155,6 +155,8 @@ def varaukset_delete(varaus_id):
 def varaus_info(varaus_id):
     
     varaus = Varaus.query.get_or_404(varaus_id)
+   
+    
     if current_user.id == varaus.user_id or current_user.admin == 1:
         dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
         if varaus.hotel_id:

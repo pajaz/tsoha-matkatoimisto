@@ -12,7 +12,10 @@ from application.matkakohteet.models import Matkakohde
 @login_required(role="Admin")
 def hotellit_index():
     hotellit=Hotelli.query.all()
-    return render_template("hotellit/list.html", hotellit=hotellit)
+    destinations = [dest.get_destination() for dest in hotellit]
+    hotels_destinations = zip(hotellit, destinations[0])
+    
+    return render_template("hotellit/list.html", hotellit=hotels_destinations)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.
 @app.route("/hotellit/uusi", methods=["GET","POST"])

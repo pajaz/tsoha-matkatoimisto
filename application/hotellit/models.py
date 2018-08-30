@@ -59,3 +59,18 @@ class Hotelli(db.Model):
             response.append({"id":row[0], "name":row[1], "destination":row[2]})
         
         print(response)
+
+    
+    def get_destination(self):
+        stmt = text("SELECT Matkakohde.name FROM Hotelli INNER JOIN"
+                    " Matkakohde ON Hotelli.destination_id = Matkakohde.id"
+                    " WHERE :id = Matkakohde.id").params(id=self.id)
+
+        res = db.engine.execute(stmt)
+
+        destination = []
+        for row in res:
+            destination.append({"name":row[0]})
+      
+        return destination
+

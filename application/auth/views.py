@@ -80,7 +80,9 @@ def auth_new():
 def user_info(user_id):
     kayttaja = Kayttaja.query.get_or_404(user_id)
     bookings = kayttaja.get_booking_infos()
-
+    for b in bookings:
+        print(type(b))
+        print(b)
     return render_template("auth/user_info.html", kayttaja = kayttaja, varaukset=bookings)
 
 # Käyttäjän muokkaus
@@ -92,6 +94,7 @@ def edit_user(user_id):
     kayttaja = Kayttaja.query.get_or_404(user_id)
     form = NewUserForm(obj=kayttaja)
     bookings = kayttaja.get_booking_infos()
+    
 
     if request.method == "POST" and form.validate():
         kayttaja.first_name = form.first_name.data
@@ -115,7 +118,7 @@ def edit_user(user_id):
 def kayttajat_index():
     orderby = request.args.get("order", "id", type=str)
     page = request.args.get("page", 1, type=int)
-    show = 6
+    show = 6 
     
     users = Kayttaja.query.order_by(orderby, "id").paginate(page, show, False).items
     bookings = [len(nmbr.get_booking_infos()) for nmbr in users]

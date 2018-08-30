@@ -13,6 +13,7 @@
     <h2>Muokkaa tietoja</h2>
     <form method="POST" action="{{ url_for('edit_user', user_id=kayttaja.id) }}" class="form" role="form">
     {% endif %}
+    
         {{ wtf.form_field(form.first_name, class="form-control", placeholder="max. 24 merkkiä") }}
         {{ wtf.form_field(form.last_name, class="form-control", placeholder="max 24 merkkiä") }}
         {{ wtf.form_field(form.phone_number, class="form-control", placeholder="8-20 merkkiä") }}

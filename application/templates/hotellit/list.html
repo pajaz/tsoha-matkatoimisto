@@ -2,45 +2,24 @@
 
 {% block body %}
 
-    <div class="container middle-column">
-        <h2>Hotellit</h2>
+    <div class="col-md-6 col-xs-10 middle-column">
+        <h1 class="pb-3">Hotellit</h1>
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Hotelli</th>
-                    <!-- <th>Matkakohde</th> -->
-                    <th>Osoite</th>
-                    <!--
-                    Kommentoitu osa pois, koska ei vielä varmuutta mitä tiedoista tulee lopulliseen listaan
-                    <th>Puhelinnumero</th>
-                    <th>Email</th>
-                    <th>Varauksia</th>
-                    <th>Pieniä Huoneita</th>
-                    <th>Suuria Huoneita</th>
-                    <th>€/viikko (pieni)</th>
-                    <th>€/viikko (suuri)</th>
-                    -->
+                    <th>Matkakohde</th>
                     <th>Tähtiluokitus</th>
                     <th>Muokkaa</th>
                     <th>Poista</th>
                 </tr>
             </thead>    
-            {% for hotelli in hotellit %}
+            {% for hotelli, d in hotellit %}
             <tr>
                 <td> 
                   <a href="{{ url_for('hotelli_intro', hotel_id=hotelli.id) }}"> {{ hotelli.name }}</a>
                 </td>
-                
-                <td> {{ hotelli.address }} </td>
-                <!-- 
-                <td> {{ hotelli.phone_number }} </td>
-                <td> {{ hotelli.email }} </td>
-                <td> {{ hotelli.bookings }} </td>
-                <td> {{ hotelli.small_rooms }} </td>
-                <td> {{ hotelli.large_rooms }} </td>
-                <td> {{ hotelli.price_small }} </td>
-                <td> {{ hotelli.price_large }} </td>
-                -->
+                <td> {{ d.name }}</td>
                 <td> {{ hotelli.star_rating }} </td>
 
                 <td>

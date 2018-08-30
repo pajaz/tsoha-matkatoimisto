@@ -6,7 +6,7 @@
 <div class="col-md-6 col-xs-10 middle-column">
     <h2> Varauksen tiedot </h2>
     <h3> Matkakohde: {{ matkakohde.name }}, {{ matkakohde.country }}</h3>
-    <h3> Lähtöpäivä: {{ date }} </h3>
+    <h3> Lähtöpäivä: {{ date.strftime('%d.%m.%Y') }} </h3>
     <!-- Tähän väliin paluu pvm -->
    
     <div class="card">

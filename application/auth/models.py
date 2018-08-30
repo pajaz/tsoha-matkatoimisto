@@ -1,7 +1,7 @@
 # application/auth/models.py
 from application import db
 from sqlalchemy import text
-
+import datetime
 
 roles = db.Table("roles",
                     db.Column('role_id', db.Integer, db.ForeignKey("role.id"), primary_key=True),
@@ -69,7 +69,9 @@ class Kayttaja(db.Model):
 
         bookings = []
         for row in res:
-            bookings.append({"id":row[0], "start_date":row[1], "name":row[2]})
+            dt = datetime.datetime.strptime(row[1], "%Y-%m-%d")
+            date = dt.strftime("%d.%m.%Y")
+            bookings.append({"id":row[0], "start_date":date, "name":row[2]})
 
         return bookings
 
