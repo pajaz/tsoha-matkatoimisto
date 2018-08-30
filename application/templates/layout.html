@@ -40,12 +40,20 @@
                             <a class="dropdown-item" href=" {{ url_for('hotellit_create') }} ">Lisää uusi</a>
                         </div>
                     </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                            Varaukset   
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href=" {{ url_for('varaukset_index') }} ">Näytä kaikki</a>
+                            <a class="dropdown-item" href=" {{ url_for('varaukset_index') }} ">
+                                {% if current_user.admin == 1 %}
+                                Näytä kaikki
+                                {% else %}
+                                Omat varaukset
+                                {% endif %}
+                            </a>
                         </div>
                     </li>
                     {% endif %}

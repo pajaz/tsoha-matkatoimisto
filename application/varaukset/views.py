@@ -14,10 +14,17 @@ from application.matkustajat.forms import PassengerForm
 
 # Hakee varausten listaussivun esille
 @app.route("/varaukset/", methods=["GET"])
-@login_required(role="Admin")
+@login_required(role="User")
 def varaukset_index():
-    bookings = Varaus.query.order_by(Varaus.dest_id).all()
-    return render_template("/varaukset/list.html", varaukset=Varaus.query.all())
+    print(current_user.admin)
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    if current_user.admin == 1:
+        bookings = Varaus.query.order_by(Varaus.dest_id).all()
+    else:
+        bookings = Varaus.query.filter_by(user_id = current_user.id)
+    print(current_user.id)
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    return render_template("/varaukset/list.html", varaukset=bookings)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.
 @app.route("/varaukset/uusi", methods=["GET","POST"])
@@ -125,54 +132,56 @@ def varaukset_delete(varaus_id):
 def varaus_info(varaus_id):
     
     varaus = Varaus.query.get_or_404(varaus_id)
-    dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
-    if varaus.hotel_id:
-        hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
-    else:
-        hotel = None
-    passengers = varaus.booking_passengers()
-    form = PassengerForm(request.form)
-                                                                # Jos kaikki matkustajia ei vielä ole syötetty
-    if request.method == "POST" and form.validate_on_submit() and len(passengers) < varaus.passengers: 
-        fname = form.fname.data
-        lname = form.lname.data
-        socsec = form.socialsec.data
-
-        pas = Matkustaja.query.filter_by(socialsec=socsec).first()
-        # Jos matkustajaa ei ole vielä luotu tietokantaan, luodaan se tässä
-        if pas is None:
-            passenger = Matkustaja(fname, lname, socsec)
-            db.session.add(passenger)
-            db.session.flush()
-            pas_book = matkustaja_varaus.insert().values(matkustaja_id=passenger.id, varaus_id=varaus.id)
-
+    if current_user.id == varaus.user_id or current_user.admin == 1:
+        dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
+        if varaus.hotel_id:
+            hotel = Hotelli.query.get_or_404(varaus.booking_hotel()[0])
         else:
-            pas_book = matkustaja_varaus.insert().values(matkustaja_id=pas.id, varaus_id=varaus.id)
+            hotel = None
+        passengers = varaus.booking_passengers()
+        form = PassengerForm(request.form)
+                                                                    # Jos kaikki matkustajia ei vielä ole syötetty
+        if request.method == "POST" and form.validate_on_submit() and len(passengers) < varaus.passengers: 
+            fname = form.fname.data
+            lname = form.lname.data
+            socsec = form.socialsec.data
+
+            pas = Matkustaja.query.filter_by(socialsec=socsec).first()
+            # Jos matkustajaa ei ole vielä luotu tietokantaan, luodaan se tässä
+            if pas is None:
+                passenger = Matkustaja(fname, lname, socsec)
+                db.session.add(passenger)
+                db.session.flush()
+                pas_book = matkustaja_varaus.insert().values(matkustaja_id=passenger.id, varaus_id=varaus.id)
+
+            else:
+                pas_book = matkustaja_varaus.insert().values(matkustaja_id=pas.id, varaus_id=varaus.id)
 
        
-        db.session.execute(pas_book)
+            db.session.execute(pas_book)
 
-        db.session.commit()
+            db.session.commit()
 
-        return redirect(url_for("varaus_info", varaus_id=varaus.id))
+            return redirect(url_for("varaus_info", varaus_id=varaus.id))
 
 
-    if request.method == "POST" and len(passengers) == varaus.passengers:
+        if request.method == "POST" and len(passengers) == varaus.passengers:
 
-        if not varaus.confirmed:
-            varaus.confirmed = True
-        elif varaus.confirmed and not varaus.bill_sent:
-            varaus.bill_sent = True
-        elif varaus.bill_sent and not varaus.handled:
-            varaus.handled = True
-        db.session().commit()
+            if not varaus.confirmed:
+                varaus.confirmed = True
+            elif varaus.confirmed and not varaus.bill_sent:
+                varaus.bill_sent = True
+            elif varaus.bill_sent and not varaus.handled:
+                varaus.handled = True
+            db.session().commit()
 
-        return redirect(url_for("varaus_info", varaus_id = varaus.id))
+            return redirect(url_for("varaus_info", varaus_id = varaus.id))
 
     
-    return render_template("varaukset/varausinfo.html", form=form, varaus=varaus, matkakohde=dest, hotel=hotel, date = varaus.start_date,
+        return render_template("varaukset/varausinfo.html", form=form, varaus=varaus, matkakohde=dest, hotel=hotel, date = varaus.start_date,
                             matkustajat = passengers, lasku=varaus.bill_sent, maksettu=varaus.handled)
-
+    else:
+        return render_template("varaukset/varausinfo.html", varaus=varaus)
 
 
 
