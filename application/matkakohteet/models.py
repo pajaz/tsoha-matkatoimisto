@@ -34,12 +34,12 @@ class Matkakohde(db.Model):
             stmt = text("SELECT * FROM Matkakohde"
                     " WHERE lower(name) LIKE lower(:name)"
                     " ORDER BY :order"
-                    " LIMIT :page, :count").params(name=name, page=page-1, count=count, order=order)
+                    " LIMIT :count OFFSET :page").params(name=name, page=page-1, count=count, order=order)
         else:            
             stmt = text("SELECT * FROM Matkakohde"
                     " WHERE country=:country AND lower(name) LIKE lower(:name)"
                     " ORDER BY :order"
-                    " LIMIT :page, :count").params(name=name,country=country, page=page-1, count=count, order=order)
+                    " LIMIT :count OFFSET :page").params(name=name,country=country, page=page-1, count=count, order=order)
 
                    
         res = db.engine.execute(stmt)
