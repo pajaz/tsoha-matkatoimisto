@@ -36,7 +36,7 @@
             <div class="col-md-2 col-xs-3 middle-column">
                 <div class="card middle-column">
                     <ul class="list-group">
-                       
+                      {% if hotellit %} 
                         {% for hotel in hotellit %}
                         <li class="list-group-item">
                             <a href="{{ url_for('hotelli_intro', hotel_id=hotel.id) }}">{{ hotel.name }}</a> <br/>
@@ -45,6 +45,11 @@
                             {% endfor %}
                         </li>
                         {% endfor %}
+                      {% else %}
+                        <li class="list-group-item">
+                            <p>Kohteeseen ei ole tarjolla majoitusta</p>
+                        </li>
+                      {% endif %}
                     </ul>
                 </div>
                 <div class="card middle-column container-fluid">

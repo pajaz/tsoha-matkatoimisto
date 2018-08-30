@@ -58,7 +58,7 @@ def matkakohteet_create():
     dest_price = form.price.data
     dest_intro = form.intro.data
 
-    if form.validate_on_submit():
+    if form.validate():
         if not dest_intro: # Jos ei esittelyä määritelty käytetään valmiiksi määriteltyä.
             dest = Matkakohde(dest_name, dest_country, dest_depart, dest_day_out, dest_price)
         else:
@@ -83,6 +83,8 @@ def matkakohde_intro(matkakohde_id):
     else:
         travel_days = ["Ei lähtöjä"]
     hotels = Hotelli.query.filter_by(destination_id=matkakohde_id)
+    if not hotels.first():
+        hotels = None
     bookings = Varaus.query.filter_by(dest_id=matkakohde_id).count()
 
     return render_template("matkakohteet/intropage.html", traveldays = travel_days, matkakohde = destination,
@@ -95,7 +97,7 @@ def matkakohteet_edit_form(matkakohde_id):
 
     destination = Matkakohde.query.get_or_404(matkakohde_id)
     form = DestinationForm(obj=destination) # Lomakkeen esitäyttö tietokannasta löytyvillä tiedoilla
-
+ 
     if request.method == 'POST' and form.validate():
 
         destination.name = form.name.data.title()

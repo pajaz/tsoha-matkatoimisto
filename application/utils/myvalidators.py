@@ -15,4 +15,4 @@ class SocialSecCheck(object):
             print(form.lname.data)
             if (form.fname.data != passenger.first_name) or (form.lname.data != passenger.last_name):
                 raise ValidationError(message="Samalla henkilötunnuksella löytyy jo toisen niminen henkilö")
-        return True
+        return Truez
