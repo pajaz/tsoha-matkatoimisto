@@ -47,7 +47,7 @@ class Varaus(db.Model):
         self.small_rooms = small_rooms
         self.large_rooms = large_rooms
         self.confirmed = False
-
+  
     def booking_hotel(self):
         stmt = text("SELECT id FROM Hotelli"
                     " WHERE Hotelli.id = :id").params(id=self.hotel_id)
@@ -56,13 +56,14 @@ class Varaus(db.Model):
         for row in res:
             hotel.append(row[0])
         return hotel
-
+    
     def booking_dest(self):
         stmt = text("SELECT id FROM Matkakohde"
                     " WHERE Matkakohde.id = :id").params(id=self.dest_id)
         res = db.engine.execute(stmt)
         dest = []
         for row in res:
+            print(row)
             dest.append(row[0])
         return dest
     
@@ -74,7 +75,7 @@ class Varaus(db.Model):
         for row in res:
             dest.append(row[0])
         return dest
-
+  
     def booking_passengers(self):
         stmt = text("SELECT Matkustaja.first_name, Matkustaja.last_name, Matkustaja.socialsec, Matkustaja.id FROM Matkustaja"
                     " LEFT JOIN matkustaja_varaus mv ON mv.matkustaja_id = matkustaja.id" 
@@ -84,10 +85,25 @@ class Varaus(db.Model):
         for row in res:
             response.append((row[0], row[1], row[2], row[3]))
         return response
-
+    
     def delete_passenger_from_booking(self, pas_id):
         stmt = text("DELETE FROM matkustaja_varaus WHERE matkustaja_id=:m_id AND varaus_id=:v_id").params(m_id=pas_id, v_id=self.id)
 
         db.engine.execute(stmt)
 
         return "Done"
+
+    # Metodi varausten hakuun kohteen perusteella.
+    @staticmethod
+    def find_bookings_by_dest(dest=""):
+      
+        stmt = text("SELECT id, dest_id, confirmed, bill_sent, handled FROM Varaus"
+                    " WHERE dest_id = :dest").params(dest=dest)
+                   
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"id":row[0], "dest_id":row[1]})
+
+        return response

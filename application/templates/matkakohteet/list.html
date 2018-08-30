@@ -43,7 +43,7 @@
                     <th>
                         <a href="{{ url_for('matkakohteet_index', page=page, order='country') }}">Maa</a>
                     </th>
-                    {% if current_user.admin == 1 %} <!-- Osa tiedoista vain kirjautuneelle käyttäjälle -->
+                    {% if current_user.admin == 1 %} <!-- Osa tiedoista vain admin käyttäjälle -->
                     
                     <th>Muokkaa</th>
                     <th>Poista</th>
@@ -72,6 +72,7 @@
             </tr>
             {% endfor %}
         </table>
+        <!-- Seuraavaksi sivutus -->
         <ul class="pagination">
             {% for n in range(pages) %}
             <li class="page-item">

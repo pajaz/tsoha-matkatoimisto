@@ -79,3 +79,23 @@ class Matkakohde(db.Model):
             response.append({"id":row[0], "name":row[1], "country":row[2], "introduction":row[3]})
 
         return response
+
+    # Palauttaa matkakohteet joihin on tehty varauksia
+    @staticmethod
+    def destinations_with_bookings():
+       
+
+        stmt = text("SELECT Matkakohde.id, Matkakohde.name FROM Matkakohde"
+                    " INNER JOIN Varaus ON Varaus.dest_id = Matkakohde.id"
+                    " WHERE (Varaus.dest_id = Matkakohde.id)"
+                    " GROUP BY Matkakohde.id ORDER BY Matkakohde.name")
+            
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            print(row[0])
+            print(row[1])
+            response.append({"id":row[0], "name":row[1]})
+        
+        return response

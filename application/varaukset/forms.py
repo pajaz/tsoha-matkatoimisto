@@ -22,3 +22,9 @@ class ChooseHotelForm(FlaskForm):
 
     class Meta:
         csrf = False
+
+class BookingSearchForm(FlaskForm):
+    destination = SelectField("Matkakohde: ", [validators.optional()], coerce=int)
+
+    class Meta:
+        csrf = False

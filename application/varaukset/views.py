@@ -3,26 +3,51 @@ from flask import redirect, render_template, request, url_for
 from flask_login import login_required, current_user
 from wtforms import StringField
 import datetime
+from math import ceil
 
 from application import app, db, login_required
 from application.varaukset.models import Varaus, matkustaja_varaus
 from application.matkakohteet.models import Matkakohde
 from application.matkustajat.models import Matkustaja
 from application.hotellit.models import Hotelli
-from application.varaukset.forms import BookingForm, ChooseHotelForm
+from application.varaukset.forms import BookingForm, ChooseHotelForm, BookingSearchForm
 from application.matkustajat.forms import PassengerForm
 
 # Hakee varausten listaussivun esille
-@app.route("/varaukset/", methods=["GET"])
+@app.route("/varaukset/", methods=["GET", "POST"])
 @login_required(role="User")
 def varaukset_index():
 
-    if current_user.admin == 1:
-        bookings = Varaus.query.order_by(Varaus.dest_id).all()
-    else:
-        bookings = Varaus.query.filter_by(user_id = current_user.id)
+    orderby = request.args.get("order", "id", type=str)
+    show = 6
+    page = request.args.get("page", 1, type=int)
 
-    return render_template("/varaukset/list.html", varaukset=bookings)
+    form = BookingSearchForm(request.form)
+    
+    dests_with_bookings = Matkakohde.destinations_with_bookings()
+   
+    choices = [(dest["id"], dest["name"]) for dest in dests_with_bookings]
+   
+   
+    form.destination.choices = choices
+
+    if current_user.admin == 1:
+        bookings = Varaus.query.order_by(Varaus.dest_id).paginate(page, show, False).items
+
+    else:
+        bookings = Varaus.query.filter_by(user_id = current_user.id).paginate(page, show, False).items
+
+    if request.method == "POST" and form.validate():
+        print(form.destination.data)
+        print("!!!!!")
+        bookings = Varaus.find_bookings_by_dest(form.destination.data)
+
+        return render_template("varaukset/list.html", varaukset=bookings, form=form, page=page,
+                                pages=1, order=orderby)
+    pages = ceil(Varaus.query.count()/show)
+
+    return render_template("/varaukset/list.html", varaukset=bookings,form=form, page=page,
+                            pages=pages, order=orderby)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.
 @app.route("/varaukset/uusi", methods=["GET","POST"])
