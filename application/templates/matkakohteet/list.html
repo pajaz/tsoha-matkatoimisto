@@ -5,7 +5,7 @@
     <div class="col-md-6 col-xs-10 middle-column">
         <h2>Matkakohteet</h2>
         <h4>Haku</h4>
-            <form method="POST" action="{{ url_for('matkakohteet_index', page=page, order=order) }}" class="form-inline" role="form">
+            <form method="POST" action="{{ url_for('matkakohteet_index', page=1, order=order) }}" class="form-inline" role="form">
             
                     {{ wtf.form_field(form.country, class="form-control") }}
               
