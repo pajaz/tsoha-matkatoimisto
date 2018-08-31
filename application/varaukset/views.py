@@ -40,7 +40,7 @@ def varaukset_index():
                                 pages=pages, order=orderby)
 
     if current_user.admin == 1:
-        bookings = Varaus.search_bookings(n = ((page-1)*show)-1)
+        bookings = Varaus.search_bookings(n = (page-1)*show)
         pages = ceil(Varaus.query.count()/show)
     else:
         bookings = Varaus.query.filter_by(user_id = current_user.id).paginate(page, show, False).items
