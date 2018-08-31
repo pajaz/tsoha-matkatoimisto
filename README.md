@@ -10,7 +10,8 @@
   [Tietokantataulut](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/Tietokantataulut(2nd_draft).pdf)  
   [Käyttäjätarinat](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/userstories.md)   
   [Käyttöohje](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/kayttohje.md)  
-  [Asennusohje](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/asennusohje.md)  
+  [Asennusohje](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/asennusohje.md) 
+  [Harmilista](https://github.com/pajaz/tsoha-matkatoimisto/blob/master/documentation/left_undone.md)
   
    <h2> Yleiskuvaus </h2>
 
