@@ -21,7 +21,7 @@ class Varaus(db.Model):
     end_date = db.Column(db.Date, nullable=False)
     passengers = db.Column(db.Integer, nullable=False) # Matkustajien määrä
     price = db.Column(db.Integer, nullable=False)
-    handled = db.Column(db.Boolean, nullable=False)    # Asiakas maksanut laskun ja saanut matkan dokumentit
+    handled = db.Column(db.Integer, nullable=False)    # Asiakas maksanut laskun ja saanut matkan dokumentit
     bill_sent = db.Column(db.Boolean, nullable=False)  # Asiakkaalle lähetetty lasku varauksesta
     small_rooms = db.Column(db.Integer, nullable=True) # Varaukseen liittyvät huoneet
     large_rooms = db.Column(db.Integer, nullable=True) 
@@ -39,7 +39,7 @@ class Varaus(db.Model):
         self.start_date = start
         self.end_date = end
         self.price = price
-        self.handled = False
+        self.handled = 0
         self.bill_sent = False
         self.user_id = user
         self.dest_id = dest

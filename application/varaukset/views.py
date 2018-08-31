@@ -118,29 +118,6 @@ def varaus_hotelli():
     return render_template("/varaukset/destinationhotels.html", dest=dest, date=date, form=form, hotels=zipped)
 
 
-
-
-@app.route("/varaukset/edit/<varaus_id>", methods=["GET","POST"])
-@login_required(role="Admin")
-def varaukset_edit_form(varaus_id):
-    
-    varaus = Varaus.query.get_or_404(varaus_id)
-    form = BookingForm(obj=varaus)
-    form.hotel.choices = [(hotel.id, hotel.name) for hotel in Hotelli.query.filter_by(dest_id=desti_id)]
-
-    if request.method == "POST" and form.validate_on_submit():
-        varaus.start = form.start.data
-        varaus.destination = form.destination.data
-        varaus.passengers = form.passengers.data
-        varaus.hotel = form.hotel.data
-        varaus.small_rooms = form.small_rooms.data
-        varaus.large_rooms = form.large_rooms.data
-
-        db.session().commit()
-        return redirect(url_for("matkakohteet_index"))
-
-    return render_template("/varaukset/varaus.html", form=form, varaus=varaus, varaus_id=varaus.id, book_add=False)
-
 @app.route("/varaukset/delete/<varaus_id>", methods=["GET", "POST"])
 @login_required(role="Admin")
 def varaukset_delete(varaus_id):
@@ -202,8 +179,8 @@ def varaus_info(varaus_id):
                 varaus.confirmed = True
             elif varaus.confirmed and not varaus.bill_sent:
                 varaus.bill_sent = True
-            elif varaus.bill_sent and not varaus.handled:
-                varaus.handled = True
+            elif varaus.bill_sent and varaus.handled == 0:
+                varaus.handled = 1
             db.session().commit()
 
             return redirect(url_for("varaus_info", varaus_id = varaus.id))

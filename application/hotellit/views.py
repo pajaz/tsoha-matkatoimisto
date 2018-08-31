@@ -14,7 +14,7 @@ def hotellit_index():
     orderby = request.args.get("order", "name", type=str)
     page = request.args.get("page", 1, type=int)
     show = 6
-
+    pages = ceil(Hotelli.query.count()/show)
     form = SearchHotelForm(request.form)
     choices = [(dest.id, dest.name) for dest in db.session.query(Matkakohde).order_by("name")]
     empty = [("%","Kaikki")]
@@ -22,13 +22,13 @@ def hotellit_index():
 
     if request.method == "POST" and form.validate:
 
-        hotellit = Hotelli.get_destinations(form.name.data + "%", form.destination.data)
+        hotellit = Hotelli.get_hotels_destinations(form.name.data + "%", form.destination.data)
         pages = 1
         return render_template("hotellit/list.html", form=form, hotellit=hotellit, order=orderby, page=page,pages=pages)
 
 
-    hotellit=Hotelli.get_destinations(n = (page-1)*show)
-    pages = ceil(Hotelli.query.count()/show)
+    hotellit=Hotelli.get_hotels_destinations(n = (page-1)*show)
+    
     return render_template("hotellit/list.html", form=form, hotellit=hotellit, order=orderby, page=page, pages=pages)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.

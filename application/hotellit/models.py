@@ -73,9 +73,9 @@ class Hotelli(db.Model):
             destination.append({"name":row[0]})
       
         return destination
-
+    # Hakee kaikki tai ehtojen mukaiset hotellit, sekä niihin liitetyt matkakohteet
     @staticmethod
-    def get_destinations(hotel="%",dest="%", show=6, n=0):
+    def get_hotels_destinations(hotel="%",dest="%", show=6, n=0):
         if dest == "%":
             stmt = text("SELECT Hotelli.id, Hotelli.name, Matkakohde.name, Matkakohde.id, Hotelli.star_rating FROM Hotelli"
                         " LEFT JOIN Matkakohde ON Hotelli.destination_id = Matkakohde.id"
@@ -93,7 +93,6 @@ class Hotelli(db.Model):
         response = []
 
         for row in res:
-            print(row)
             response.append({"hotel_id":row[0], "hotel_name":row[1], "dest_name":row[2], "dest_id":row[3], "star_rating":row[4]})
 
         return response
