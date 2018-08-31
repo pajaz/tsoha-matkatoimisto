@@ -16,6 +16,6 @@ def delete_matkustaja(matkustaja_id):
     varaus = Varaus.query.get_or_404(varaus_id)
 
     varaus.delete_passenger_from_booking(matkustaja_id)
-
-
+    Matkustaja.delete_orphan(matkustaja_id)
+  
     return redirect(url_for(previous_page, varaus_id = varaus_id))

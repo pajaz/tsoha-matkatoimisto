@@ -2,7 +2,7 @@
 from sqlalchemy.sql import text
 
 from application import db
-
+import datetime
 from application.matkakohteet.models import Matkakohde
 from application.hotellit.models import Hotelli
 from application.auth.models import Kayttaja
@@ -18,7 +18,7 @@ matkustaja_varaus = db.Table("matkustaja_varaus",
 class Varaus(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.Date, nullable=False)
-    #end_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date, nullable=False)
     passengers = db.Column(db.Integer, nullable=False) # Matkustajien määrä
     price = db.Column(db.Integer, nullable=False)
     handled = db.Column(db.Boolean, nullable=False)    # Asiakas maksanut laskun ja saanut matkan dokumentit
@@ -34,9 +34,10 @@ class Varaus(db.Model):
     matkustajat = db.relationship("Matkustaja", secondary=matkustaja_varaus, lazy="dynamic",
                                   backref=db.backref("varaukset", lazy=True))
 
-    def __init__(self, start, price, user, dest, passengers, hotel, 
+    def __init__(self, start, end, price, user, dest, passengers, hotel, 
                  small_rooms = 0, large_rooms = 0):
         self.start_date = start
+        self.end_date = end
         self.price = price
         self.handled = False
         self.bill_sent = False
@@ -105,5 +106,102 @@ class Varaus(db.Model):
         response = []
         for row in res:
             response.append({"id":row[0], "dest_id":row[1]})
+
+        return response
+
+    # Nyt on aika kääntää katseet pois, koska seuraavan saisi varmaan tehtyä helpomminkin.
+    # Metodi palauttaa Varaus-sivun (varaukset/list.html) haun mukaisen tuloksen. Koska erilaisia tuloksia on 16kpl,
+    # tässä 16 hieman toisistaan poikkeavaa statementtia
+    @staticmethod
+    def search_bookings(dest=0, handled=2, status="", n=0, show=6):
+        today = datetime.datetime.today()
+        if dest != 0:
+            if handled == 2:
+                if status == "past":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest"
+                                " AND Varaus.end_date < :today ORDER BY Varaus.start_date").params(today=today, dest=dest)
+                elif status == "future":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest"
+                                " AND Varaus.start_date > :today ORDER BY Varaus.start_date").params(today=today, dest=dest)
+                elif status == "active":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest"
+                                " AND Varaus.start_date < :today AND Varaus.end_date > :today ORDER BY Varaus.start_date").params(today=today, dest=dest)   #101
+                else:
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " AND Varaus.dest_id = :dest ORDER BY Varaus.start_date").params(dest=dest)                                                 #100
+            else:
+                if status == "past":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest"
+                                " AND Varaus.end_date < :today AND handled=:handled ORDER BY Varaus.start_date").params(today=today, dest=dest, handled=handled)
+                elif status == "future":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest"
+                                " AND Varaus.start_date > :today AND handled=:handled ORDER BY Varaus.start_date").params(today=today, dest=dest, handled=handled)
+                elif status == "active":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest"
+                                " AND Varaus.start_date < :today AND Varaus.end_date > :today"
+                                " AND handled=:handled ORDER BY Varaus.start_date").params(today=today, dest=dest, handled=handled)                         #111
+                else:
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.dest_id = :dest AND Varaus.handled = :handled"
+                                " ORDER BY Varaus.start_date").params(dest=dest, handled=handled)                                                           #110
+        elif dest == 0:
+            if handled == 2:
+                if status == "past":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.end_date < :today ORDER BY Varaus.start_date").params(today=today)
+                elif status == "future":
+                    stmt=text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.start_date > :today ORDER BY Varaus.start_date").params(today=today)
+                elif status == "active":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " AND Varaus.start_date < :today AND Varaus.end_date > :today ORDER BY Varaus.start_date").params(today=today)              #001
+                else:
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id ORDER BY Varaus.start_date"
+                                " LIMIT :show OFFSET :n").params(n=n, show=show)                                      #000
+            if handled != 2:
+                if status == "past":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.end_date < :today AND Varaus.handled = :handled ORDER BY Varaus.start_date").params(today=today, handled=handled)
+                elif status == "future":
+                    stmt=text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.start_date > :today AND Varaus.handled = :handled ORDER BY Varaus.start_date").params(today=today, handled=handled)
+                elif status == "active":
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " AND Varaus.start_date < :today AND Varaus.handled = :handled" 
+                                " AND Varaus.end_date > :today ORDER BY Varaus.start_date").params(today=today, handled=handled)                            #011
+                else:
+                    stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
+                                " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
+                                " WHERE Varaus.handled = :handled ORDER BY Varaus.start_date").params(handled=handled)                                      #010
+        res = db.engine.execute(stmt)
+        response = []
+        for row in res:
+            if type(row[2]) == str: # String -check tässä, koska paikallisesti rivin tyyppi on str ja herokussa datetime.
+                dt = datetime.datetime.strptime(row[2], "%Y-%m-%d")
+            else:
+                dt = row[2]
+            date = dt.strftime("%d.%m.%Y") # Muutetaan päiväys eurooppalaisittain tutumpaan muotoon.
+            response.append({"id":row[0], "dest_name":row[1], "start_date":date, "handled":row[3]})
 
         return response

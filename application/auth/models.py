@@ -62,22 +62,24 @@ class Kayttaja(db.Model):
 
     # Haetaan käyttäjän tekemien varausten tiedot
     def get_booking_infos(self):
-        stmt = text("SELECT Varaus.id, Varaus.start_date, Matkakohde.name" 
+        stmt = text("SELECT Varaus.id, Varaus.start_date, Varaus.end_date, Matkakohde.name" 
                     " FROM Varaus INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id" 
-                    " WHERE Varaus.user_id = :id").params(id=self.id)
+                    " WHERE Varaus.user_id = :id ORDER BY Varaus.start_date").params(id=self.id)
         res = db.engine.execute(stmt)
 
         bookings = []
         for row in res:
-            if type(row[1]) == str:
+            if type(row[1]) == str: # String -check tässä, koska paikallisesti rivin tyyppi on str ja herokussa datetime.
                 dt = datetime.datetime.strptime(row[1], "%Y-%m-%d")
+                ed = datetime.datetime.strptime(row[2], "%Y-%m-%d")
             else:
                 dt = row[1]
-            date = dt.strftime("%d.%m.%Y")
-            bookings.append({"id":row[0], "start_date":date, "name":row[2]})
+                ed = row[2]
+            date = dt.strftime("%d.%m.%Y") # Muutetaan päiväys eurooppalaisittain tutumpaan muotoon.
+            edate = ed.strftime("%d.%m.%Y")
+            bookings.append({"id":row[0], "start_date":date, "name":row[3], "end_date":edate})
 
         return bookings
-
 
 class Role(db.Model):
     id = db.Column(db.Integer(), primary_key=True)

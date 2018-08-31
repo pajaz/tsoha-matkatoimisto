@@ -43,21 +43,65 @@
         </div>
         <div class="col-md-4 cold-xs-4">
             <div class="card">
-                <div class="card-header card-yellow-head">
-                    <h5>Varaukset</h5>
+                    <div class="card-header card-yellow-head">
+                            <h3>Varaukset</h3   >
+                        </div>
+                {% if now %}
+                <div class="card border-0">
+                    <div class="card-header card-yellow-head">
+                        <h5>Käynnissä</h5>
+                    </div>
+                    
+                    <div class="card-body">
+                        {% for n in now %}
+                        <li class="list-group-item">
+                            <p> {{ n.start_date }} - 
+                            <a href="{{ url_for('varaus_info', varaus_id=n.id) }}"> {{ n.name }}</a>
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </div>
+                        
                 </div>
-                <div class="card-body">
-                    {% for v in varaukset %}
-                    <li class="list-group-item">
-                        <p> {{ v.start_date }} - 
-                        <a href="{{ url_for('varaus_info', varaus_id=v.id) }}"> {{ v.name }}</a>
-                        </p>
-                    </li>
-                    {% endfor %}
+                {% endif %}
+                {% if future %}
+                <div class="card border-0">
+                    <div class="card-header card-yellow-head">
+                        <h5>Tulevat</h5>
+                    </div>
+                    
+                    <div class="card-body">
+                        {% for f in future %}
+                        <li class="list-group-item">
+                            <p> {{ f.start_date }} - 
+                            <a href="{{ url_for('varaus_info', varaus_id=f.id) }}"> {{ f.name }}</a>
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </div>
+                        
                 </div>
+                {% endif %}
+                {% if past %}
+                <div class="card border-0">
+                    <div class="card-header card-yellow-head">
+                        <h5>Menneet</h5>
+                    </div>
+                    
+                    <div class="card-body">
+                        {% for p in past %}
+                        <li class="list-group-item">
+                            <p> {{ p.start_date }} - 
+                            <a href="{{ url_for('varaus_info', varaus_id=p.id) }}"> {{ p.name }}</a>
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </div>
+                      
+                </div>
+                {% endif %}
             </div>
         </div>
-    </div>
 </div>
 {% endif %}
 

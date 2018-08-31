@@ -12,6 +12,7 @@ from application.matkustajat.models import Matkustaja
 from application.hotellit.models import Hotelli
 from application.varaukset.forms import BookingForm, ChooseHotelForm, BookingSearchForm
 from application.matkustajat.forms import PassengerForm
+from application.utils.tools import next_weekdays
 
 # Hakee varausten listaussivun esille
 @app.route("/varaukset/", methods=["GET", "POST"])
@@ -25,26 +26,26 @@ def varaukset_index():
     form = BookingSearchForm(request.form)
     
     dests_with_bookings = Matkakohde.destinations_with_bookings()
-   
+    
     choices = [(dest["id"], dest["name"]) for dest in dests_with_bookings]
+    empty = [(0, "Kaikki")]
    
-   
-    form.destination.choices = choices
-
-    if current_user.admin == 1:
-        bookings = Varaus.query.order_by(Varaus.dest_id).paginate(page, show, False).items
-
-    else:
-        bookings = Varaus.query.filter_by(user_id = current_user.id).paginate(page, show, False).items
+    form.destination.choices = empty + choices
 
     if request.method == "POST" and form.validate():
-        print(form.destination.data)
-        print("!!!!!")
-        bookings = Varaus.find_bookings_by_dest(form.destination.data)
+        bookings = Varaus.search_bookings(form.destination.data, form.handled.data, form.status.data)
+        pages=1
 
         return render_template("varaukset/list.html", varaukset=bookings, form=form, page=page,
-                                pages=1, order=orderby)
-    pages = ceil(Varaus.query.count()/show)
+                                pages=pages, order=orderby)
+
+    if current_user.admin == 1:
+        bookings = Varaus.search_bookings(n = (page-1)*show)
+        pages = ceil(Varaus.query.count()/show)
+    else:
+        bookings = Varaus.query.filter_by(user_id = current_user.id).paginate(page, show, False).items
+        pages = 1
+    
 
     return render_template("/varaukset/list.html", varaukset=bookings,form=form, page=page,
                             pages=pages, order=orderby)
@@ -81,11 +82,14 @@ def varaus_create():
                 price = destination.price * passengers
             
             date_save = datetime.datetime.strptime(date, '%d.%m.%Y')
+            return_date = next_weekdays(date_save, destination.day_out, 0)
+            return_save = datetime.datetime.strptime(return_date, "%d.%m.%Y")
+
             if hotel_id:
-                booking = Varaus(date_save, price, current_user.id, dest, passengers, hotel_id,
+                booking = Varaus(date_save, return_save, price, current_user.id, dest, passengers, hotel_id,
                                  small_rooms, large_rooms)
             else:
-                booking = Varaus(date_save, price, current_user.id, dest, passengers, None,
+                booking = Varaus(date_save, return_save, price, current_user.id, dest, passengers, None,
                                  small_rooms, large_rooms)
           
             db.session().add(booking)
@@ -149,13 +153,13 @@ def varaukset_delete(varaus_id):
     return redirect(url_for("matkakohteet_index"))
 
 # Käyttäjä voi tarkastella varauksen tietoja, vahvistaa varauksen ja lisätä/poistaa matkustajia varauksesta tämän sivun kautta
-# Admin voi tämän lisäksi merkitä varauksen laskun lähetetyksi ja maksetuksi
+# Admin voi tämän lisäksi merkitä varauksen laskun lähetetyksi ja maksetuksi, sekä poistaa varauksen
 @app.route("/varaukset/<varaus_id>", methods=["GET", "POST"])
 @login_required(role=("User"))
 def varaus_info(varaus_id):
     
     varaus = Varaus.query.get_or_404(varaus_id)
-   
+    
     
     if current_user.id == varaus.user_id or current_user.admin == 1:
         dest = Matkakohde.query.get_or_404(varaus.booking_dest()[0])
@@ -172,9 +176,11 @@ def varaus_info(varaus_id):
             socsec = form.socialsec.data
 
             pas = Matkustaja.query.filter_by(socialsec=socsec).first()
+            
             # Jos matkustajaa ei ole vielä luotu tietokantaan, luodaan se tässä
             if pas is None:
                 passenger = Matkustaja(fname, lname, socsec)
+
                 db.session.add(passenger)
                 db.session.flush()
                 pas_book = matkustaja_varaus.insert().values(matkustaja_id=passenger.id, varaus_id=varaus.id)

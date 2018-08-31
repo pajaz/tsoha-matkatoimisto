@@ -25,6 +25,8 @@ class ChooseHotelForm(FlaskForm):
 
 class BookingSearchForm(FlaskForm):
     destination = SelectField("Matkakohde: ", [validators.optional()], coerce=int)
+    handled = RadioField("Maksettu: ", [validators.optional()], choices=[(2, "Kaikki"), (1, "Kyllä"), (0, "Ei")], default=2, coerce=int)
+    status = RadioField("Status: ", [validators.optional()], choices=[("", "Kaikki"), ("past", "Mennyt"), ("active", "Käynnissä"), ("future", "Tuleva")], default="", coerce=str)
 
     class Meta:
         csrf = False

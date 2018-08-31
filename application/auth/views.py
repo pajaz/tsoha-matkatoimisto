@@ -2,6 +2,7 @@
 from flask import redirect, render_template, request, url_for
 from flask_login import login_user, logout_user, login_required
 
+import datetime
 from math import ceil
 from application import app, db, login_required
 from application.auth.models import Kayttaja, Role, roles
@@ -80,10 +81,19 @@ def auth_new():
 def user_info(user_id):
     kayttaja = Kayttaja.query.get_or_404(user_id)
     bookings = kayttaja.get_booking_infos()
+    today = datetime.datetime.strptime("2018-09-14", '%Y-%m-%d')
+    past = []
+    active = []
+    future = []
     for b in bookings:
-        print(type(b))
-        print(b)
-    return render_template("auth/user_info.html", kayttaja = kayttaja, varaukset=bookings)
+        if datetime.datetime.strptime(b["end_date"], '%d.%m.%Y') < today:
+            past.append(b)
+        elif datetime.datetime.strptime(b["start_date"], '%d.%m.%Y')  <= today  <= datetime.datetime.strptime(b["end_date"], '%d.%m.%Y'):
+            active.append(b)
+        else:
+            future.append(b)
+
+    return render_template("auth/user_info.html", kayttaja = kayttaja, varaukset=bookings, today=today, past=past, now=active, future=future)
 
 # Käyttäjän muokkaus
 @app.route("/auth/edit/<user_id>", methods=["GET", "POST"])

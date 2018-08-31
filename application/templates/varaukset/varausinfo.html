@@ -5,8 +5,10 @@
 {% if current_user.id == varaus.user_id or current_user.admin == 1 %}
 <div class="col-md-6 col-xs-10 middle-column">
     <h2> Varauksen tiedot </h2>
+    <h2> Varaaja: {{ current_user.first_name }} {{ current_user.last_name }}</h2>
     <h3> Matkakohde: {{ matkakohde.name }}, {{ matkakohde.country }}</h3>
     <h3> Lähtöpäivä: {{ date.strftime('%d.%m.%Y') }} </h3>
+    <h3> Paluupäivä: {{ varaus.end_date.strftime('%d.%m.%Y') }}</h3>
     <!-- Tähän väliin paluu pvm -->
    
     <div class="card">
@@ -17,7 +19,7 @@
                 <p>{{ i }} {{ j }}  <br/>
                 Henkilötunnus: {{ k }}  </p>
             </div> 
-                {% if not varaus.confirmed %}
+                {% if not varaus.confirmed or current_user.admin == 1 %}
             <div class="col-md-3">
                 <form method="POST" action="{{ url_for('delete_matkustaja', matkustaja_id = l , varaus_id = varaus.id, previous_page = 'varaus_info') }}">
                 <input class="btn btn-warning" type="submit" value="Poista Matkustaja"/></form>
@@ -27,10 +29,10 @@
             {% if varaus.passengers > matkustajat|length %}
             <div class="col-md-12">
                 <form method="POST" action="{{ url_for('varaus_info', varaus_id=varaus.id) }}" class="form" role="form">
-                    {{ errors }}
-                    {{ wtf.form_field(form.fname, class="form-control", placeholder="...") }}
-                    {{ wtf.form_field(form.lname, class="form-control", placeholder="...") }}
-                    {{ wtf.form_field(form.socialsec, class="form-control", placeholder="...") }}
+                    
+                    {{ wtf.form_field(form.fname, class="form-control", placeholder="Etunimi") }}
+                    {{ wtf.form_field(form.lname, class="form-control", placeholder="Sukunimi") }}
+                    {{ wtf.form_field(form.socialsec, class="form-control", placeholder="000000-xxxx") }}
                     <input type="submit" class="btn btn-default" value="Lisää"/>
                 </form>
             </div>
@@ -76,13 +78,16 @@
             <input type="submit" class="btn btn-default" value="Lasku maksettu"/>
     </form> 
         {% endif %}
+    {% endif %} 
+    {% if (current_user.admin == 1) or (not varaus.confirmed) %}
         <!-- Varauksen poistonamiska. -->
-        <form method="POST" action="{{ url_for('varaukset_delete', varaus_id=varaus.id) }}" class="form" role="form">
-                <input type="submit" class="btn btn-warning" value="Poista varaus"/>
-            </form>
-    {% endif %}    
+    <form method="POST" action="{{ url_for('varaukset_delete', varaus_id=varaus.id) }}" class="form" role="form">
+            <input type="submit" class="btn btn-warning" value="Poista varaus"/>
+        </form>
+    {% endif %}
     <p>Varausta voi muokata niin kauan, kun et ole vahvistanut sen tietoja.</p>
     <p>Tietojen vahvistaminen on mahdollista, kun kaikkien matkustajien tiedot on syötetty</p>
+    <p class="text-black-70">Käyttäjätunnus: {{ current_user.username }} </p>
     <p class="text-black-70">Varausnumero: {{ varaus.id }}</p>
     
 </div>
