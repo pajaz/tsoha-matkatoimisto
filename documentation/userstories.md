@@ -58,13 +58,15 @@ DELETE FROM Varaus WHERE Varaus.id = 1;
 En ehtinyt (muistanut) tehdä suoraa kyselyä ihmismäärille eri kohteissa. Kuitenkin hakutoiminto löytyy, jolla saa listattua kaikki varaukset kohteen mukaan. Haussa myös yhtenä vaihtoehtona tällä hetkellä aktiiviset varaukset. 
 
 Tämä listaa kaikki varaukset kohteessa nro 1.  
-SELECT Varaus.id, Matkakohde.name as Matkakohde FROM Varaus INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id WHERE Varaus.dest_id = 1 AND Varaus.start_date < "tänään" AND Varaus.end_date > "tänään" AND handled=1;
+SELECT Varaus.id, Matkakohde.name as Matkakohde FROM Varaus  
+INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id WHERE Varaus.dest_id = 1  
+AND Varaus.start_date < "tänään" AND Varaus.end_date > "tänään" AND handled=1;
 
-Ja tässä itseasiassa kaikkien matkustajien määrä kohteessa 1 tällä hetkellä:  
-SELECT sum(Varaus.passengers), Matkakohde.name as Matkakohde FROM Varaus 
-INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id 
-WHERE Varaus.dest_id = Matkakohde.id AND Varaus.start_date < "2018-08-31" AND Varaus.end_date > "2018-08-31" 
-AND handled=1 AND Matkakohde.id = 1;
+Ja tässä itseasiassa kaikkien matkustajien määrä kohteessa 1 tällä hetkellä:   
+SELECT sum(Varaus.passengers), Matkakohde.name as Matkakohde FROM Varaus  
+INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id  
+WHERE Varaus.dest_id = Matkakohde.id AND Varaus.start_date < "2018-08-31" AND Varaus.end_date > "2018-08-31"  
+AND handled=1 AND Matkakohde.id = 1;  
 
 
 
