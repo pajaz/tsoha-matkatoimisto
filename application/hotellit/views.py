@@ -4,18 +4,32 @@ from flask_login import login_required
 
 from application import app, db, login_required
 from application.hotellit.models import Hotelli
-from application.hotellit.forms import HotelForm
+from application.hotellit.forms import HotelForm, SearchHotelForm
 from application.matkakohteet.models import Matkakohde
-
+from math import ceil
 # Hotellien listaussivu
-@app.route("/hotellit/", methods=["GET"])
+@app.route("/hotellit/", methods=["GET", "POST"])
 @login_required(role="Admin")
 def hotellit_index():
-    hotellit=Hotelli.query.all()
-    destinations = [dest.get_destination() for dest in hotellit]
-    hotels_destinations = zip(hotellit, destinations)
-    
-    return render_template("hotellit/list.html", hotellit=hotels_destinations)
+    orderby = request.args.get("order", "name", type=str)
+    page = request.args.get("page", 1, type=int)
+    show = 6
+
+    form = SearchHotelForm(request.form)
+    choices = [(dest.id, dest.name) for dest in db.session.query(Matkakohde).order_by("name")]
+    empty = [("%","Kaikki")]
+    form.destination.choices = empty + choices
+
+    if request.method == "POST" and form.validate:
+
+        hotellit = Hotelli.get_destinations(form.name.data + "%", form.destination.data)
+        pages = 1
+        return render_template("hotellit/list.html", form=form, hotellit=hotellit, order=orderby, page=page,pages=pages)
+
+
+    hotellit=Hotelli.get_destinations(n = (page-1)*show)
+    pages = ceil(Hotelli.query.count()/show)
+    return render_template("hotellit/list.html", form=form, hotellit=hotellit, order=orderby, page=page, pages=pages)
 
 #  Hakee näytille uusien hotellien lisäämiseen käytettävän lomakkeen ja lähettää uuden hotellin tiedot eteenpäin.
 @app.route("/hotellit/uusi", methods=["GET","POST"])

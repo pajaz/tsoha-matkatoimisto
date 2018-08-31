@@ -79,6 +79,8 @@
                 <a class="page-link" href="{{ url_for('matkakohteet_index', page=n+1, order=order) }}">{{n+1}}</a>
             </li>
             {% endfor %}
+        </ul>
+            
         
         {% if current_user.admin == 1 %}
         <div class="container">

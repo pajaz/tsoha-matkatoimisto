@@ -32,3 +32,10 @@ class HotelForm(FlaskForm):
 
     class Meta:
         csrf = False
+
+class SearchHotelForm(FlaskForm):
+    destination = SelectField("Matkakohde: ", [validators.optional()])
+    name = StringField("Nimi", [validators.optional(), validators.Length(max=30, message=('max. 30 merkkiä'))])
+
+    class Metal:
+        csrf = False

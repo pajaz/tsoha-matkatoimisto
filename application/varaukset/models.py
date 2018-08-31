@@ -48,7 +48,7 @@ class Varaus(db.Model):
         self.small_rooms = small_rooms
         self.large_rooms = large_rooms
         self.confirmed = False
-  
+    # 
     def booking_hotel(self):
         stmt = text("SELECT id FROM Hotelli"
                     " WHERE Hotelli.id = :id").params(id=self.hotel_id)
@@ -94,7 +94,7 @@ class Varaus(db.Model):
 
         return "Done"
 
-    # Metodi varausten hakuun kohteen perusteella.
+    # Metodi varausten hakuun kohteen perusteella. !!!!!!! Poista kun olet todennut täysin turhaksi !!!!!!!!
     @staticmethod
     def find_bookings_by_dest(dest=""):
       
@@ -111,7 +111,7 @@ class Varaus(db.Model):
 
     # Nyt on aika kääntää katseet pois, koska seuraavan saisi varmaan tehtyä helpomminkin.
     # Metodi palauttaa Varaus-sivun (varaukset/list.html) haun mukaisen tuloksen. Koska erilaisia tuloksia on 16kpl,
-    # tässä 16 hieman toisistaan poikkeavaa statementtia
+    # tässä 16 hieman toisistaan poikkeavaa statementtia.
     @staticmethod
     def search_bookings(dest=0, handled=2, status="", n=0, show=6):
         today = datetime.datetime.today()
@@ -131,8 +131,8 @@ class Varaus(db.Model):
                     stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
                                 " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
                                 " WHERE Varaus.dest_id = :dest"
-                                " AND Varaus.start_date < :today AND Varaus.end_date > :today ORDER BY Varaus.start_date").params(today=today, dest=dest)   #101
-                else:
+                                " AND Varaus.start_date < :today AND Varaus.end_date > :today ORDER BY Varaus.start_date").params(today=today, dest=dest)   # 101, missä 1=Parametri annettu, 0=Käytetään vakioparametria
+                else:                                                                                                                                       # 1=dest 0=handled 1=status
                     stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
                                 " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id"
                                 " AND Varaus.dest_id = :dest ORDER BY Varaus.start_date").params(dest=dest)                                                 #100
@@ -175,7 +175,7 @@ class Varaus(db.Model):
                 else:
                     stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"
                                 " INNER JOIN Matkakohde ON Varaus.dest_id = Matkakohde.id ORDER BY Varaus.start_date"
-                                " LIMIT :show OFFSET :n").params(n=n, show=show)                                      #000
+                                " LIMIT :show OFFSET :n").params(n=n, show=show) # Sivutus toistaiseksi käytössä vain kun näytetään kaikki hotellit.        #000
             if handled != 2:
                 if status == "past":
                     stmt = text("SELECT Varaus.id, Matkakohde.name, Varaus.start_date, Varaus.handled FROM Varaus"

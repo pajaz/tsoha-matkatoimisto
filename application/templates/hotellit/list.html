@@ -1,9 +1,21 @@
 {% extends "layout.html" %}
-
+{% import "bootstrap/wtf.html" as wtf %}
 {% block body %}
 
     <div class="col-md-6 col-xs-10 middle-column">
         <h1 class="pb-3">Hotellit</h1>
+
+        <h4>Haku</h4>
+            <form method="POST" action="{{ url_for('hotellit_index', page=1, order=order) }}" class="form-inline" role="form">
+            
+                    {{ wtf.form_field(form.destination, class="form-control") }}
+              
+                    {{ wtf.form_field(form.name, class="form-control", placeholder="Hotellin nimi, max 30 merkkiä") }}
+            
+                <input type="submit" class="btn btn-default" value="Hae"/>   
+            </form>
+        <p class="text-black-50 mx-2">Hae hotelleja joko matkakohteen, nimen tai molempien perusteella</p>
+
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -14,16 +26,16 @@
                     <th>Poista</th>
                 </tr>
             </thead>    
-            {% for hotelli, d in hotellit %}
+            {% for hotelli in hotellit %}
             <tr>
                 <td> 
-                  <a href="{{ url_for('hotelli_intro', hotel_id=hotelli.id) }}"> {{ hotelli.name }}</a>
+                  <a href="{{ url_for('hotelli_intro', hotel_id=hotelli.id) }}"> {{ hotelli.hotel_name }}</a>
                 </td>
-                <td> {{ d.name }}</td>
+                <td> {{ hotelli.dest_name }}</td>
                 <td> {{ hotelli.star_rating }} </td>
 
                 <td>
-                    <form method="GET" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.id) }}">
+                    <form method="GET" action="{{ url_for('hotellit_edit_form', hotelli_id=hotelli.hotel_id) }}">
                         <input type="submit" class="btn btn-secondary" value="Muokkaa"/>
                     </form>
                 </td>
@@ -35,6 +47,15 @@
             </tr>
             {% endfor %}
         </table>
+        <!-- Seuraavaksi sivutus -->
+            <ul class="pagination">
+                {% for n in range(pages) %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('hotellit_index', page=n+1, order=order) }}">{{n+1}}</a>
+                </li>
+                {% endfor %}
+            </ul>
+                
             <div class="container">
                 <form method="GET" action="{{ url_for('hotellit_create') }}">
                     <input type="submit" class="btn btn-default" value="Lisää uusi hotelli"/>

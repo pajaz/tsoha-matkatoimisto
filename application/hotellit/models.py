@@ -74,3 +74,27 @@ class Hotelli(db.Model):
       
         return destination
 
+    @staticmethod
+    def get_destinations(hotel="%",dest="%", show=6, n=0):
+        if dest == "%":
+            stmt = text("SELECT Hotelli.id, Hotelli.name, Matkakohde.name, Matkakohde.id, Hotelli.star_rating FROM Hotelli"
+                        " LEFT JOIN Matkakohde ON Hotelli.destination_id = Matkakohde.id"
+                        " WHERE lower(Hotelli.name) LIKE lower(:name) ORDER BY Matkakohde.id"
+                        " LIMIT :show OFFSET :n").params(name=hotel, show=show, n=n)
+        else:
+            stmt = text("SELECT Hotelli.id, Hotelli.name, Matkakohde.name, Matkakohde.id, Hotelli.star_rating FROM Hotelli"
+                        " LEFT JOIN Matkakohde ON Hotelli.destination_id = Matkakohde.id"
+                        " WHERE Hotelli.destination_id = :dest"
+                        " AND lower(Hotelli.name) LIKE lower(:name) ORDER BY Matkakohde.id"
+                        " LIMIT :show OFFSET :n").params(name=hotel, dest=dest, show=show, n=n)
+
+        res = db.engine.execute(stmt)
+
+        response = []
+
+        for row in res:
+            print(row)
+            response.append({"hotel_id":row[0], "hotel_name":row[1], "dest_name":row[2], "dest_id":row[3], "star_rating":row[4]})
+
+        return response
+
