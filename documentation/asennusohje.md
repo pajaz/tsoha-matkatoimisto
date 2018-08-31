@@ -32,25 +32,36 @@ $ heroku create tsoha-matkatoimisto  (kyseinen nimi tietysti tällä hetkellä k
 ```
 $ git remote add heroku htts://git.heroku.com/tahan-se-keksimasi-nimi.git
 ```
-* Lähetetään sovellus Herokuun
+* Lähetetään sovellus Herokuun ja kerrotaan sovellukselle, että se toimii Herokussa.
 ```
 $ git add .
 $ git commit -m "Kiva eka commit viesti"
 $ git push heroku master
+$ heroku config:set HEROKU=1
 ```
 Nyt voit siirtyä hyvin mielin ottamaan Herokun tarjoaman PostgreSQL -tietokannan käyttöön.
 
 
-<h4> Postgresql(ja sqlite3) -komennot ensimmäisen käynnistyksen jälkeen </h4>
-Nämä komennot luovat käyttäjäroolit tietokantaan, sekä ensimmäisen adminoikeuksilla toimivan tunnuksen.  
+<h4> PostgreSQL -käyttöönotto ja SQL-komennot ensimmäisen käynnistyksen jälkeen </h4>
+ 
+ * Ota Herokun tarjoama tietokanta käyttöön komennolla
+  ```
+  heroku addons:add heroku-postgresql:hobby-dev
+  ```
+  
+Seuraavaksi luodaan käyttäjäroolit tietokantaan, sekä ensimmäisen adminoikeuksilla toimiva tunnus.
+Samat komennot toimivat, sekä paikallisesti, että Herokussa.
+Syötä komennot tässä järjestyksessä.
+```
+$ heroku pg:psql    (paikallisesti esim. sqlite3 tai vastaava, jota käytät)
+$ INSERT INTO role (name) VALUES ('Admin'), ('User');  
+```
+(Sijoita allaolevaan haluamasi tiedot omille paikoilleen. Älä koske ykköseen salasanan jälkeen.)  
+```
+$ INSERT INTO kayttaja (first_name, last_name, username, email, phone_number, password, admin) 
+$ VALUES ('Etunimi', 'Sukunimi', 'admin', 'email<span>@matkatoimisto.x', '0501234567', 'salasana', 1);  
+$ INSERT INTO roles (role_id, kayttaja_id) VALUES (1, 1), (2, 1);
+```
 
-Huom! Syötä komennot tässä järjestyksessä!
-```
-INSERT INTO role (name) VALUES ('Admin'), ('User');  
-```
-(Sijoita allaolevaan haluamasi tiedot omille paikoilleen. Älä koske ykköseen salasanan jälkeen!)  
-```
-INSERT INTO kayttaja (first_name, last_name, username, email, phone_number, password, admin) 
-VALUES ('Etunimi', 'Sukunimi', 'admin', 'email<span>@matkatoimisto.x', '0501234567', 'salasana', 1);  
-INSERT INTO roles (role_id, kayttaja_id) VALUES (1, 1), (2, 1);
-```
+Nyt kaiken pitäisi olla valmista ja sovelluksen pyöriä (toivottavasti) moitteettomasti.
+
